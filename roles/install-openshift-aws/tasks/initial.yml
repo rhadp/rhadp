@@ -11,5 +11,5 @@
 
 - name: create aws credentials file
   template:
-    src: "roles/install-openshift/templates/aws_env.j2"
-    dest: "roles/install-openshift/files/env.sh"
+    src: "roles/install-openshift-aws/templates/aws_env.j2"
+    dest: "roles/install-openshift-aws/files/env.sh"

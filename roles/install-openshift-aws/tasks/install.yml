@@ -3,7 +3,7 @@
 
 - name: create cluster config file
   template:
-    src: "roles/install-openshift/templates/install-config.yaml.j2"
+    src: "roles/install-openshift-aws/templates/install-config.yaml.j2"
     dest: "{{ openshift_install_dir }}/{{ cluster_name }}/install-config.yaml"
 
 - name: create cluster
@@ -12,7 +12,7 @@
 
     ./openshift-install create cluster --dir="{{ openshift_install_dir }}/{{ cluster_name }}"
   args:
-    chdir: "roles/install-openshift/files"
+    chdir: "roles/install-openshift-aws/files"
 
 - name: check openshift-install pid
   pids:

@@ -7,6 +7,7 @@
     ACTION: "UNINSTALL" # INSTALL, UNINSTALL, UPDATE
     
   tasks:
-    - name: destroy the OpenShift cluster
+    - name: destroy the openshift cluster
       include_role:
         name: roles/install-openshift
+      when: cloud_provider == "aws"

@@ -8,7 +8,7 @@
 
     ./openshift-install destroy cluster --dir="{{ openshift_install_dir }}/{{ cluster_name }}"
   args:
-    chdir: "roles/install-openshift/files"
+    chdir: "roles/install-openshift-aws/files"
 
 - name: remove the cluster directory
   file: 
@@ -16,4 +16,4 @@
     state: absent
   with_items:
     - "{{ openshift_install_dir }}/{{ cluster_name }}"
-    - "roles/install-openshift/files/env.sh"
+    - "roles/install-openshift-aws/files/env.sh"
