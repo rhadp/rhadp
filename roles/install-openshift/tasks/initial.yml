@@ -1,0 +1,15 @@
+# Implement your initial tasks here
+# -------------------------------------------------
+
+- name: create dirs
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0755
+  with_items:
+    - "{{ openshift_install_dir }}/{{ cluster_name }}"
+
+- name: create aws credentials file
+  template:
+    src: "roles/install-openshift/templates/aws_env.j2"
+    dest: "roles/install-openshift/files/env.sh"

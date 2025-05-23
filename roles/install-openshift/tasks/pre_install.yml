@@ -1,0 +1,16 @@
+# Implement your pre-install deployment tasks here
+# -------------------------------------------------
+
+- name: read the public key
+  slurp:
+    src: "{{ cluster_ssh_key }}.pub"
+  register: cluster_ssh_pub_key
+
+- name: read pull secret
+  slurp:
+    src: "{{ pull_secret_file}}"
+  register: cluster_pull_secret
+
+- name: set the local kubeconfig location
+  set_fact:
+    local_kubeconfig_file: '~/.kube/{{ cluster_name }}'
