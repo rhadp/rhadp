@@ -1,6 +1,7 @@
 secrets/**
 inventory/**
 openshift-install
+env.sh
 
 hack/**
-hack.md
+hack.*

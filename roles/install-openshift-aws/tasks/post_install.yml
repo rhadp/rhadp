@@ -1,27 +1,11 @@
 # Implement your post-install deployment tasks here
 # -------------------------------------------------
 
-- name: wait for the cluster
-  pause:
-    minutes: 5
+- name: copy KUBECONFIG to local location
+  copy:
+    src: "~/.openshift/{{ cluster_name }}/auth/kubeconfig"
+    dest: "~/.kube/{{ cluster_name }}"
 
-- name: get the cluster version
-  k8s_info:
-    kubeconfig: "{{ local_kubeconfig }}"
-    api_version: config.openshift.io/v1
-    kind: dns
-    name: cluster
-  register: r_cluster_version
-
-- name: set the base domain
-  set_fact:
-    ocp_base_domain: "apps.{{ r_cluster_version.resources.0.spec.baseDomain }}"
-
-- name: set the console url
-  set_fact:
-    ocp_console_url: "https://console-openshift-console.{{ ocp_base_domain }}"
-    ocp_api_url: "https://api.{{ ocp_base_domain }}"
-    
 - name: remove the env file
   file: 
     path: "{{ item }}"

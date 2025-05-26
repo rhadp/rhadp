@@ -21,7 +21,7 @@
 
 - name: wait for openshift-install to finish
   wait_for:
-    path: "{{ openshift_install_dir }}/{{ cluster_name }}/auth/kubeconfig"
+    path: "{{ local_kubeconfig_file}}"
     state: present
     timeout: 5400
 
@@ -30,14 +30,13 @@
     source env.sh
 
     ./openshift-install wait-for bootstrap-complete --dir="{{ openshift_install_dir }}/{{ cluster_name }}"
+  args:
+    chdir: "roles/install-openshift-aws/files"
 
 - name: wait for the cluster
   shell: |
     source env.sh
 
     ./openshift-install wait-for install-complete --dir="{{ openshift_install_dir }}/{{ cluster_name }}"
-
-- name: copy kubeconfig
-  copy:
-    src: "{{ openshift_install_dir }}/{{ cluster_name }}/auth/kubeconfig"
-    dest: "{{ local_kubeconfig }}"
+  args:
+    chdir: "roles/install-openshift-aws/files"

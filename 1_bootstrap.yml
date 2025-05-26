@@ -12,3 +12,7 @@
         name: roles/install-openshift-aws
       when: cloud_provider == "aws"
 
+    - name: configure the openshift cluster infrastructure
+      include_role:
+        name: roles/infra-openshift-aws
+      when: cloud_provider == "aws"

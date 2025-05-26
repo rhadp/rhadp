@@ -10,7 +10,3 @@
   slurp:
     src: "{{ pull_secret_file}}"
   register: cluster_pull_secret
-
-- name: set the local kubeconfig location
-  set_fact:
-    local_kubeconfig_file: '~/.kube/{{ cluster_name }}'
