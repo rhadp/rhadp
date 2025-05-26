@@ -15,5 +15,8 @@
     path: "{{ item }}"
     state: absent
   with_items:
+    - "~/.kube/{{ cluster_name }}"
     - "{{ openshift_install_dir }}/{{ cluster_name }}"
     - "roles/install-openshift-aws/files/env.sh"
+    - "{{ cluster_ssh_key }}"
+    - "{{ cluster_ssh_key }}.pub"

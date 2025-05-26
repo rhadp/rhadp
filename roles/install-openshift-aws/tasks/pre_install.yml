@@ -1,6 +1,13 @@
 # Implement your pre-install deployment tasks here
 # -------------------------------------------------
 
+# FIXME: check if the keys already exist, otherwise generate them
+- name: generate SSH keys
+  openssh_keypair:
+    type: rsa
+    size: 2048
+    path: "{{ cluster_ssh_key }}"
+
 - name: read the public key
   slurp:
     src: "{{ cluster_ssh_key }}.pub"

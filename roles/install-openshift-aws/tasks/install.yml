@@ -21,7 +21,7 @@
 
 - name: wait for openshift-install to finish
   wait_for:
-    path: "{{ local_kubeconfig_file}}"
+    path: "$HOME/.openshift/{{ cluster_name }}/auth/kubeconfig"
     state: present
     timeout: 5400
 

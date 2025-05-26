@@ -4,13 +4,13 @@ baseDomain: {{ cluster_domain }}
 compute:
 - architecture: arm64
   hyperthreading: Enabled
-  name: worker-arm
+  name: worker
   platform: {}
   replicas: 3
 controlPlane:
   architecture: arm64
   hyperthreading: Enabled
-  name: control-plane-arm
+  name: master
   platform: {}
   replicas: 3
 metadata:
