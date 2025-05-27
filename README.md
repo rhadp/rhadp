@@ -5,12 +5,24 @@
 
 ## what needs to be done
 
-- [X] create a a certificate if none is provided
+- [ ] create a bastion host
+    - [ ] install openshift-client
+    - [ ] install kubectl
+    - [ ] install oc
+    - [ ] install awscli
+    - [ ] install python3, python3-pip, ansible 
+    - [ ] clone the repo into the bastion host
+    - [ ] aws credentials, pull secret, aws
+    - [ ] create a a certificate if none is provided
+
 - [X] bootstrap a basic cluster
+    - [X] Arm controll plane
+    - [X] x86 compute nodes
+
 - [ ] configure the cluster
     - [ ] add additional machine sets
-        - [X] x86 set for general purpose & infra
-        - [ ] GPU set for AI (optional)
+        - [X] ARM compute nodes
+        - [ ] GPU compute nodes (optional)
     - [ ] apply correct labels to the nodes
     - [ ] install Let's Encrypt certificate
     - [ ] configure OAuth and SSO

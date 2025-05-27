@@ -1,0 +1,20 @@
+all:
+  vars:
+    # cluster variables
+    cluster_name: "rhadp"
+    cluster_domain: "example.com"
+
+    # cloud provider specific variables
+    cloud_provider: "aws" # aws, azure, gcp
+
+    # aws specific variables
+    aws_access_key_id: "abc123"
+    aws_secret_access_key: "def456"
+    aws_default_region: "us-east-2"
+
+    # azure specific variables
+    
+    # gcp specific variables
+    
+    # keys
+    cluster_ssh_key: "$HOME/.ssh/rhadp"
