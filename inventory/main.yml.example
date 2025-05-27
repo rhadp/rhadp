@@ -16,5 +16,8 @@ all:
     
     # gcp specific variables
     
+    # letsencrypt variables
+    letsencrypt_email: "hello@example.com"
+    
     # keys
     cluster_ssh_key: "$HOME/.ssh/rhadp"
