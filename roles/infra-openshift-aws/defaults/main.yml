@@ -1,2 +1,5 @@
 ---
 # defaults
+
+cert_manager_namespace: "cert-manager-operator"
+cert_manager_deployment_name: "cert-manager-operator-controller-manager"

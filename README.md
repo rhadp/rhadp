@@ -29,4 +29,3 @@
         - [ ] add Keycloak to the cluster
         - [ ] configure htpasswd provider and add default users
         - [ ] configure GitHub as identity provider
-    - [ ] 
