@@ -5,9 +5,16 @@
 
 ## what needs to be done
 
-- [ ] create a a certificate if none is provided
-- [ ] bootstrap a cluster
+- [X] create a a certificate if none is provided
+- [X] bootstrap a basic cluster
+- [ ] configure the cluster
     - [ ] add additional machine sets
-        - [ ] x86 set for general purpose & infra
+        - [X] x86 set for general purpose & infra
         - [ ] GPU set for AI (optional)
+    - [ ] apply correct labels to the nodes
+    - [ ] install Let's Encrypt certificate
+    - [ ] configure OAuth and SSO
+        - [ ] add Keycloak to the cluster
+        - [ ] configure htpasswd provider and add default users
+        - [ ] configure GitHub as identity provider
     - [ ] 
