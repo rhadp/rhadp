@@ -34,7 +34,7 @@
         - [X] install cert-manager operator
         - [X] create issuer and get a certificate
         - [X] configure ingress controller
-        - [ ] configure the cluster to use the certificate by default on all routes
+        - [X] configure the cluster to use the certificate by default on all routes
     - [ ] configure OAuth and SSO
         - [ ] add Keycloak to the cluster
         - [ ] configure htpasswd provider and add default users
