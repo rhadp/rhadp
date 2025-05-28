@@ -72,3 +72,7 @@ spec:
           apiVersion: machine.openshift.io/v1beta1
           iamInstanceProfile:
             id: {{ cluster_label }}-worker-profile
+      taints:
+        - effect: NoSchedule
+          key: architecture
+          value: arm
