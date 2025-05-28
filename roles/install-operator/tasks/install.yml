@@ -1,6 +1,33 @@
 # Implement your install deployment tasks here
 # -------------------------------------------------
 
+- name: create operator namespace
+  k8s:
+    definition:
+      apiVersion: v1
+      kind: Namespace
+      metadata:
+        name: "{{ operator_namespace }}"
+    state: present
+    apply: yes
+    kubeconfig: "{{ local_kubeconfig_file }}"
+  when: create_operator_namespace
+
+- name: create operator group
+  k8s:
+    definition:
+      apiVersion: operators.coreos.com/v1
+      kind: OperatorGroup
+      metadata:
+        name: "{{ operator_group_name }}"
+        namespace: "{{ operator_namespace }}"
+      spec:
+        targetNamespaces: []
+    state: present
+    apply: yes
+    kubeconfig: "{{ local_kubeconfig_file }}"
+  when: create_operator_group
+
 - name: install operators 
   k8s:
     state: present

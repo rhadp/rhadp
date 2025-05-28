@@ -1,16 +1,21 @@
 # Implement your install deployment tasks here
 # -------------------------------------------------
 
-- name: create cert-manager namespace
-  k8s:
-    definition:
-      apiVersion: v1
-      kind: Namespace
-      metadata:
-        name: "{{ cert_manager_namespace }}"
-    state: present
-    apply: yes
-    kubeconfig: "{{ local_kubeconfig_file }}"
+- name: install cert-manager operator
+  include_role:
+    name: roles/install-operator
+  vars:
+    operator_name: "openshift-cert-manager-operator"
+    operator_group_name: "openshift-cert-manager-operator"
+    operator_subscription_name: "openshift-cert-manager-operator"
+    operator_namespace: "{{ cert_manager_namespace }}"
+    operator_deployment_name: "{{ cert_manager_deployment_name }}"
+    subscription_channel: "{{ cert_manager_subscription_channel }}"
+    subscription_starting_csv: "{{ cert_manager_subscription_starting_csv }}"
+    install_plan_approval: "Automatic"
+    create_operator_namespace: true
+    create_operator_group: true
+    wait_for_operator: true
 
 - name: create AWS credentials secret 
   k8s:
@@ -32,18 +37,6 @@
     - "cert-manager"
     - "openshift-ingress"
     - "openshift-ingress-operator"
-
-- name: install cert-manager operator
-  include_role:
-    name: roles/install-operator
-  vars:
-    operator_name: "openshift-cert-manager-operator"
-    operator_subscription_name: "openshift-cert-manager-operator"
-    operator_namespace: "{{ cert_manager_namespace }}"
-    operator_deployment_name: "{{ cert_manager_deployment_name }}"
-    subscription_channel: "stable-v1"
-    install_plan_approval: "Automatic"
-    wait_for_operator: true
 
 - name: create cert-manager instance
   k8s:

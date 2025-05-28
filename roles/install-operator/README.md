@@ -9,6 +9,7 @@ This role installs an operator from the Red Hat Operators catalog.
 - `operator_namespace`: The namespace to install the operator in.
 - `wait_for_operator`: Whether to wait for the operator to be ready.
 - `subscription_channel`: The channel to subscribe to.
+- `subscription_starting_csv`: The starting CSV to subscribe to.
 - `install_plan_approval`: The approval mode for the subscription.
 - `source`: The source of the subscription.
 - `source_namespace`: The namespace of the source.
@@ -21,6 +22,7 @@ wait_for_operator: true
 
 # subscription defaults
 subscription_channel: "latest"
+subscription_starting_csv: ""
 install_plan_approval: "Automatic"
 source: "redhat-operators"
 source_namespace: "openshift-marketplace"
@@ -38,6 +40,7 @@ source_namespace: "openshift-marketplace"
     operator_namespace: "my-namespace"
     wait_for_operator: true
     subscription_channel: "latest"
+    subscription_starting_csv: ""
     install_plan_approval: "Automatic"
     source: "redhat-operators"
     source_namespace: "openshift-marketplace"
