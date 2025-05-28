@@ -2,6 +2,7 @@
 
 ## references
 - https://docs.redhat.com/en/documentation/openshift_container_platform/4.18/html/installing_on_aws/index
+- https://docs.redhat.com/en/documentation/openshift_container_platform/4.18/html/postinstallation_configuration/index
 
 ## what needs to be done
 

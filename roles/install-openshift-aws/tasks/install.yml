@@ -40,3 +40,8 @@
     ./openshift-install wait-for install-complete --dir="{{ openshift_install_dir }}/{{ cluster_name }}"
   args:
     chdir: "roles/install-openshift-aws/files"
+
+- name: copy KUBECONFIG to local location
+  copy:
+    src: "~/.openshift/{{ cluster_name }}/auth/kubeconfig"
+    dest: "~/.kube/{{ cluster_name }}"

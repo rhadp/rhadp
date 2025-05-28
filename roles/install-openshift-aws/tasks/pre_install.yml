@@ -8,12 +8,12 @@
     size: 2048
     path: "{{ cluster_ssh_key }}"
 
-- name: read the public key
+- name: import the public key
   slurp:
     src: "{{ cluster_ssh_key }}.pub"
   register: cluster_ssh_pub_key
 
-- name: read pull secret
+- name: import pull secret
   slurp:
     src: "{{ pull_secret_file}}"
   register: cluster_pull_secret

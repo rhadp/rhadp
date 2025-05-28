@@ -7,12 +7,14 @@
     ACTION: "INSTALL" # INSTALL, UNINSTALL, UPDATE
     
   tasks:
-    - name: bootstrap the openshift cluster
-      include_role:
-        name: roles/install-openshift-aws
-      when: cloud_provider == "aws"
 
-    - name: configure the openshift cluster infrastructure
-      include_role:
-        name: roles/infra-openshift-aws
+    - name: install clustere on AWS
       when: cloud_provider == "aws"
+      block:
+        - name: bootstrap the openshift cluster
+          include_role:
+            name: roles/install-openshift-aws
+
+        - name: configure the openshift cluster infrastructure
+          include_role:
+            name: roles/infra-openshift-aws

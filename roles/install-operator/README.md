@@ -1,0 +1,44 @@
+# install-operator
+
+This role installs an operator from the Red Hat Operators catalog.
+
+## Parameters
+
+- `operator_subscription_name`: The name of the subscription to install.
+- `operator_deployment_name`: The name of the deployment to wait for.
+- `operator_namespace`: The namespace to install the operator in.
+- `wait_for_operator`: Whether to wait for the operator to be ready.
+- `subscription_channel`: The channel to subscribe to.
+- `install_plan_approval`: The approval mode for the subscription.
+- `source`: The source of the subscription.
+- `source_namespace`: The namespace of the source.
+
+## Default values
+
+```yaml
+operator_namespace: "openshift-operators"
+wait_for_operator: true
+
+# subscription defaults
+subscription_channel: "latest"
+install_plan_approval: "Automatic"
+source: "redhat-operators"
+source_namespace: "openshift-marketplace"
+```
+
+## Usage
+
+```yaml
+- name: install some operator
+  include_role:
+    name: install-operator
+  vars:
+    operator_subscription_name: "my-operator"
+    operator_deployment_name: "my-operator"
+    operator_namespace: "my-namespace"
+    wait_for_operator: true
+    subscription_channel: "latest"
+    install_plan_approval: "Automatic"
+    source: "redhat-operators"
+    source_namespace: "openshift-marketplace"
+```

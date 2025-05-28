@@ -1,11 +1,6 @@
 # Implement your post-install deployment tasks here
 # -------------------------------------------------
 
-- name: copy KUBECONFIG to local location
-  copy:
-    src: "~/.openshift/{{ cluster_name }}/auth/kubeconfig"
-    dest: "~/.kube/{{ cluster_name }}"
-
 - name: remove the env file
   file: 
     path: "{{ item }}"
