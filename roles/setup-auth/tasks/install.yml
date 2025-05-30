@@ -1,0 +1,5 @@
+# Implement your install deployment tasks here
+# -------------------------------------------------
+
+- name: install htpasswd
+  import_tasks: install_htpasswd.yml

@@ -5,7 +5,7 @@
     silent: false
     become_override: false
     ACTION: "UNINSTALL" # INSTALL, UNINSTALL, UPDATE
-    
+
   tasks:
     - name: destroy the openshift cluster
       include_role:

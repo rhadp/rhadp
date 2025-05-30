@@ -17,7 +17,7 @@
     create_operator_group: true
     wait_for_operator: true
 
-- name: create AWS credentials secret 
+- name: create AWS credentials secret
   k8s:
     definition:
       apiVersion: v1
@@ -38,7 +38,7 @@
     - "openshift-ingress"
     - "openshift-ingress-operator"
 
-- name: fix permissions 
+- name: fix permissions
   k8s:
     state: present
     apply: yes
@@ -62,8 +62,8 @@
         unsupportedConfigOverrides:
           controller:
             args:
-              - '--dns01-recursive-nameservers=1.1.1.1:53'
-              - '--dns01-recursive-nameservers-only'
+              - "--dns01-recursive-nameservers=1.1.1.1:53"
+              - "--dns01-recursive-nameservers-only"
     state: present
     apply: yes
     kubeconfig: "{{ local_kubeconfig_file }}"
@@ -82,18 +82,18 @@
           privateKeySecretRef:
             name: letsencrypt-prod
           solvers:
-          - dns01:
-              route53:
-                region: "{{ aws_default_region }}"
-                hostedZoneID: "{{ cluster_public_zone_id }}"
-                accessKeyID: "{{ aws_access_key_id }}"
-                secretAccessKeySecretRef:
-                  name: route53-credentials
-                  key: secret-access-key
-            selector:
-              dnsZones:
-                - "apps.{{ cluster_base_domain }}"
-                - "api.{{ cluster_base_domain }}"
+            - dns01:
+                route53:
+                  region: "{{ aws_default_region }}"
+                  hostedZoneID: "{{ cluster_public_zone_id }}"
+                  accessKeyID: "{{ aws_access_key_id }}"
+                  secretAccessKeySecretRef:
+                    name: route53-credentials
+                    key: secret-access-key
+              selector:
+                dnsZones:
+                  - "apps.{{ cluster_base_domain }}"
+                  - "api.{{ cluster_base_domain }}"
     state: present
     apply: yes
     kubeconfig: "{{ local_kubeconfig_file }}"
@@ -134,7 +134,7 @@
     state: present
     apply: yes
     kubeconfig: "{{ local_kubeconfig_file }}"
-    
+
 - name: wait for certificate to be ready
   k8s_info:
     api_version: cert-manager.io/v1
@@ -147,7 +147,7 @@
   delay: 10
   until:
     - r_certificate.resources | length | int > 0
-    
+
 - name: wait for certificate to be ready
   pause:
     seconds: 120

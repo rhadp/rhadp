@@ -28,7 +28,7 @@
     kubeconfig: "{{ local_kubeconfig_file }}"
   when: create_operator_group
 
-- name: install operators 
+- name: install operators
   k8s:
     state: present
     apply: yes
@@ -58,13 +58,13 @@
       until:
         - r_subscription.resources | length | int > 0
         - r_subscription.resources[0].status.currentCSV is defined
-    
+
     - name: get CSV info
       k8s_info:
         api_version: operators.coreos.com/v1alpha1
         kind: ClusterServiceVersion
         namespace: "{{ operator_namespace }}"
-        name: "{{ r_subscription.resources[0].status.currentCSV }}" 
+        name: "{{ r_subscription.resources[0].status.currentCSV }}"
         kubeconfig: "{{ local_kubeconfig_file }}"
       register: r_csv
       retries: 30
@@ -91,5 +91,3 @@
     - r_deployment.resources[0].status.availableReplicas is defined
     - r_deployment.resources[0].status.availableReplicas | int == r_deployment.resources[0].spec.replicas | int
   when: wait_for_operator
-  
-

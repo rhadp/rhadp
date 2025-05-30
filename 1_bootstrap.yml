@@ -5,9 +5,8 @@
     silent: false
     become_override: false
     ACTION: "INSTALL" # INSTALL, UNINSTALL, UPDATE
-    
-  tasks:
 
+  tasks:
     - name: install clustere on AWS
       when: cloud_provider == "aws"
       block:
@@ -18,3 +17,7 @@
         - name: configure the openshift cluster infrastructure
           include_role:
             name: roles/infra-openshift-aws
+
+    - name: configure openshift cluster authentication
+      include_role:
+        name: roles/setup-auth
