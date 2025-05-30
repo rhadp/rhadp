@@ -3,6 +3,10 @@ apiVersion: argoproj.io/v1alpha1
 metadata:
   name: "{{ rhadp_prefix }}-bootstrap"
   namespace: "openshift-gitops"
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
 spec:
   project: "{{ rhadp_prefix }}-bootstrap"
   namespace: "openshift-gitops"
@@ -11,8 +15,8 @@ spec:
     directory:
       recurse: false
     path: apps/bootstrap
-    repoURL: {{ rhadp_gitops_repo_url }}
-    targetRevision: {{ rhadp_gitops_repo_revision }}
+    repoURL: "{{ rhadp_gitops_repo_url }}"
+    targetRevision: "{{ rhadp_gitops_repo_revision }}"
   destination:
     namespace: "{{ rhadp_prefix }}-infra"
     server: https://kubernetes.default.svc
@@ -21,8 +25,8 @@ spec:
       prune: true
       selfHeal: true
     syncOptions:
-    - CreateNamespace=true
-    - ApplyOutOfSyncOnly=true
+      - CreateNamespace=true
+      - ApplyOutOfSyncOnly=true
     retry:
       backoff:
         duration: 5s # the amount to back off. Default unit is seconds, but could also be a duration (e.g. "2m", "1h")
