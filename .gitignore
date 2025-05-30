@@ -5,3 +5,4 @@ env.sh
 
 hack/**
 hack.*
+**hack**.yml

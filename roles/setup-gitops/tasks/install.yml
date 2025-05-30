@@ -1,0 +1,25 @@
+# Implement your install deployment tasks here
+# -------------------------------------------------
+
+- name: install gitops operator
+  include_role:
+    name: roles/install-operator
+  vars:
+    operator_name: "openshift-gitops-operator"
+    operator_subscription_name: "openshift-gitops-operator"
+    subscription_channel: "latest"
+    subscription_starting_csv: "openshift-gitops-operator.v1.16.1"
+    operator_deployment_name: "openshift-gitops-operator-controller-manager"
+    operator_namespace: "openshift-gitops-operator"
+    operator_group_name: "openshift-gitops-operator"
+    create_operator_namespace: true
+    create_operator_group: true
+
+- name: install pipelines operator
+  include_role:
+    name: roles/install-operator
+  vars:
+    operator_name: "openshift-pipelines-operator-rh"
+    operator_subscription_name: "openshift-pipelines-operator"
+    operator_deployment_name: "openshift-pipelines-operator"
+    create_operator_namespace: true

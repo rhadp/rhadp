@@ -1,0 +1,4 @@
+---
+# defaults
+
+gitops_namespace: "openshift-gitops"

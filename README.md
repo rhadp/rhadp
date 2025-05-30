@@ -28,6 +28,7 @@
 - [ ] configure the cluster
     - [ ] add additional machine sets
         - [X] ARM compute nodes
+        - [ ] ARM bare metal compute nodes (optional)
         - [ ] GPU compute nodes (optional)
     - [X] add labels/taints to the machinesets
     - [X] install Let's Encrypt certificate
@@ -37,5 +38,11 @@
         - [X] configure the cluster to use the certificate by default on all routes
     - [ ] configure OAuth and SSO
         - [ ] add Keycloak to the cluster
-        - [ ] configure htpasswd provider and add default users
+        - [X] configure htpasswd provider and add default users
         - [ ] configure GitHub as identity provider
+
+- [ ] basic cluster operators
+    - [ ] install OpenShift GitOps operator
+    - [ ] install OpenShift Pipelines operator
+    - [ ] install HashiCorp Vault operator
+    

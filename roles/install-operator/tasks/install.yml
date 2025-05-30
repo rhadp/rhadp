@@ -3,11 +3,8 @@
 
 - name: create operator namespace
   k8s:
-    definition:
-      apiVersion: v1
-      kind: Namespace
-      metadata:
-        name: "{{ operator_namespace }}"
+    kind: Namespace
+    name: "{{ operator_namespace }}"
     state: present
     apply: yes
     kubeconfig: "{{ local_kubeconfig_file }}"
@@ -22,6 +19,7 @@
         name: "{{ operator_group_name }}"
         namespace: "{{ operator_namespace }}"
       spec:
+        upgradeStrategy: "Default"
         targetNamespaces: []
     state: present
     apply: yes
@@ -30,9 +28,9 @@
 
 - name: install operators
   k8s:
+    definition: "{{ lookup('template', item ) | from_yaml }}"
     state: present
     apply: yes
-    definition: "{{ lookup('template', item ) | from_yaml }}"
     kubeconfig: "{{ local_kubeconfig_file }}"
   loop:
     - operator-template.yml.j2
