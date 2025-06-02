@@ -38,11 +38,12 @@
         - [X] configure the cluster to use the certificate by default on all routes
     - [ ] configure OAuth and SSO
         - [ ] add Keycloak to the cluster
-        - [X] configure htpasswd provider and add default users
+        - [X] configure htpasswd provider and add default admin user
         - [ ] configure GitHub as identity provider
 
 - [ ] basic cluster operators
-    - [ ] install OpenShift GitOps operator
-    - [ ] install OpenShift Pipelines operator
-    - [ ] install HashiCorp Vault operator
+    - [X] install OpenShift GitOps operator
+    - [X] install OpenShift Pipelines operator
+    - [X] install HashiCorp Vault operator
+    - [X] install Keycloak operator
     

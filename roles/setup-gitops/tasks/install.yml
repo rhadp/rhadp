@@ -1,25 +1,21 @@
 # Implement your install deployment tasks here
 # -------------------------------------------------
 
-- name: install gitops operator
-  include_role:
-    name: roles/install-operator
-  vars:
-    operator_name: "openshift-gitops-operator"
-    operator_subscription_name: "openshift-gitops-operator"
-    subscription_channel: "latest"
-    subscription_starting_csv: "openshift-gitops-operator.v1.16.1"
-    operator_deployment_name: "openshift-gitops-operator-controller-manager"
-    operator_namespace: "openshift-gitops-operator"
-    operator_group_name: "openshift-gitops-operator"
-    create_operator_namespace: true
-    create_operator_group: true
+- name: create gitops namespace
+  k8s:
+    kind: Namespace
+    name: "{{ gitops_namespace }}"
+    state: present
+    apply: yes
+    kubeconfig: "{{ local_kubeconfig_file }}"
 
-- name: install pipelines operator
-  include_role:
-    name: roles/install-operator
-  vars:
-    operator_name: "openshift-pipelines-operator-rh"
-    operator_subscription_name: "openshift-pipelines-operator"
-    operator_deployment_name: "openshift-pipelines-operator"
-    create_operator_namespace: true
+- name: create gitops system instance
+  k8s:
+    definition: "{{ lookup('template', item ) | from_yaml }}"
+    state: present
+    apply: yes
+    kubeconfig: "{{ local_kubeconfig_file }}"
+  loop:
+    - default-gitops.yml.j2
+    - bootstrap-project.yml.j2
+    - bootstrap-app.yml.j2

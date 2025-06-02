@@ -21,3 +21,7 @@
     - name: configure openshift cluster authentication
       include_role:
         name: roles/setup-auth
+
+    - name: bootstrap the essential operators e.g. gitops, pipelines, vault, keycloak
+      include_role:
+        name: roles/install-essential-operators

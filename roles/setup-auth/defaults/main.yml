@@ -1,2 +1,4 @@
 ---
 # defaults
+
+cluster_admin_group: "cluster-admins"

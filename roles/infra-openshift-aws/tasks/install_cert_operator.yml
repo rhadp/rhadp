@@ -68,6 +68,10 @@
     apply: yes
     kubeconfig: "{{ local_kubeconfig_file }}"
 
+- name: pause to allow cert-manager to start
+  pause:
+    seconds: 180
+
 - name: create Let's Encrypt prod ClusterIssuer
   k8s:
     definition:
@@ -100,7 +104,7 @@
 
 - name: wait for cluster issuer to be ready
   pause:
-    seconds: 120
+    seconds: 180
 
 - name: create wildcard certificate for default ingress
   k8s:

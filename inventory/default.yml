@@ -38,6 +38,12 @@ all:
     gpu_gpu: 1
     gpu_memory: 16384
 
+    # default namespaces
+    default_operator_namespace: "openshift-operators"
+    gitops_namespace: "openshift-gitops"
+    keycloak_namespace: "keycloak"
+    vault_namespace: "vault"
+    
     # other variables
     openshift_install_dir: "$HOME/.openshift"
     pull_secret_file: "inventory/pull-secret.txt"
