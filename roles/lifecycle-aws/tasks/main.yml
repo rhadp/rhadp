@@ -1,0 +1,17 @@
+# Do not modify this file.
+# Implement pre-/post-install, install/uninstall tasks in their own files.
+
+- name: run start tasks
+  include_tasks:
+    file: ./start.yml
+    apply:
+      become: "{{ become_override | bool }}"
+  when: ACTION == "START"
+
+- name: run stop tasks
+  include_tasks:
+    file: ./stop.yml
+    apply:
+      become: "{{ become_override | bool }}"
+  when: ACTION == "STOP"
+

@@ -1,0 +1,22 @@
+# Implement your stop tasks here
+# -------------------------------------------------
+
+- name: stop openshift cluster
+  environment:
+    AWS_ACCESS_KEY_ID: "{{ aws_access_key_id }}"
+    AWS_SECRET_ACCESS_KEY: "{{ aws_secret_access_key }}"
+    AWS_DEFAULT_REGION: "{{ aws_default_region }}"
+  block:
+    - name: gather ec2 instances in running state
+      ec2_instance_info:
+        region: "{{ aws_default_region }}"
+        filters:
+          instance-state-name: running
+      register: ec2_instances
+
+    - name: stop running instances
+      ec2_instance:
+        state: stopped
+        wait: true
+        instance_ids: "{{ ec2_instances.instances | map(attribute='instance_id') | list }}"
+      when: ec2_instances.instances | length > 0

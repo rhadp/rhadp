@@ -1,4 +1,4 @@
-- name: bootstrap the OpenShift cluster
+- name: bootstrap the openshift cluster
   hosts: localhost
   vars:
     # set the following to control the install/uninstall process

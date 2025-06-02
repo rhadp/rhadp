@@ -1,4 +1,4 @@
-- name: remove the OpenShift cluster
+- name: remove the openshift cluster
   hosts: localhost
   vars:
     # set the following to control the install/uninstall process
