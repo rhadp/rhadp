@@ -5,6 +5,7 @@ operator_namespace: "openshift-operators"
 wait_for_operator: true
 create_operator_namespace: true
 create_operator_group: false
+manage_all_namespaces: true
 
 # subscription defaults
 subscription_channel: "latest"

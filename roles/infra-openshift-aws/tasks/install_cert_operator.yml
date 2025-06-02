@@ -152,7 +152,7 @@
   until:
     - r_certificate.resources | length | int > 0
 
-- name: wait for certificate to be ready
+- name: pause to allow certificate to be registered
   pause:
     seconds: 120
 

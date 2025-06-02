@@ -46,5 +46,7 @@
     subscription_starting_csv: "rhbk-operator.v26.2.4-opr.2"
     operator_deployment_name: "rhbk-operator"
     operator_namespace: "{{ keycloak_namespace}}"
+    operator_group_name: "keycloak"
     create_operator_namespace: true
-    
+    create_operator_group: true
+    manage_all_namespaces: false
