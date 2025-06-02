@@ -1,49 +1,74 @@
-# rhadp-bootstrap
+# RHADP Bootstrap
 
-## references
+This repository provides infrastructure as code (IaC) for bootstrapping a Red Hat Automotive Development Platform (RHADP) cluster on AWS or Azure. 
 
-#### Installation
-- https://docs.redhat.com/en/documentation/openshift_container_platform/4.18/html/installing_on_aws/index
-- https://docs.redhat.com/en/documentation/openshift_container_platform/4.18/html/postinstallation_configuration/index
+The cluster is configured with a hybrid architecture featuring ARM control plane and x86 compute nodes, along with essential operators 
+and configurations for development and production workloads.
 
-#### Other
-- https://docs.redhat.com/en/documentation/openshift_container_platform/4.18/html/security_and_compliance/cert-manager-operator-for-red-hat-openshift
+## Prerequisites
 
-## what needs to be done
+Before using this repository, ensure you have the following prerequisites:
 
-- [ ] create a bastion host
-    - [ ] install openshift-client
-    - [ ] install kubectl
-    - [ ] install oc
-    - [ ] install awscli
-    - [ ] install python3, python3-pip, ansible 
-    - [ ] clone the repo into the bastion host
-    - [ ] aws credentials, pull secret, aws
-    - [ ] create a a certificate if none is provided
+AWS Account with appropriate permissions:
+   - EC2 instances creation
+   - VPC management
+   - IAM roles and policies
+   - Route53 (if using custom domain)
 
-- [X] bootstrap a basic cluster
-    - [X] Arm controll plane
-    - [X] x86 compute nodes
+Required Software:
+   - OpenShift CLI (`oc`)
+   - Kubernetes CLI (`kubectl`)
+   - Python 3.x with pip
+   - Ansible
+   - Git
 
-- [ ] configure the cluster
-    - [ ] add additional machine sets
-        - [X] ARM compute nodes
-        - [ ] ARM bare metal compute nodes (optional)
-        - [ ] GPU compute nodes (optional)
-    - [X] add labels/taints to the machinesets
-    - [X] install Let's Encrypt certificate
-        - [X] install cert-manager operator
-        - [X] create issuer and get a certificate
-        - [X] configure ingress controller
-        - [X] configure the cluster to use the certificate by default on all routes
-    - [ ] configure OAuth and SSO
-        - [ ] add Keycloak to the cluster
-        - [X] configure htpasswd provider and add default admin user
-        - [ ] configure GitHub as identity provider
+Credentials:
+   - AWS credentials with appropriate permissions
+   - Red Hat pull secret
 
-- [ ] basic cluster operators
-    - [X] install OpenShift GitOps operator
-    - [X] install OpenShift Pipelines operator
-    - [X] install HashiCorp Vault operator
-    - [X] install Keycloak operator
+
+## Cluster creation
+
+### Repository Setup
+
+Clone this repository:
+
+```bash
+git clone <repository-url>
+cd rhadp-bootstrap
+```
+
+### Inventory setup
+
+Copy the inventory template to a new file:
+
+```bash
+cp inventory/main.yml.example inventory/main.yml
+```
+
+Edit the inventory file to match your environment:
+
+```bash
+vi inventory/main.yml
+```
+
+### Cluster bootstrap
+
+Initialize the cluster:
+
+```bash
+ansible-playbook -i inventory/ 1_bootstrap.yml
+```
+
+Monitor cluster installation:
+
+```bash
+tail -f $HOME/.openshift/<cluster-name>/.openshift-install.log
+```
+
+
+## References
+- [OpenShift Installation on AWS](https://docs.redhat.com/en/documentation/openshift_container_platform/4.18/html/installing_on_aws/index)
+- [Post-installation Configuration](https://docs.redhat.com/en/documentation/openshift_container_platform/4.18/html/postinstallation_configuration/index)
+- [Cert-Manager Operator](https://docs.redhat.com/en/documentation/openshift_container_platform/4.18/html/security_and_compliance/cert-manager-operator-for-red-hat-openshift)
     
