@@ -1,0 +1,18 @@
+all:
+  vars:
+    # default namespaces
+    default_operator_namespace: "openshift-operators"
+    gitops_namespace: "openshift-gitops"
+    keycloak_namespace: "keycloak"
+    vault_namespace: "vault"
+
+    # resource prefix
+    rhadp_prefix: "rhadp" # used in e.g. namespace creation
+
+    # default repo for all the GitOps apps
+    rhadp_gitops_repo_url: "https://github.com/rhadp-example-repos/rhadp-bootstrap"
+    rhadp_gitops_repo_revision: "main"
+
+    # default repo for all the Helm Charts
+    rhadp_helm_repo_url: "https://github.com/rhadp-example-repos/rhadp-bootstrap"
+    rhadp_helm_repo_revision: "main"

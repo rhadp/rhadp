@@ -24,4 +24,5 @@
 
     - name: wait until the cluster is ready
       pause:
-        seconds: 300 # is 5 minutes enough?
+        seconds: "{{ wait_timeout }}"
+      when: verify_cluster | bool

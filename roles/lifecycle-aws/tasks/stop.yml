@@ -12,6 +12,7 @@
         region: "{{ aws_default_region }}"
         filters:
           instance-state-name: running
+          "tag:Name": "{{ cluster_name }}*"
       register: ec2_instances
 
     - name: stop running instances
@@ -20,3 +21,17 @@
         wait: true
         instance_ids: "{{ ec2_instances.instances | map(attribute='instance_id') | list }}"
       when: ec2_instances.instances | length > 0
+
+    - name: verify instances are stopped
+      ec2_instance_info:
+        region: "{{ aws_default_region }}"
+        filters:
+          instance-state-name: running
+          "tag:Name": "{{ cluster_name }}*"
+      register: running_instances
+      when: verify_cluster | bool
+
+    - name: fail if instances are still running
+      fail:
+        msg: "Some instances are still running after stop operation"
+      when: verify_cluster | bool and running_instances.instances | length > 0

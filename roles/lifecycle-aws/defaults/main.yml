@@ -1,2 +1,5 @@
 ---
 # defaults
+
+wait_timeout: 600  # Timeout for cluster readiness wait in seconds
+verify_cluster: true  # Whether to verify cluster state

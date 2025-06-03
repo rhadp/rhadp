@@ -4,6 +4,13 @@ all:
     cluster_name: "rhadp"
     cluster_domain: "example.com"
 
+    # cluster variables
+    primary_architecture: "arm64" # control plane
+    secondary_architecture: "amd64" # initial compute nodes
+
+    primary_instance_count: 3 # 3 nodes minimum, on 3 different availability zones
+    secondary_instance_count: 3 # 3 nodes minimum, on 3 different availability zones
+    
     # cloud provider specific variables
     cloud_provider: "aws" # aws, azure, gcp
 
@@ -19,5 +26,12 @@ all:
     # letsencrypt variables
     letsencrypt_email: "hello@example.com"
     
+    # default users for the htpasswd authentication
+    htpasswd_admin_user: admin
+    htpasswd_admin_password: PASSWORD
+
+    remove_kubeadmin: True
+    remove_selfprovisioning: True
+
     # keys
     cluster_ssh_key: "$HOME/.ssh/rhadp"
