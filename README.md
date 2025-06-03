@@ -24,25 +24,9 @@ and configurations for development and production workloads.
 - AWS CLI v2 (for AWS deployments)
 - Azure CLI (for Azure deployments)
 
-AWS Account with appropriate permissions:
-   - EC2 instances creation
-   - VPC management
-   - IAM roles and policies
-   - Route53 (if using custom domain)
-
-### Azure Prerequisites
-- Azure subscription with appropriate permissions
-- Azure credentials configured
-- Sufficient Azure quotas for:
-  - Virtual Machines
-  - Virtual Networks
-  - Public IPs
-  - Load Balancers
-
 ### Required Credentials
 - Red Hat pull secret (download from [Red Hat Console](https://console.redhat.com))
 - Cloud provider credentials (AWS/Azure)
-- Optional: Custom domain certificates if using custom domain
 
 
 ## Architecture
@@ -56,11 +40,8 @@ The RHADP cluster is designed with a hybrid architecture:
 
 ### Compute Nodes
 - x86-based nodes for maximum compatibility
-- Separate node pools for:
-  - Application workloads
-  - Infrastructure components
-  - Monitoring and logging
-
+- ARM-based nodes for building the Red Hat In-Vehicle OS (RHIVOS)
+- ARM-bare-metal nodes to run RHIVOS VMs on the cluster (optional)
 
 ## Installation
 
@@ -68,7 +49,7 @@ The RHADP cluster is designed with a hybrid architecture:
 
 1. Clone this repository:
 ```bash
-git clone <repository-url>
+git clone https://github.com/rhadp-example-repos/rhadp-bootstrap.git
 cd rhadp-bootstrap
 ```
 
@@ -94,11 +75,13 @@ vi inventory/main.yml
 
 Required inventory variables:
 - `cluster_name`: Unique name for your cluster
-- `base_domain`: Base domain for the cluster
+- `cluster_domain`: Base domain for the cluster
 - `cloud_provider`: AWS or Azure
-- `region`: Cloud provider region
-- `pull_secret`: Red Hat pull secret
-- `ssh_key`: SSH public key for node access
+- `pull_secret_file`: path to the OpenShift pull secret file
+- `cluster_ssh_key`: location of the private key
+- `aws credentials` or
+- `azure credentials`
+
 
 ### Cluster Bootstrap
 

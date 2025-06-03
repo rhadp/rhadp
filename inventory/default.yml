@@ -1,5 +1,5 @@
 all:
   vars:    
     # other variables
-    openshift_install_dir: "$HOME/.openshift"
-    pull_secret_file: "inventory/pull-secret.txt"
+    
+    

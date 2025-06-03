@@ -35,3 +35,7 @@ all:
 
     # keys
     cluster_ssh_key: "$HOME/.ssh/rhadp"
+    pull_secret_file: "inventory/pull-secret.txt"
+
+    # local installation directory
+    openshift_install_dir: "$HOME/.openshift"
