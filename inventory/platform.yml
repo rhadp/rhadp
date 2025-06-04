@@ -1,4 +1,5 @@
 all:
+  # default values to configure the development platform deployment
   vars:
     # default namespaces
     default_operator_namespace: "openshift-operators"

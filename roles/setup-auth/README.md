@@ -22,3 +22,5 @@ This role performs the following tasks:
 
 - [OpenShift Authentication Documentation](https://docs.openshift.com/container-platform/latest/authentication/understanding-authentication.html)
 
+https://docs.redhat.com/en/documentation/red_hat_build_of_keycloak/26.2/html/operator_guide/index
+

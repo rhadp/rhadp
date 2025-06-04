@@ -1,5 +1,12 @@
 all:
-  vars:    
-    # other variables
+  # default values controlling the behavior of the bootstrap process
+  vars:
+    remove_kubeadmin: True
+    remove_selfprovisioning: True
     
-    
+    # keys
+    cluster_ssh_key: "$HOME/.ssh/rhadp"
+    pull_secret_file: "inventory/pull-secret.txt"
+
+    # local installation directory
+    openshift_install_dir: "$HOME/.openshift"

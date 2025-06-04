@@ -24,18 +24,9 @@ all:
     # gcp specific variables
     
     # letsencrypt variables
-    letsencrypt_email: "hello@example.com"
+    letsencrypt_email: "admin@example.com"
     
-    # default users for the htpasswd authentication
-    htpasswd_admin_user: admin
-    htpasswd_admin_password: PASSWORD
-
-    remove_kubeadmin: True
-    remove_selfprovisioning: True
-
-    # keys
-    cluster_ssh_key: "$HOME/.ssh/rhadp"
-    pull_secret_file: "inventory/pull-secret.txt"
-
-    # local installation directory
-    openshift_install_dir: "$HOME/.openshift"
+    # default admin user
+    default_admin_user: admin
+    default_admin_password: openshift
+    default_admin_email: "admin@example.com"

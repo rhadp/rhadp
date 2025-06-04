@@ -1,31 +1,6 @@
 # Implement your pre-install deployment tasks here
 # -------------------------------------------------
 
-- name: generate htpasswd hash for admin user
-  shell: >-
-    htpasswd -nb "{{ htpasswd_admin_user }}" "{{ htpasswd_admin_password }}"|cut -d: -f2
-  register: htpasswd_line
-  when:
-    - htpasswd_admin_password is defined
-
-- name: set fact admin user password
-  set_fact:
-    admin_password: "{{ htpasswd_line.stdout }}"
-  when:
-    - htpasswd_admin_password is defined
-    - htpasswd_line is succeeded
-    
-- name: create the default cluster admin group
-  ignore_errors: true
-  shell: |
-    oc adm groups new {{ cluster_admin_group }} \
-      --kubeconfig="$HOME/.kube/{{ cluster_name }}"
-
-- name: add the cluster-admin ClusterRole to the admin group
-  shell: |
-    oc adm policy add-cluster-role-to-group cluster-admin {{ cluster_admin_group }} \
-      --kubeconfig="$HOME/.kube/{{ cluster_name }}"
-
 - name: install keycloak operator
   include_role:
     name: roles/install-operator
@@ -40,3 +15,20 @@
     create_operator_namespace: true
     create_operator_group: true
     manage_all_namespaces: false
+
+- name: generate password hash for admin user
+  shell: >-
+    htpasswd -nb "{{ default_admin_user }}" "{{ default_admin_password }}"|cut -d: -f2
+  register: default_line
+  when:
+    - default_admin_password is defined
+
+- name: set fact admin user password
+  set_fact:
+    admin_password_hash: "{{ default_line.stdout }}"
+  when:
+    - default_admin_password is defined
+    - default_line is succeeded
+    
+
+
