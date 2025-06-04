@@ -7,8 +7,8 @@
   vars:
     operator_name: "openshift-gitops-operator"
     operator_subscription_name: "openshift-gitops-operator"
-    subscription_channel: "latest"
-    subscription_starting_csv: "openshift-gitops-operator.v1.16.1"
+    subscription_channel: "{{ gitops_subscription_channel }}"
+    subscription_starting_csv: "{{ gitops_subscription_starting_csv }}"
     operator_deployment_name: "openshift-gitops-operator-controller-manager"
     operator_namespace: "openshift-gitops-operator"
     operator_group_name: "openshift-gitops-operator"
@@ -22,8 +22,6 @@
     operator_name: "openshift-pipelines-operator-rh"
     operator_subscription_name: "openshift-pipelines-operator"
     operator_deployment_name: "openshift-pipelines-operator"
-    operator_namespace: "{{ default_operator_namespace}}"
-    create_operator_namespace: true
 
 - name: install hashicorp vault operator
   include_role:
@@ -31,8 +29,8 @@
   vars:
     operator_name: "vault-secrets-operator"
     operator_subscription_name: "vault-secrets-operator"
-    subscription_channel: "stable"
-    subscription_starting_csv: "vault-secrets-operator.v0.10.0"
+    subscription_channel: "{{ vault_subscription_channel }}"
+    subscription_starting_csv: "{{ vault_subscription_starting_csv }}"
     source: "certified-operators"
     operator_deployment_name: "vault-secrets-operator-controller-manager"
 
