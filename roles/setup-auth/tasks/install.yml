@@ -1,19 +1,7 @@
 # Implement your install deployment tasks here
 # -------------------------------------------------
 
-- name: generate htpasswd file
-  template:
-    src: "htpasswd.j2"
-    dest: "roles/setup-auth/files/users.htpasswd"
-    owner: "{{ ansible_user_id }}"
-    mode: 0664
-
-- name: create htpasswd secret from htpasswd file
-  shell: |
-    oc create secret generic htpasswd-secret \
-      --from-file=htpasswd=roles/setup-auth/files/users.htpasswd \
-      -n openshift-config \
-      --kubeconfig="$HOME/.kube/{{ cluster_name }}"
+# prepare the default admin user
 
 - name: create the default cluster admin group
   ignore_errors: true # can fail if group already exists
@@ -42,6 +30,23 @@
       --kubeconfig="$HOME/.kube/{{ cluster_name }}"
   when: default_admin_user is defined
 
+# prepare for the htpasswd oauth provider
+
+- name: generate htpasswd file
+  template:
+    src: "htpasswd.j2"
+    dest: "roles/setup-auth/files/users.htpasswd"
+    owner: "{{ ansible_user_id }}"
+    mode: 0664
+
+- name: create htpasswd secret from htpasswd file
+  ignore_errors: true # can fail if secret already exists
+  shell: |
+    oc create secret generic htpasswd-secret \
+      --from-file=htpasswd=roles/setup-auth/files/users.htpasswd \
+      -n openshift-config \
+      --kubeconfig="$HOME/.kube/{{ cluster_name }}"
+
 - name: update oauth configuration
   k8s:
     merge_type:
@@ -51,18 +56,24 @@
     state: present
     kubeconfig: "{{ local_kubeconfig_file }}"
 
+# prepare the keycloak instance
 
-#- name: create keycloak instance
-#  k8s:
-#    definition: "{{ lookup('template', item ) | from_yaml }}"
-#    state: present
-#    apply: yes
-#    kubeconfig: "{{ local_kubeconfig_file }}"
-#  loop:
-#    - keycloak-instance.yml.j2
-#    - keycloak-realm-openshift.yml.j2
-#    - keycloak-user-admin.yml.j2
+- name: create keycloak instance
+  k8s:
+    definition: "{{ lookup('template', item ) | from_yaml }}"
+    state: present
+    apply: yes
+    kubeconfig: "{{ local_kubeconfig_file }}"
+  loop:
+    - keycloak-db-secret.yml.j2
+    - keycloak-temp-admin-secret.yml.j2
+    - keycloak-postgres.yml.j2
+    - keycloak-db-service.yml.j2
+    - keycloak-instance.yml.j2
+    
+# configure the keycloak oauth provider
 
+# remove the kubeadmin user secret and self-provisioner cluster role binding
 
 - name: remove kubeadmin user secret
   k8s:
