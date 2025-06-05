@@ -19,12 +19,12 @@
     merge_type:
       - strategic-merge
       - merge
-    definition: "{{ lookup('template', 'cluster_role_binding.j2') | from_yaml }}"
+    definition: "{{ lookup('template', 'clusteradmin_role_binding.j2') | from_yaml }}"
     state: present
     kubeconfig: "{{ local_kubeconfig_file }}"
   when: default_admin_user is defined
 
-- name: add the admin user to the admin group
+- name: add the default admin user to the admin group
   shell: |
     oc adm groups add-users {{ cluster_admin_group }} {{ default_admin_user }} \
       --kubeconfig="$HOME/.kube/{{ cluster_name }}"
@@ -70,6 +70,7 @@
     - keycloak-postgres.yml.j2
     - keycloak-db-service.yml.j2
     - keycloak-instance.yml.j2
+    - keycloak-openshift-realm.yml.j2
     
 # configure the keycloak oauth provider
 

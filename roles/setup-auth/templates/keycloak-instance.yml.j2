@@ -20,6 +20,6 @@ spec:
   http:
     httpEnabled: true
   hostname:
-    hostname: keycloak-keycloak.apps.rhadp.sandbox2239.opentlc.com
+    hostname: keycloak-keycloak.apps.{{ cluster_name }}.{{ cluster_domain }}
   proxy:
     headers: xforwarded # double check your reverse proxy sets and overwrites the X-Forwarded-* headers

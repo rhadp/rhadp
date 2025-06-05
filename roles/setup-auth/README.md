@@ -24,3 +24,4 @@ This role performs the following tasks:
 
 https://docs.redhat.com/en/documentation/red_hat_build_of_keycloak/26.2/html/operator_guide/index
 
+https://access.redhat.com/webassets/avalon/d/red_hat_build_of_keycloak-26.2/rest-api//index.html

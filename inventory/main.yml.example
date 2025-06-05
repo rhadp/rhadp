@@ -1,5 +1,7 @@
 all:
   vars:
+    # cluster setup specific variables that MUST be individually set for each cluster
+
     # cluster variables
     cluster_name: "rhadp"
     cluster_domain: "example.com"
@@ -30,3 +32,7 @@ all:
     default_admin_user: admin
     default_admin_password: openshift
     default_admin_email: "admin@example.com"
+
+    # keycloak instance variables
+    keycloak_db_user: "admin"
+    keycloak_db_password: "openshift"
