@@ -2,7 +2,7 @@ apiVersion: k8s.keycloak.org/v2alpha1
 kind: KeycloakRealmImport
 metadata:
   name: openshift-realm
-  namespace: {{ keycloak_namespace }}
+  namespace: { { keycloak_namespace } }
 spec:
   keycloakCRName: keycloak
   realm:
@@ -22,39 +22,62 @@ spec:
         directAccessGrantsEnabled: true
         secret: "{{ keycloak_client_secret }}"
         redirectUris:
-          - "https://keycloak-keycloak.apps.{{ cluster_name }}.{{ cluster_domain }}/oauth2callback/*"
-          - "https://keycloak-keycloak.apps.{{ cluster_name }}.{{ cluster_domain }}/*/*"
+          - "https://oauth-openshift.apps.{{ cluster_name }}.{{ cluster_domain }}/oauth2callback/*"
         webOrigins:
-          - "https://keycloak-keycloak.apps.{{ cluster_name }}.{{ cluster_domain }}"
-    #clientScopes:
-    #  - name: openshift
-    #    protocol: openid-connect
-    #    protocolMappers:
-    #      - name: openshift-user-info
-    #        protocolMapper: oidc-usermodel-attribute-mapper
-    #       config:
-    #          attribute: username
-    #          idToken.claim: true
-    #          accessToken.claim: true
+          - "https://oauth-openshift.apps.{{ cluster_name }}.{{ cluster_domain }}"
+        bearerOnly: false
+        publicClient: false
+        serviceAccountsEnabled: true
+        authorizationServicesEnabled: true
+        fullScopeAllowed: true
+        protocol: openid-connect
+        consentRequired: false
+        access:
+          view: true
+          configure: true
+          manage: true
+    clientScopes:
+      - name: openshift
+        protocol: openid-connect
+        protocolMappers:
+          # Username mapper
+          - name: username-mapper
+            protocolMapper: oidc-usermodel-attribute-mapper
+            config:
+              attribute: username
+              idToken.claim: true
+              accessToken.claim: true
+              claim.name: username
+
+          # Email mapper
+          - name: email-mapper
+            protocolMapper: oidc-usermodel-attribute-mapper
+            config:
+              attribute: email
+              idToken.claim: true
+              accessToken.claim: true
+              claim.name: email
+
+          # Group membership mapper
+          - name: group-mapper
+            protocolMapper: oidc-group-membership-mapper
+            config:
+              id.token.claim: true
+              access.token.claim: true
+              claim.name: groups
+              full.path: true
     users:
-      - username: {{ default_admin_user }}
-        email: {{ default_admin_email }}
+      - username: developer
+        email: developer@{{ cluster_domain }}
         emailVerified: true
         enabled: true
-        firstName: {{ default_admin_user }}
-        lastName: Administrator
+        firstName: Dev
+        lastName: Null
         credentials:
           - type: password
-            value: "{{ default_admin_password }}"
-            temporary: false
+            value: "developer"
+            temporary: true
         realmRoles:
-          - realm-admin
-        clientRoles:
-          realm-management:
-            - realm-admin
-            - manage-users
-            - manage-clients
-            - manage-realm
+          - default-roles-openshift
         groups:
-          - cluster-admins
           - developers
