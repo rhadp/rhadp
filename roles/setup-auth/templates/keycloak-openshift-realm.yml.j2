@@ -9,9 +9,37 @@ spec:
     realm: openshift
     enabled: true
     displayName: "OpenShift Authentication Realm"
+    groups:
+      - name: cluster-admins
+        path: /cluster-admins
+      - name: developers
+        path: /developers
+    clients:
+      - name: openshift
+        clientId: openshift
+        enabled: true
+        standardFlowEnabled: true
+        directAccessGrantsEnabled: true
+        secret: "{{ keycloak_client_secret }}"
+        redirectUris:
+          - "https://keycloak-keycloak.apps.{{ cluster_name }}.{{ cluster_domain }}/oauth2callback/*"
+          - "https://keycloak-keycloak.apps.{{ cluster_name }}.{{ cluster_domain }}/*/*"
+        webOrigins:
+          - "https://keycloak-keycloak.apps.{{ cluster_name }}.{{ cluster_domain }}"
+    #clientScopes:
+    #  - name: openshift
+    #    protocol: openid-connect
+    #    protocolMappers:
+    #      - name: openshift-user-info
+    #        protocolMapper: oidc-usermodel-attribute-mapper
+    #       config:
+    #          attribute: username
+    #          idToken.claim: true
+    #          accessToken.claim: true
     users:
       - username: {{ default_admin_user }}
         email: {{ default_admin_email }}
+        emailVerified: true
         enabled: true
         firstName: {{ default_admin_user }}
         lastName: Administrator
@@ -27,3 +55,6 @@ spec:
             - manage-users
             - manage-clients
             - manage-realm
+        groups:
+          - cluster-admins
+          - developers

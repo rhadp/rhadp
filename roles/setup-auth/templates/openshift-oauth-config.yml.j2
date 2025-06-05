@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: OAuth
+metadata:
+  name: cluster
+spec:
+  identityProviders:
+  - name: sso
+    mappingMethod: claim
+    type: OpenID
+    openID:
+      clientID: openshift
+      clientSecret:
+        name: openid-client-secret
+      claims:
+        email:
+          - email
+        groups:
+          - groups
+        name:
+          - name
+        preferredUsername:
+          - preferred_username
+      extraScopes: []
+      issuer: https://keycloak-keycloak.apps.{{ cluster_name }}.{{ cluster_domain }}/realms/openshift
+  
+  - name: htpasswd
+    mappingMethod: claim
+    type: HTPasswd
+    htpasswd:
+      fileData:
+        name: htpasswd-secret

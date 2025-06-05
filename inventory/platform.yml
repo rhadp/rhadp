@@ -23,3 +23,6 @@ all:
     gitops_namespace: "openshift-gitops"
     keycloak_namespace: "keycloak"
     vault_namespace: "vault"
+
+    # storage
+    default_storage_class: "gp3-csi"
