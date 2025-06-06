@@ -61,8 +61,8 @@
     - keycloak-db-statefulset.yml.j2
     - keycloak-db-service.yml.j2
     - keycloak-instance.yml.j2
-    - keycloak-openshift-realm.yml.j2
     - openid-client-secret.yml.j2
+    - keycloak-openshift-realm.yml.j2
     
 # configure OAuth
 

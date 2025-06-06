@@ -4,4 +4,4 @@
 keycloak_subscription_channel: "stable-v26.2"
 keycloak_subscription_starting_csv: "rhbk-operator.v26.2.4-opr.2"
 
-keycloak_client_secret: "{{ lookup('password', '/dev/null length=24 chars=ascii_letters,digits,punctuation') }}"
+temp_secret: "{{ lookup('password', '/dev/null length=24 chars=ascii_letters,digits,punctuation') }}"
