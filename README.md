@@ -10,7 +10,6 @@ and configurations for development and production workloads.
 - [Architecture](#architecture)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Troubleshooting](#help)
 - [Contributing](#contributing)
 - [References](#references)
 
@@ -42,32 +41,34 @@ The RHADP cluster is designed with a hybrid architecture:
 - x86-based nodes for maximum compatibility
 - ARM-based nodes for building the Red Hat In-Vehicle OS (RHIVOS)
 - ARM-bare-metal nodes to run RHIVOS VMs on the cluster (optional)
+- x86-based nodes with GPU acceleration for training and inference workloads (optional)
+
 
 ## Installation
 
 ### Repository Setup
 
-1. Clone this repository:
+Clone this repository:
 ```bash
-git clone https://github.com/rhadp-example-repos/rhadp-bootstrap.git
+git clone https://github.com/rhadp/rhadp-bootstrap.git
 cd rhadp-bootstrap
 ```
 
-2. Create a Python virtual environment (recommended):
+Create a Python virtual environment (recommended):
 ```bash
 python3 -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+source venv/bin/activate
 pip install -r requirements.txt
 ```
 
 ### Inventory Setup
 
-1. Copy the inventory template:
+Copy the inventory template:
 ```bash
 cp inventory/main.yml.example inventory/main.yml
 ```
 
-2. Configure your environment:
+Configure your environment:
 ```bash
 # Edit the inventory file with your specific settings
 vi inventory/main.yml
@@ -79,58 +80,43 @@ Required inventory variables:
 - `cloud_provider`: AWS or Azure
 - `pull_secret_file`: path to the OpenShift pull secret file
 - `cluster_ssh_key`: location of the private key
-- `aws credentials` or
-- `azure credentials`
+- `aws credentials` or `azure credentials`
 
 
 ### Cluster Bootstrap
 
-1. Initialize the cluster:
+Initialize the cluster:
 ```bash
 ansible-playbook -i inventory/ 1_bootstrap.yml
 ```
 
-2. Monitor the installation:
+Monitor the installation:
 ```bash
-# View installation logs
 tail -f $HOME/.openshift/<cluster-name>/.openshift-install.log
-
-# Check cluster status
-oc get clusteroperators
 ```
 
 ## Usage
 
 ### Common Operations
 
-1. Start the cluster:
+Start the cluster:
 ```bash
 ansible-playbook -i inventory/ start.yml
 ```
 
-2. Stop the cluster:
+Stop the cluster:
 ```bash
 ansible-playbook -i inventory/ stop.yml
 ```
 
-3. Destroy the cluster:
+Destroy the cluster:
 ```bash
 ansible-playbook -i inventory/ 99_destroy.yml
 ```
 
-## Help
-
-- Check the [OpenShift Documentation](https://docs.openshift.com)
-- Review [Red Hat Knowledge Base](https://access.redhat.com)
-- Open an issue in this repository
-- Contact Red Hat Support
-
 ## Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Submit a pull request
+Fork the repository and submit a pull request.
 
 
 ## References
