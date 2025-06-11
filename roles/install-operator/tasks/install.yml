@@ -1,6 +1,10 @@
 # Implement your install deployment tasks here
 # -------------------------------------------------
 
+- name: installing operator
+  debug:
+    msg: "installing '{{ operator_name }}'"
+
 - name: create operator namespace
   k8s:
     kind: Namespace
@@ -109,3 +113,7 @@
     - r_deployment.resources[0].status.availableReplicas is defined
     - r_deployment.resources[0].status.availableReplicas | int == r_deployment.resources[0].spec.replicas | int
   when: wait_for_operator
+
+- name: installed operator
+  debug:
+    msg: "done installing '{{ operator_name }}'"  

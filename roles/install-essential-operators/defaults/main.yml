@@ -4,8 +4,5 @@
 gitops_subscription_channel: "latest"
 gitops_subscription_starting_csv: "openshift-gitops-operator.v1.16.1"
 
-#pipelines_subscription_channel: "latest"
-#pipelines_subscription_starting_csv: "openshift-pipelines-operator.v1.18.1"
-
 vault_subscription_channel: "stable"
 vault_subscription_starting_csv: "vault-secrets-operator.v0.10.0"
