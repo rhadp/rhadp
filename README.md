@@ -17,14 +17,13 @@ and configurations for development and production workloads.
 
 ### Required Software Versions
 - OpenShift CLI (`oc`) v4.18 or later
+- OpenShift Installer
 - Python 3.9 or later with pip
 - Ansible 2.15 or later
 - Git
-- AWS CLI v2 (for AWS deployments)
-- Azure CLI (for Azure deployments)
 
 ### Required Credentials
-- Red Hat pull secret (download from [Red Hat Console](https://console.redhat.com))
+- Red Hat pull secret (download from the [Red Hat Console](https://console.redhat.com))
 - Cloud provider credentials (AWS/Azure)
 
 
@@ -38,10 +37,10 @@ The RHADP cluster is designed with a hybrid architecture:
 - Dedicated nodes for control plane components
 
 ### Compute Nodes
-- x86-based nodes for maximum compatibility
-- ARM-based nodes for building the Red Hat In-Vehicle OS (RHIVOS)
-- ARM-bare-metal nodes to run RHIVOS VMs on the cluster (optional)
-- x86-based nodes with GPU acceleration for training and inference workloads (optional)
+- x86-based worker nodes for maximum compatibility
+- ARM-based worker nodes for building the Red Hat In-Vehicle OS (RHIVOS)
+- ARM bare-metal node(s) to run RHIVOS VMs on the cluster (optional)
+- x86-based nodes with GPU acceleration for AI training / inference workloads (optional)
 
 
 ## Installation
@@ -60,6 +59,17 @@ python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 ```
+
+
+### Preparing the installation
+
+Review and follow the instructions on how to create an OpenShift cluster with [Installer-provisioned Infrastructure](https://docs.redhat.com/en/documentation/openshift_container_platform/4.18/html/installing_on_aws/installer-provisioned-infrastructure):
+- Download the installer and place it into `roles/install-openshift-aws/files`.
+- Download and install the OpenShift CLI.
+- Download the OpenShift `pull-secret` and place it into `inventory`.
+
+All binaries can also be downloaded from [this location](https://mirror.openshift.com/pub/openshift-v4/clients/ocp/).
+
 
 ### Inventory Setup
 
@@ -90,7 +100,7 @@ Initialize the cluster:
 ansible-playbook -i inventory/ 1_bootstrap.yml
 ```
 
-Monitor the installation:
+Monitor the installation process:
 ```bash
 tail -f $HOME/.openshift/<cluster-name>/.openshift-install.log
 ```
@@ -118,9 +128,12 @@ ansible-playbook -i inventory/ 99_destroy.yml
 
 Fork the repository and submit a pull request.
 
+## Development
+
+A list of ideas, open issues etc is [here](docs/to.md). Also check the [Issues](https://github.com/rhadp/rhadp-bootstrap/issues) section of the this repository.
+
 
 ## References
 - [OpenShift Installation on AWS](https://docs.redhat.com/en/documentation/openshift_container_platform/4.18/html/installing_on_aws/index)
 - [Post-installation Configuration](https://docs.redhat.com/en/documentation/openshift_container_platform/4.18/html/postinstallation_configuration/index)
 
-    
