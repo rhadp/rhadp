@@ -51,7 +51,7 @@ This document outlines the development roadmap for the RHADP (Red Hat Advanced D
 
 ---
 
-## 🔧 Platform Enhancements (High Priority)
+## 🔧 Platform Enhancements
 
 ### Hardware & Infrastructure Optimization
 
@@ -177,6 +177,9 @@ This document outlines the development roadmap for the RHADP (Red Hat Advanced D
 - [Developer Hub Authentication](https://docs.redhat.com/en/documentation/red_hat_developer_hub/1.6/html/authentication_in_red_hat_developer_hub/assembly-authenticating-with-rhbk)
 - [Developer Hub RBAC](https://docs.redhat.com/en/documentation/red_hat_developer_hub/1.6/html/authorization_in_red_hat_developer_hub/index)
 - [Garage Object Storage](https://git.deuxfleurs.fr/Deuxfleurs/garage)
+
+### Random Links
+- [Keycloak OpenShift](https://blog.badgerops.net/keycloak-open-shift/)
 
 ### Next Steps
 1. Prioritize critical infrastructure items

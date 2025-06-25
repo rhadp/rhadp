@@ -4,8 +4,10 @@ all:
     # resource prefix
     rhadp_prefix: "rhadp" # used in e.g. namespace creation
 
-    # RBAC related
+    # default groups
     cluster_admin_group: "cluster-admins"
+    platform_admin_group: "platform-admins"
+    default_developer_group: "developers"
 
     # default repo for all the developer hub templates
     rhadp_templates_repo_url: "https://github.com/rhadp/rhadp-bootstrap"

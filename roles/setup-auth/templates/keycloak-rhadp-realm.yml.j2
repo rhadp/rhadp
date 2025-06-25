@@ -1,32 +1,35 @@
+# see https://github.com/keycloak/keycloak/blob/main/operator/src/test/resources/example-realm.yaml
 apiVersion: k8s.keycloak.org/v2alpha1
 kind: KeycloakRealmImport
 metadata:
-  name: openshift-realm
+  name: rhadp-realm
   namespace: {{ keycloak_namespace }}
 spec:
   keycloakCRName: keycloak
   realm:
-    realm: openshift
+    realm: rhadp
     enabled: true
-    displayName: "OpenShift Authentication Realm"
-    groups:
+    displayName: "Automotive Development Platform Authentication Realm"
+    
+    groups: # should match default openshift groups
       - name: cluster-admins
         path: /cluster-admins
+      - name: platform-admins
+        path: /platform-admins
       - name: developers
         path: /developers
+    
     clients:
-      - name: openshift
-        clientId: openshift
+      - name: rhadp
+        clientId: rhadp
         enabled: true
         standardFlowEnabled: true
         directAccessGrantsEnabled: true
         secret: "{{ keycloak_client_secret }}"
         redirectUris:
           - "https://oauth-openshift.apps.{{ cluster_name }}.{{ cluster_domain }}/oauth2callback/*"
-          - "https://console-openshift-console.apps.{{ cluster_name }}.{{ cluster_domain }}/*"
         webOrigins:
           - "https://oauth-openshift.apps.{{ cluster_name }}.{{ cluster_domain }}"
-          - "https://console-openshift-console.apps.{{ cluster_name }}.{{ cluster_domain }}"
         bearerOnly: false
         publicClient: false
         serviceAccountsEnabled: true
@@ -35,7 +38,6 @@ spec:
         protocol: openid-connect
         consentRequired: false
         frontchannelLogout: true
-        #scope: "openid profile email"
         access:
           view: true
           configure: true
@@ -69,15 +71,46 @@ spec:
     #          multivalued: "true"
 
     users:
-      - username: developer
-        email: developer@{{ cluster_domain }}
+      - username: steve
+        email: steve@{{ default_tld }}
         emailVerified: true
         enabled: true
-        firstName: "Dev"
-        lastName: "Null"
+        firstName: "Steve"
+        lastName: "Admin"
         credentials:
           - type: password
-            value: "developer"
+            value: "steve"
+            temporary: true
+        realmRoles:
+          - default-roles-openshift
+        groups:
+          - cluster-admins
+          - platform-admins
+
+      - username: bibi
+        email: bibi@{{ default_tld }}
+        emailVerified: true
+        enabled: true
+        firstName: "Bibi"
+        lastName: "RHIVOS Developer"
+        credentials:
+          - type: password
+            value: "bibi"
+            temporary: true
+        realmRoles:
+          - default-roles-openshift
+        groups:
+          - developers
+
+      - username: karol
+        email: karol@{{ default_tld }}
+        emailVerified: true
+        enabled: true
+        firstName: "Karol"
+        lastName: "Application Developer"
+        credentials:
+          - type: password
+            value: "karol"
             temporary: true
         realmRoles:
           - default-roles-openshift

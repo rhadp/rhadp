@@ -1,7 +1,7 @@
 all:
   # default values controlling the behavior of the bootstrap process
   vars:
-    remove_kubeadmin: True
+    remove_kubeadmin: False # True
     remove_selfprovisioning: True
     
     # keys

@@ -28,6 +28,9 @@ all:
     # letsencrypt variables
     letsencrypt_email: "admin@example.com"
     
+    # user setup
+    default_tld: "example.com" # top-level domain for default users etc
+    
     # default admin user
     default_admin_user: admin
     default_admin_password: openshift
