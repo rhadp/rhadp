@@ -4,11 +4,11 @@ metadata:
   name: cluster
 spec:
   identityProviders:
-  - name: "Single Sign-On"
+  - name: sso
     mappingMethod: claim
     type: OpenID
     openID:
-      clientID: rhadp
+      clientID: openshift
       clientSecret:
         name: openid-client-secret
       claims:
@@ -21,9 +21,9 @@ spec:
         preferredUsername:
           - preferred_username
       extraScopes: []
-      issuer: https://keycloak-keycloak.apps.{{ cluster_name }}.{{ cluster_domain }}/realms/openshift
+      issuer: https://keycloak-{{ keycloak_namespace }}.apps.{{ cluster_name }}.{{ cluster_domain }}/realms/openshift
   
-  - name: OpenShift
+  - name: htpasswd
     mappingMethod: claim
     type: HTPasswd
     htpasswd:

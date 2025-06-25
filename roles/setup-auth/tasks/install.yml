@@ -85,8 +85,12 @@
     - keycloak-db-service.yml.j2
     - keycloak-instance.yml.j2
     - openid-client-secret.yml.j2
-    - keycloak-rhadp-realm.yml.j2
+    - keycloak-openshift-realm.yml.j2
     
+- name: pause to allow KC startup and realm import to finish
+  pause:
+    seconds: 300
+
 # configure OAuth
 
 - name: update oauth configuration

@@ -2,34 +2,47 @@
 apiVersion: k8s.keycloak.org/v2alpha1
 kind: KeycloakRealmImport
 metadata:
-  name: rhadp-realm
+  name: openshift-realm
   namespace: {{ keycloak_namespace }}
 spec:
   keycloakCRName: keycloak
   realm:
-    realm: rhadp
+    realm: openshift
     enabled: true
     displayName: "Automotive Development Platform Authentication Realm"
-    
+
     groups: # should match default openshift groups
       - name: cluster-admins
         path: /cluster-admins
       - name: platform-admins
         path: /platform-admins
+        clientRoles:
+          account:
+            - view-profile
+            - view-groups
+            - manage-consent
+            - view-consent
+            - delete-account
+            - manage-account
+            - manage-account-links
+            - view-applications
+
       - name: developers
         path: /developers
-    
+
     clients:
-      - name: rhadp
-        clientId: rhadp
+      - name: openshift
+        clientId: openshift
         enabled: true
         standardFlowEnabled: true
         directAccessGrantsEnabled: true
         secret: "{{ keycloak_client_secret }}"
         redirectUris:
           - "https://oauth-openshift.apps.{{ cluster_name }}.{{ cluster_domain }}/oauth2callback/*"
+          - "https://console-openshift-console.apps.{{ cluster_name }}.{{ cluster_domain }}/*"
         webOrigins:
           - "https://oauth-openshift.apps.{{ cluster_name }}.{{ cluster_domain }}"
+          - "https://console-openshift-console.apps.{{ cluster_name }}.{{ cluster_domain }}"
         bearerOnly: false
         publicClient: false
         serviceAccountsEnabled: true
@@ -42,33 +55,23 @@ spec:
           view: true
           configure: true
           manage: true
-    
-    #clientScopes:
-    #  - name: openshift
-    #    protocol: openid-connect
-    #    protocolMappers:
-    #    
-    #      # Group membership mapper
-    #      - name: group-membership-mapper
-    #        protocolMapper: oidc-group-membership-mapper
-    #        config:
-    #          claim.name: "groups"
-    #          jsonType.label: "String"
-    #          idToken.claim: "true"
-    #          accessToken.claim: "true"
-    #          userinfo.token.claim: "true"
-    #          full.path: "true"
-    #
-    #      # Roles mapper
-    #      - name: roles-mapper
-    #        protocolMapper: oidc-usermodel-realm-role-mapper
-    #        config:
-    #          claim.name: "roles"
-    #          jsonType.label: "String"
-    #          idToken.claim: "true"
-    #          accessToken.claim: "true"
-    #          userinfo.token.claim: "true"
-    #          multivalued: "true"
+
+    clientScopes:
+      - name: openshift
+        protocol: openid-connect
+        protocolMappers:
+          - name: user_group_in_jwt
+            protocol: openid-connect
+            protocolMapper: oidc-group-membership-mapper
+            config:
+              claim.name: "groups"
+              full.path: "false"
+              introspection.token.claim: "true"
+              userinfo.token.claim: "true"
+              id.token.claim: "true"
+              lightweight.claim: "false"
+              access.token.claim: "true"
+              jsonType.label: "String"
 
     users:
       - username: steve
