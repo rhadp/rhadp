@@ -17,7 +17,7 @@ all:
     secondary_memory: 16384
 
     arm_instance_type: "m8g.xlarge"
-    arm_ami_id: "ami-0b04071739ccf4af2"
+    arm_ami_id: "ami-0b04071739ccf4af2" # ARM
     arm_instance_count: 1 # number of replicas per availability zone
     arm_volume_size: 120
     arm_volume_type: "gp3"

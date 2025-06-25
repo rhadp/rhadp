@@ -9,9 +9,9 @@
     oc adm groups new {{ item }} \
       --kubeconfig="$HOME/.kube/{{ cluster_name }}"
   with_items:
-    - cluster_admin_group
-    - platform_admin_group
-    - default_developer_group
+    - "{{ cluster_admin_group }}"
+    - "{{ platform_admin_group }}"
+    - "{{ default_developer_group }}"
 
 - name: add the cluster-admin ClusterRole to the admin group
   shell: |
