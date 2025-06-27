@@ -84,7 +84,7 @@
     - keycloak-db-statefulset.yml.j2
     - keycloak-db-service.yml.j2
     - keycloak-instance.yml.j2
-    - openid-client-secret.yml.j2
+    - openshift-openid-client-secret.yml.j2
     
 - name: wait for KC to be ready
   k8s_info:
