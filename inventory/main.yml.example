@@ -25,6 +25,10 @@ all:
     
     # gcp specific variables
     
+    # github secrets
+    github_client_id: "abc123"
+    github_client_secret: "def456"
+
     # letsencrypt variables
     letsencrypt_email: "admin@example.com"
     

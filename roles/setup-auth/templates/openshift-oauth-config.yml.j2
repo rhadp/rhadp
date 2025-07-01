@@ -4,7 +4,7 @@ metadata:
   name: cluster
 spec:
   identityProviders:
-  - name: sso
+  - name: "Automotive Development Platform"
     mappingMethod: claim
     type: OpenID
     openID:
@@ -23,7 +23,7 @@ spec:
       extraScopes: []
       issuer: https://keycloak-{{ keycloak_namespace }}.apps.{{ cluster_name }}.{{ cluster_domain }}/realms/openshift
   
-  - name: htpasswd
+  - name: OpenShift
     mappingMethod: claim
     type: HTPasswd
     htpasswd:

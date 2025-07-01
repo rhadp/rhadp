@@ -9,25 +9,15 @@ spec:
   realm:
     realm: openshift
     enabled: true
-    displayName: "Automotive Development Platform Authentication Realm"
+    displayName: "Automotive Development Platform"
 
-    defaultDefaultClientScopes:
-      - "acr"
-      - "basic"
-      - "email"
-      - "profile"
-      - "roles"
-      - "service_account"
-      - "web-origins"
-
-    defaultOptionalClientScopes:
-      - "address"
-      - "phone"
-      - "offline_access"
-      - "organization"
-      - "microprofile-jwt"
-      - "role_list"
-      - "saml_organization"
+    sslRequired: external
+    registrationAllowed: true
+    registrationEmailAsUsername: true
+    verifyEmail: false
+    loginWithEmailAllowed: true
+    duplicateEmailsAllowed: false
+    resetPasswordAllowed: false
 
     clients:
       - name: openshift
@@ -54,6 +44,22 @@ spec:
           view: true
           configure: true
           manage: true
+
+    users:
+      - username: developer
+        email: developer@{{ default_tld }}
+        emailVerified: true
+        enabled: true
+        firstName: "Dev"
+        lastName: "Null"
+        credentials:
+          - type: password
+            value: "developer"
+            temporary: false
+        realmRoles:
+          - default-roles-openshift
+        groups:
+          - platform-users
 
     clientScopes:
       - name: acr
@@ -266,7 +272,7 @@ spec:
               access.token.claim: "true"
               claim.name: "updated_at"
               jsonType.label: "long"
-          - name: "user_group_in_jwt"
+          - name: groups_mapper
             protocol: "openid-connect"
             protocolMapper: "oidc-group-membership-mapper"
             consentRequired: false
@@ -274,10 +280,11 @@ spec:
               full.path: "false"
               introspection.token.claim: "true"
               userinfo.token.claim: "true"
+              multivalued: "true"
               id.token.claim: "true"
-              lightweight.claim: "false"
+              lightweight.claim: "true"
               access.token.claim: "true"
-              claim.name: "group"
+              claim.name: "groups"
 
       - name: roles
         protocol: "openid-connect"
@@ -563,68 +570,61 @@ spec:
             protocolMapper: "saml-organization-membership-mapper"
             consentRequired: false
 
-    groups: # should match default openshift groups
-      - name: cluster-admins
-        path: /cluster-admins
-      - name: platform-admins
-        path: /platform-admins
-        clientRoles:
-          account:
-            - view-profile
-            - view-groups
-            - manage-consent
-            - view-consent
-            - delete-account
-            - manage-account
-            - manage-account-links
-            - view-applications
+    defaultDefaultClientScopes:
+      - acr
+      - basic
+      - email
+      - profile
+      - roles
+      - service_account
+      - web-origins
 
-      - name: developers
-        path: /developers
+    defaultOptionalClientScopes:
+      - address
+      - phone
+      - offline_access
+      - organization
+      - microprofile-jwt
+      - role_list
+      - saml_organization
+    
+    groups:
+      - name: platform-users
+        path: "/platform-users"
+        subGroups: []
+        attributes: {}
+        realmRoles: []
+        clientRoles: {}
+    
+    defaultGroups:
+      - "/platform-users"
 
-    users:
-      - username: steve
-        email: steve@{{ default_tld }}
-        emailVerified: true
+    defaultRole:
+      name: default-roles-openshift
+      description: "${role_default-roles}"
+      composite: true
+      clientRole: false
+    
+    identityProviders:
+      - alias: github
+        displayName: 'GitHub Login'
+        providerId: github
         enabled: true
-        firstName: "Steve"
-        lastName: "Admin"
-        credentials:
-          - type: password
-            value: "steve"
-            temporary: true
-        realmRoles:
-          - default-roles-openshift
-        groups:
-          - cluster-admins
-          - platform-admins
+        updateProfileFirstLoginMode: 'on'
+        trustEmail: false
+        storeToken: false
+        addReadTokenRoleOnCreate: false
+        authenticateByDefault: false
+        linkOnly: false
+        hideOnLogin: false
+        firstBrokerLoginFlowAlias: first broker login
+        config:
+          acceptsPromptNoneForwardFromClient: 'false'
+          clientId: "{{ github_client_id }}"
+          disableUserInfo: 'false'
+          filteredByClaim: 'false'
+          syncMode: LEGACY
+          clientSecret: "{{ github_client_secret }}"
+          caseSensitiveOriginalUsername: 'false'
 
-      - username: bibi
-        email: bibi@{{ default_tld }}
-        emailVerified: true
-        enabled: true
-        firstName: "Bibi"
-        lastName: "RHIVOS Developer"
-        credentials:
-          - type: password
-            value: "bibi"
-            temporary: true
-        realmRoles:
-          - default-roles-openshift
-        groups:
-          - developers
 
-      - username: karol
-        email: karol@{{ default_tld }}
-        emailVerified: true
-        enabled: true
-        firstName: "Karol"
-        lastName: "Application Developer"
-        credentials:
-          - type: password
-            value: "karol"
-            temporary: true
-        realmRoles:
-          - default-roles-openshift
-        groups:
-          - developers
