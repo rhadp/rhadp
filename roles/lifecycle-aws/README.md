@@ -1,22 +1,10 @@
 # lifecycle-aws
 
-This Ansible role manages the lifecycle of AWS OpenShift cluster EC2 instances.
-
-## Purpose
+This Ansible role manages the lifecycle of the OpenShift cluster EC2 instances.
 
 This role is designed to:
-- Manage AWS OpenShift cluster lifecycle
-- Control cluster instance states
 - Handle cluster start/stop operations
-- Ensure proper cluster state transitions
 
-## Tasks
-
-This role performs the following tasks:
-- Starts a stopped OpenShift cluster by starting EC2 instances
-- Stops a running OpenShift cluster by stopping EC2 instances
-- Verifies cluster state transitions
-- Waits for cluster readiness after start
 
 ## Required Variables
 

@@ -10,15 +10,15 @@ all:
     platform_user_group: "platform-users"
 
     # default repo for all the developer hub templates
-    rhadp_templates_repo_url: "https://github.com/rhadp/rhadp-bootstrap"
+    rhadp_templates_repo_url: "https://github.com/rhadp/rhadp-templates"
     rhadp_templates_repo_revision: "main"
 
     # default repo for all the GitOps apps
-    rhadp_gitops_repo_url: "https://github.com/rhadp/rhadp-bootstrap"
+    rhadp_gitops_repo_url: "https://github.com/rhadp/rhadp-manifests"
     rhadp_gitops_repo_revision: "main"
 
     # default repo for all the Helm Charts
-    rhadp_helm_repo_url: "https://github.com/rhadp/rhadp-bootstrap"
+    rhadp_helm_repo_url: "https://github.com/rhadp/rhadp-manifests"
     rhadp_helm_repo_revision: "main"
 
     # default namespaces
@@ -27,4 +27,5 @@ all:
     vault_namespace: "vault"
 
     # storage
-    default_storage_class: "gp3-csi"
+    default_storage_class: "gp3-csi" # for AWS
+    # default_storage_class: "xxx" # for Azure

@@ -1,21 +1,6 @@
 # Implement your pre-install deployment tasks here
 # -------------------------------------------------
 
-- name: install keycloak operator
-  include_role:
-    name: roles/install-operator
-  vars:
-    operator_name: "rhbk-operator"
-    operator_subscription_name: "rhbk-operator"
-    subscription_channel: "{{ keycloak_subscription_channel }}"
-    subscription_starting_csv: "{{ keycloak_subscription_starting_csv }}"
-    operator_deployment_name: "rhbk-operator"
-    operator_namespace: "{{ keycloak_namespace}}"
-    operator_group_name: "keycloak"
-    create_operator_namespace: true
-    create_operator_group: true
-    manage_all_namespaces: false
-
 - name: generate password hash for admin user
   shell: >-
     htpasswd -nb "{{ default_admin_user }}" "{{ default_admin_password }}"|cut -d: -f2

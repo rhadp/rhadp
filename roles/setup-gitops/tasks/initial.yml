@@ -1,6 +1,0 @@
-# Implement your initial tasks here
-# -------------------------------------------------
-
-- name: set the local kubeconfig location
-  set_fact:
-    local_kubeconfig_file: "~/.kube/{{ cluster_name }}" 

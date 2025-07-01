@@ -7,7 +7,7 @@
     ACTION: "START" # START, STOP, UNINSTALL, UPDATE
 
   tasks:
-    - name: start the openshift cluster
+    - name: start the openshift cluster ()
       when: cloud_provider == "aws"
       include_role:
         name: roles/lifecycle-aws

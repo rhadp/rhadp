@@ -1,57 +1,11 @@
 # Implement your install deployment tasks here
 # -------------------------------------------------
 
-# prepare the default admin user
+- name: setup rbac  
+  import_tasks: setup_rbac.yml
 
-- name: create the default groups
-  ignore_errors: true # can fail if group already exists
-  shell: |
-    oc adm groups new {{ item }} \
-      --kubeconfig="$HOME/.kube/{{ cluster_name }}"
-  with_items:
-    - "{{ cluster_admin_group }}"
-    - "{{ platform_admin_group }}"
-    - "{{ platform_user_group }}"
-
-- name: add the cluster-admin ClusterRole to the admin group
-  shell: |
-    oc adm policy add-cluster-role-to-group cluster-admin {{ cluster_admin_group }} \
-      --kubeconfig="$HOME/.kube/{{ cluster_name }}"
-
-- name: set up cluster admin user
-  k8s:
-    merge_type:
-      - strategic-merge
-      - merge
-    definition: "{{ lookup('template', 'clusteradmin_role_binding.j2') | from_yaml }}"
-    state: present
-    kubeconfig: "{{ local_kubeconfig_file }}"
-  when: default_admin_user is defined
-
-- name: add the default admin user to the admin groups
-  shell: |
-    oc adm groups add-users {{ cluster_admin_group }} {{ default_admin_user }} \
-      --kubeconfig="$HOME/.kube/{{ cluster_name }}"
-
-    oc adm groups add-users {{ platform_admin_group }} {{ default_admin_user }} \
-      --kubeconfig="$HOME/.kube/{{ cluster_name }}"
-  when: default_admin_user is defined
-
-# RBAC for the rest of the default groups
-
-- name: add default roles to the default developer group
-  shell: |
-    oc adm policy add-cluster-role-to-group {{ item }} {{ platform_admin_group }} \
-      --kubeconfig="$HOME/.kube/{{ cluster_name }}"
-
-    oc adm policy add-cluster-role-to-group {{ item }} {{ platform_user_group }} \
-      --kubeconfig="$HOME/.kube/{{ cluster_name }}"
-  with_items: # see https://docs.redhat.com/en/documentation/openshift_container_platform/4.18/html/authentication_and_authorization/using-rbac
-    - "basic-user"
-    - "cluster-status"
-    - "cluster-reader"
-    - "edit"
-    - "self-provisioner"
+- name: setup keycloak
+  import_tasks: setup_keycloak.yml
 
 # prepare for the htpasswd oauth provider
 
@@ -70,65 +24,6 @@
       -n openshift-config \
       --kubeconfig="$HOME/.kube/{{ cluster_name }}"
 
-# prepare the keycloak instance
-
-- name: create keycloak instance
-  k8s:
-    definition: "{{ lookup('template', item ) | from_yaml }}"
-    state: present
-    apply: yes
-    kubeconfig: "{{ local_kubeconfig_file }}"
-  loop:
-    - keycloak-temp-admin-secret.yml.j2
-    - keycloak-db-secret.yml.j2
-    - keycloak-db-statefulset.yml.j2
-    - keycloak-db-service.yml.j2
-    - keycloak-instance.yml.j2
-    - openshift-openid-client-secret.yml.j2
-    
-- name: wait for KC to be ready
-  k8s_info:
-    api_version: v1
-    kind: StatefulSet
-    namespace: "{{ keycloak_namespace }}"
-    name: "keycloak"
-    kubeconfig: "{{ local_kubeconfig_file }}"
-  register: r_statefulset
-  retries: 60
-  delay: 10
-  until:
-    - r_statefulset.resources | length | int > 0
-    - r_statefulset.resources[0].status.availableReplicas is defined
-    - r_statefulset.resources[0].status.availableReplicas | int == r_statefulset.resources[0].spec.replicas | int
-
-- name: import the realm
-  k8s:
-    definition: "{{ lookup('template', item ) | from_yaml }}"
-    state: present
-    apply: yes
-    kubeconfig: "{{ local_kubeconfig_file }}"
-  loop:
-    - openshift-realm.yml.j2
-
-- name: pause to allow realm import to start
-  pause:
-    seconds: 60
-
-- name: wait for realm to be ready
-  k8s_info:
-    api_version: v1
-    kind: StatefulSet
-    namespace: "{{ keycloak_namespace }}"
-    name: "keycloak"
-    kubeconfig: "{{ local_kubeconfig_file }}"
-  register: r_statefulset
-  retries: 60
-  delay: 10
-  until:
-    - r_statefulset.resources | length | int > 0
-    - r_statefulset.resources[0].status.availableReplicas is defined
-    - r_statefulset.resources[0].status.availableReplicas | int == r_statefulset.resources[0].spec.replicas | int
-
 # configure OAuth
 
 - name: update oauth configuration
@@ -140,21 +35,3 @@
     state: present
     kubeconfig: "{{ local_kubeconfig_file }}"
 
-# remove the kubeadmin user secret and self-provisioner cluster role binding
-
-- name: remove kubeadmin user secret
-  k8s:
-    api_version: v1
-    kind: Secret
-    namespace: kube-system
-    name: kubeadmin
-    state: absent
-    kubeconfig: "{{ local_kubeconfig_file }}"
-  when: remove_kubeadmin | bool
-
-- name: remove self-provisioner
-  shell: |
-    oc adm policy remove-cluster-role-from-group \
-      self-provisioner system:authenticated:oauth \
-      --kubeconfig="$HOME/.kube/{{ cluster_name }}"
-  when: remove_selfprovisioning | bool

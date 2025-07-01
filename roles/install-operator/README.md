@@ -1,13 +1,15 @@
 # install-operator
 
-This role provides a standardized way to install and manage operators from the Red Hat Operators catalog in OpenShift clusters. It handles the complete lifecycle of operator installation, including namespace creation, operator group configuration, subscription management, and deployment verification.
+This role provides a standardized way to install and manage operators from the Red Hat Operators catalog in OpenShift clusters. 
+
+It handles the complete lifecycle of operator installation, including namespace creation, operator group configuration, subscription management, and deployment verification.
 
 ## Purpose
 
 The role is designed to:
 - Simplify operator installation in OpenShift environments
 - Provide consistent operator deployment patterns
-- Handle operator lifecycle management (install/update/uninstall)
+- Handle operator lifecycle management (install/uninstall)
 - Support both cluster-wide and namespace-scoped operator installations
 - Automatically verify operator deployment status
 
@@ -33,7 +35,7 @@ The role is designed to:
 
 ### System Parameters
 - `local_kubeconfig_file`: Path to the kubeconfig file for cluster access
-- `ACTION`: The action to perform (INSTALL/UPDATE/UNINSTALL)
+- `ACTION`: The action to perform (INSTALL/UNINSTALL)
 - `become_override`: Override the become behavior for the role
 
 ## Default values
