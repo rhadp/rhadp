@@ -1,6 +1,14 @@
 # install-essential-operators
 
-This Ansible role installs operators required for the Red Hat Automotive Development Platform (RHADP) platform. The role does NOT configure any instances of the operators.
+This Ansible role installs operators required for the Red Hat Automotive Development Platform (RHADP) platform. The role does NOT configure any instances of these operators.
+
+## Operators
+
+- OpenShift GitOps Operator
+- OpenShift Pipelines Operator
+- OpenShift OpenShift Dev Spaces
+- Red Hat Developer Hub Operator
+- HashiCorp Vault Operator
 
 ## References
 
