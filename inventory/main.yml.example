@@ -40,6 +40,6 @@ all:
     default_admin_password: openshift
     default_admin_email: "admin@example.com"
 
-    # keycloak instance variables
+    # default keycloak admin user
     keycloak_db_user: "admin"
     keycloak_db_password: "openshift"
