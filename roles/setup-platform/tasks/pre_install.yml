@@ -1,0 +1,12 @@
+# Implement your pre-install deployment tasks here
+# -------------------------------------------------
+
+#- name: create platform namespaces
+#  k8s:
+#    kind: Namespace
+#    name: "{{ item }}"
+#    state: present
+#    apply: yes
+#    kubeconfig: "{{ local_kubeconfig_file }}"
+#  with_items:
+#    - "{{ platform_gitops_namespace }}"

@@ -22,7 +22,7 @@ all:
     rhadp_helm_repo_revision: "main"
 
     # default namespaces
-    gitops_namespace: "openshift-gitops"
+    gitops_namespace: "openshift-gitops" # the system wide GitOps instance
     keycloak_namespace: "keycloak"
     vault_namespace: "vault"
 

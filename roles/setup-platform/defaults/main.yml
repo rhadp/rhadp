@@ -1,0 +1,5 @@
+---
+# defaults
+
+platform_infra_namespace: "rhadp-infra"
+platform_gitops_namespace: "rhadp-gitops" # the platform's GitOps instance

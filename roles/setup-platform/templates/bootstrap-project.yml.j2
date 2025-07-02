@@ -1,0 +1,16 @@
+kind: AppProject
+apiVersion: argoproj.io/v1alpha1
+metadata:
+  name: "rhadp-bootstrap"
+  namespace: "openshift-gitops"
+spec:
+  clusterResourceWhitelist:
+    - group: "*"
+      kind: "*"
+  destinations:
+    - namespace: "openshift-gitops"
+      server: "*"
+    - namespace: "rhadp-infra"
+      server: "*"
+  sourceRepos:
+    - "*"
