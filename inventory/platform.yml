@@ -4,6 +4,14 @@ all:
     # resource prefix
     rhadp_prefix: "rhadp" # used in e.g. namespace creation
 
+    # remove the kubeadmin user and the self-provisioning role
+    remove_kubeadmin: True
+    remove_selfprovisioning: True
+
+    # keys
+    cluster_ssh_key: "$HOME/.ssh/rhadp" # use existing keypair, or generate a new one if it does not exist
+    pull_secret_file: "inventory/pull-secret.json" # place the pull secret at this loacation
+
     # default groups
     cluster_admin_group: "cluster-admins"
     platform_admin_group: "platform-admins"
@@ -28,4 +36,4 @@ all:
 
     # storage
     default_storage_class: "gp3-csi" # for AWS
-    # default_storage_class: "xxx" # for Azure
+    

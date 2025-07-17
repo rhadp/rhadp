@@ -3,7 +3,7 @@ inventory/**
 **/users.htpasswd
 openshift-install
 env.sh
-
+**/venv/**
 hack/**
 hack.*
 **hack**.yml
