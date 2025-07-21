@@ -25,11 +25,3 @@ all:
     aws_arm_gpu: 0
     aws_arm_memory: 16384
 
-    aws_gpu_instance_type: "g5.xlarge"
-    aws_gpu_ami_id: "ami-078e26f293629fe91" # AMD
-    aws_gpu_instance_count: 1 # number of replicas per availability zone
-    aws_gpu_volume_size: 120
-    aws_gpu_volume_type: "gp3"
-    aws_gpu_vcpu: 4
-    aws_gpu_gpu: 1
-    aws_gpu_memory: 16384

@@ -7,9 +7,9 @@ compute:
   name: worker
   platform:
     azure:
-      type: Standard_D4ps_v5
+      type: {{ azure_secondary_instance_type }}
       osDisk:
-        diskType: Premium_LRS
+        diskType: {{ azure_secondary_volume_type }}
   replicas: {{ secondary_instance_count }}
 controlPlane:
   architecture: {{ primary_architecture }}
@@ -17,9 +17,9 @@ controlPlane:
   name: master
   platform:
     azure:
-      type: Standard_D4ps_v5
+      type: {{ azure_primary_instance_type }}
       osDisk:
-        diskType: Premium_LRS
+        diskType: {{ azure_primary_volume_type }}
   replicas: {{ primary_instance_count }}
 metadata:
   name: {{ cluster_name }}
