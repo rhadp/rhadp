@@ -7,8 +7,8 @@ compute:
   name: worker
   platform:
     aws:
-      amiID: {{ secondary_ami_id }}
-      type: {{ secondary_instance_type }}
+      amiID: {{ aws_secondary_ami_id }}
+      type: {{ aws_secondary_instance_type }}
   replicas: {{ secondary_instance_count }}
 controlPlane:
   architecture: {{ primary_architecture }}
@@ -16,8 +16,8 @@ controlPlane:
   name: master
   platform:
     aws:
-      amiID: {{ primary_ami_id }}
-      type: {{ primary_instance_type }}
+      amiID: {{ aws_primary_ami_id }}
+      type: {{ aws_primary_instance_type }}
   replicas: {{ primary_instance_count }}
 metadata:
   name: {{ cluster_name }}

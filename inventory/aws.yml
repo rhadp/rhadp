@@ -4,32 +4,32 @@ all:
     # aws specific variables
     # see https://docs.redhat.com/en/documentation/openshift_container_platform/4.18/html/installing_on_aws/user-provisioned-infrastructure#installation-aws-user-infra-rhcos-ami_installing-aws-user-infra
     
-    primary_instance_type: "m7g.xlarge" # 4 vCPU, 16 GiB RAM
-    primary_ami_id: "ami-0b04071739ccf4af2" # ARM
-    primary_vcpu: 4
-    primary_gpu: 0
-    primary_memory: 16384
+    aws_primary_instance_type: "m7g.xlarge" # 4 vCPU, 16 GiB RAM
+    aws_primary_ami_id: "ami-0b04071739ccf4af2" # ARM
+    aws_primary_vcpu: 4
+    aws_primary_gpu: 0
+    aws_primary_memory: 16384
     
-    secondary_instance_type: "m6a.xlarge" # 4 vCPU, 16 GiB RAM
-    secondary_ami_id: "ami-078e26f293629fe91" # AMD
-    secondary_vcpu: 4
-    secondary_gpu: 0
-    secondary_memory: 16384
+    aws_secondary_instance_type: "m6a.xlarge" # 4 vCPU, 16 GiB RAM
+    aws_secondary_ami_id: "ami-078e26f293629fe91" # AMD
+    aws_secondary_vcpu: 4
+    aws_secondary_gpu: 0
+    aws_secondary_memory: 16384
 
-    arm_instance_type: "m8g.xlarge" # 4 vCPU, 16 GiB RAM
-    arm_ami_id: "ami-0b04071739ccf4af2" # ARM
-    arm_instance_count: 1 # number of replicas per availability zone
-    arm_volume_size: 120
-    arm_volume_type: "gp3"
-    arm_vcpu: 4
-    arm_gpu: 0
-    arm_memory: 16384
+    aws_arm_instance_type: "m8g.xlarge" # 4 vCPU, 16 GiB RAM
+    aws_arm_ami_id: "ami-0b04071739ccf4af2" # ARM
+    aws_arm_instance_count: 1 # number of replicas per availability zone
+    aws_arm_volume_size: 120
+    aws_arm_volume_type: "gp3"
+    aws_arm_vcpu: 4
+    aws_arm_gpu: 0
+    aws_arm_memory: 16384
 
-    gpu_instance_type: "g5.xlarge"
-    gpu_ami_id: "ami-078e26f293629fe91" # AMD
-    gpu_instance_count: 1 # number of replicas per availability zone
-    gpu_volume_size: 120
-    gpu_volume_type: "gp3"
-    gpu_vcpu: 4
-    gpu_gpu: 1
-    gpu_memory: 16384
+    aws_gpu_instance_type: "g5.xlarge"
+    aws_gpu_ami_id: "ami-078e26f293629fe91" # AMD
+    aws_gpu_instance_count: 1 # number of replicas per availability zone
+    aws_gpu_volume_size: 120
+    aws_gpu_volume_type: "gp3"
+    aws_gpu_vcpu: 4
+    aws_gpu_gpu: 1
+    aws_gpu_memory: 16384
