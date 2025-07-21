@@ -1,2 +1,11 @@
 ---
 # defaults
+
+primary_architecture: "arm64" # control plane
+primary_instance_count: 3 # 3 nodes minimum, on 3 different availability zones
+
+secondary_architecture: "arm64" #"amd64" # initial compute nodes, 2nd set of compute nodes will be arm64
+secondary_instance_count: 3 # 3 nodes minimum, on 3 different availability zones
+
+# storage
+default_storage_class: "managed-csi" # for Azure

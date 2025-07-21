@@ -2,7 +2,7 @@ additionalTrustBundlePolicy: Proxyonly
 apiVersion: v1
 baseDomain: {{ cluster_domain }}
 compute:
-- architecture: {{ primary_architecture }}
+- architecture: {{ secondary_architecture }}
   hyperthreading: Enabled
   name: worker
   platform:
