@@ -18,6 +18,17 @@
           include_role:
             name: roles/infra-openshift-aws
 
+    - name: install clustere on Azure
+      when: cloud_provider == "azure"
+      block:
+        - name: bootstrap the openshift cluster
+          include_role:
+            name: roles/install-openshift-azure
+
+        - name: configure the openshift cluster infrastructure
+          include_role:
+            name: roles/infra-openshift-azure
+
     - name: configure openshift cluster authentication
       include_role:
         name: roles/setup-auth

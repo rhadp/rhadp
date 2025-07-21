@@ -13,6 +13,10 @@
     src: "{{ cluster_ssh_key }}.pub"
   register: cluster_ssh_pub_key
 
+- name: debug
+  debug:
+    msg: "{{ pull_secret_file }}"
+    
 - name: import pull secret
   slurp:
     src: "{{ pull_secret_file }}"

@@ -1,0 +1,22 @@
+# Implement your uninstall deployment tasks here
+# -------------------------------------------------
+
+- name: destroy the openshift cluster
+  ignore_errors: true
+  shell: |
+    source env.sh
+
+    ./openshift-install destroy cluster --dir="{{ openshift_install_dir }}/{{ cluster_name }}"
+  args:
+    chdir: "roles/install-openshift-azure/files"
+
+- name: remove the cluster directory
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "~/.kube/{{ cluster_name }}"
+    - "{{ openshift_install_dir }}/{{ cluster_name }}"
+    - "roles/install-openshift-azure/files/env.sh"
+    - "{{ cluster_ssh_key }}"
+    - "{{ cluster_ssh_key }}.pub"
