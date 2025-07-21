@@ -4,14 +4,18 @@ all:
     # resource prefix
     rhadp_prefix: "rhadp" # used in e.g. namespace creation
 
+    # cluster variables
+    primary_architecture: "arm64" # control plane
+    secondary_architecture: "amd64" # initial compute nodes, 2nd set of compute nodes will be arm64
+
+    primary_instance_count: 3 # 3 nodes minimum, on 3 different availability zones
+    secondary_instance_count: 3 # 3 nodes minimum, on 3 different availability zones
+
     # remove the kubeadmin user and the self-provisioning role
     remove_kubeadmin: True
     remove_selfprovisioning: True
 
-    # keys
-    cluster_ssh_key: "$HOME/.ssh/rhadp" # use existing keypair, or generate a new one if it does not exist
-    
-    # default groups
+    # default openshift groups
     cluster_admin_group: "cluster-admins"
     platform_admin_group: "platform-admins"
     platform_user_group: "platform-users"

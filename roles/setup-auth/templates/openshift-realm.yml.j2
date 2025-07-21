@@ -620,11 +620,11 @@ spec:
         firstBrokerLoginFlowAlias: first broker login
         config:
           acceptsPromptNoneForwardFromClient: 'false'
-          clientId: "{{ github_client_id }}"
+          clientId: "{{ github_oauth_client_id }}"
           disableUserInfo: 'false'
           filteredByClaim: 'false'
           syncMode: LEGACY
-          clientSecret: "{{ github_client_secret }}"
+          clientSecret: "{{ github_oauth_client_secret }}"
           caseSensitiveOriginalUsername: 'false'
 
 
