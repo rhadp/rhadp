@@ -33,11 +33,8 @@ all:
 
     # letsencrypt variables
     letsencrypt_email: "hello@example.com"
-    letsencrypt_email: "hello@example.com"
     
     # user setup
-    default_tld: "example.com" # top-level domain for default users
-
     default_tld: "example.com" # top-level domain for default users
 
     # default admin user
