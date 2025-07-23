@@ -1,0 +1,34 @@
+additionalTrustBundlePolicy: Proxyonly
+apiVersion: v1
+baseDomain: {{ cluster_domain }}
+metadata:
+  name: rhadp
+compute:
+- architecture: {{ gcp_secondary_architecture }}
+  hyperthreading: Enabled
+  name: worker
+  platform: {}
+  replicas: 3
+controlPlane:
+  architecture: {{ gcp_primary_architecture }}
+  hyperthreading: Enabled
+  name: master
+  platform: {}
+  replicas: 3
+networking:
+  clusterNetwork:
+  - cidr: 10.128.0.0/14
+    hostPrefix: 23
+  machineNetwork:
+  - cidr: 10.0.0.0/16
+  networkType: OVNKubernetes
+  serviceNetwork:
+  - 172.30.0.0/16
+platform:
+  gcp:
+    projectID: {{ gcp_project_id }}
+    region: {{ gcp_default_region }}
+publish: External
+pullSecret: '{{ cluster_pull_secret['content'] | b64decode }}'
+sshKey: |
+  {{ cluster_ssh_pub_key['content'] | b64decode }}

@@ -1,0 +1,25 @@
+# Implement your initial tasks here
+# -------------------------------------------------
+
+- name: set cluster facts
+  set_fact:
+    cluster_fqn: "{{ cluster_name }}-{{ cloud_provider }}"
+
+- name: create dirs
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0755
+  with_items:
+    - "{{ cluster_metadata_dir }}/{{ cluster_fqn }}"
+
+- name: create .env file
+  template:
+    src: "roles/install-openshift/templates/env-{{ cloud_provider }}.j2"
+    dest: "{{ openshift_install_dir }}/.env-{{ cluster_fqn }}.sh"
+
+- name: create azure credentials file
+  when: cloud_provider == "azure"
+  template:
+    src: "roles/install-openshift/templates/azure_credentials.json.j2"
+    dest: "~/.azure/osServicePrincipal.json"

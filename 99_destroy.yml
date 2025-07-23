@@ -9,5 +9,4 @@
   tasks:
     - name: destroy the openshift cluster
       include_role:
-        name: roles/install-openshift-aws
-      when: cloud_provider == "aws"
+        name: roles/install-openshift

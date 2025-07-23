@@ -1,26 +1,26 @@
 additionalTrustBundlePolicy: Proxyonly
 apiVersion: v1
 baseDomain: {{ cluster_domain }}
+metadata:
+  name: {{ cluster_name }}
 compute:
-- architecture: {{ secondary_architecture }}
+- architecture: {{ aws_secondary_architecture }}
   hyperthreading: Enabled
   name: worker
   platform:
     aws:
-      amiID: {{ aws_secondary_ami_id }}
+      #amiID: {{ aws_secondary_ami_id }}
       type: {{ aws_secondary_instance_type }}
-  replicas: {{ secondary_instance_count }}
+  replicas: {{ aws_secondary_instance_count }}
 controlPlane:
-  architecture: {{ primary_architecture }}
+  architecture: {{ aws_primary_architecture }}
   hyperthreading: Enabled
   name: master
   platform:
     aws:
-      amiID: {{ aws_primary_ami_id }}
+      #amiID: {{ aws_primary_ami_id }}
       type: {{ aws_primary_instance_type }}
-  replicas: {{ primary_instance_count }}
-metadata:
-  name: {{ cluster_name }}
+  replicas: {{ aws_primary_instance_count }}
 networking:
   clusterNetwork:
   - cidr: 10.128.0.0/14
