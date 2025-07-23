@@ -8,6 +8,10 @@ all:
     gitops_namespace: "openshift-gitops" # the system wide GitOps instance
     keycloak_namespace: "keycloak"
     vault_namespace: "vault"    
+    # default namespaces
+    gitops_namespace: "openshift-gitops" # the system wide GitOps instance
+    keycloak_namespace: "keycloak"
+    vault_namespace: "vault"    
 
     # default openshift groups
     cluster_admin_group: "cluster-admins"
@@ -29,3 +33,12 @@ all:
     # remove the kubeadmin user and the self-provisioning role
     remove_kubeadmin: True
     remove_selfprovisioning: True
+
+    # local directory where the cluster metadata will be stored
+    cluster_metadata_dir: "$HOME/.openshift"
+
+    # where to store the openshift-install binary
+    openshift_install_dir: "bin"
+
+    # key used for the cluster nodes
+    cluster_ssh_key_dir: "$HOME/.ssh" # use existing keypair, or generate a new one if it does not exist

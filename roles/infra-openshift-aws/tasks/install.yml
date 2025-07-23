@@ -13,9 +13,9 @@
     - "machineset_arm_b.yml.j2"
     - "machineset_arm_c.yml.j2"
 
-# add labels to the ARM worker nodes
+# FIXME add labels to the ARM worker nodes
 
-# add labels to the secorndary worker nodes (amd64)
+# FIXME add labels to the secorndary worker nodes (amd64)
 
 # configure the cluster to use a Let's Encrypt certificate
 - name: install cert operator

@@ -1,9 +1,0 @@
-# Implement your post-install deployment tasks here
-# -------------------------------------------------
-
-- name: remove the env file
-  file:
-    path: "{{ item }}"
-    state: absent
-  with_items:
-    - "roles/install-openshift-aws/files/env.sh"

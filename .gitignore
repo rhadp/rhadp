@@ -2,7 +2,7 @@ secrets/**
 inventory/**
 **/users.htpasswd
 openshift-install
-env.sh
+**/.env-*.sh
 **/venv/**
 hack/**
 hack.*

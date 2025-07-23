@@ -3,56 +3,52 @@ all:
     # cloud provider
     cloud_provider: "aws" # aws, azure, gcp
 
-    pull_secret_file: "inventory/pull-secret.txt" # place the pull secret at this loacation
-
     # cluster variables
     cluster_name: "rhadp"
-    cluster_version: "4.18.13"
-    cluster_domain: "ocp.example.com"
-    
-    # keys
-    cluster_ssh_key: "$HOME/.ssh/rhadp" # use existing keypair, or generate a new one if it does not exist
-    # remote_ssh_public_key_file: "~/.ssh/rhadp.pub" # use existing keypair  
+    cluster_version: "4.19.3"
+    cluster_domain: "rhadp.example.com"
 
+    pull_secret_file: "inventory/pull-secret-aws.txt" # place the pull secret at this loacation
+    
     # aws specific variables
     aws_access_key_id: "abc123"
     aws_secret_access_key: "abc123"
-    aws_default_region: "us-east-2"
     
     # azure specific variables
-    azure_guid: "abc123"
-    azure_client_id: "abc123"
-    azure_password: "abc123"
-    azure_tenant: "azure.example.com"
-    azure_subscription: "abc123"
-    azure_resource_group: "abc123"
-    azure_location: "eastus"  # https://gist.github.com/ausfestivus/04e55c7d80229069bf3bc75870630ec8
-
+    #azure_guid: "guid123"
+    #azure_client_id: "abc123"
+    #azure_password: "abc123"
+    #azure_tenant: "redhatOn.example.com"
+    #azure_subscription: "abc123"
+    #azure_resource_group: "abc123"
+ 
     # gcp specific variables
+    #gcp_service_account_key_file: "$HOME/.gcp/osServiceAccount.json" # place the service account key at this location
+    #gcp_project_id: "project-123"
     
     # github secrets
     github_oauth_client_id: "abc123"
     github_oauth_client_secret: "abc123"
-    github_api_pat: "ghp_abc123"
+    github_api_pat: ""abc123"
 
     # letsencrypt variables
+    letsencrypt_email: "hello@example.com"
     letsencrypt_email: "hello@example.com"
     
     # user setup
     default_tld: "example.com" # top-level domain for default users
 
+    default_tld: "example.com" # top-level domain for default users
+
     # default admin user
     default_admin_user: admin
     default_admin_password: openshift
-    default_admin_email: "hello@example.com"
+    default_admin_email: "admin@example.com"
     
     # keycloak instance variables
     keycloak_db_user: "admin"
     keycloak_db_password: "openshift"
-
-    # local installation directory
-    openshift_install_dir: "$HOME/.openshift" # local directory where the cluster metadata will be stored
-
+    
     # ansible configuration
-    ansible_user: ec2-user # ec2-user, azureuser
-    ansible_ssh_private_key_file: "~/.ssh/rhadp" # private key used to access the remote server
+    #ansible_user: ec2-user # ec2-user, azureuser
+    #ansible_ssh_private_key_file: "~/.ssh/rhadp" # private key used to access the remote server

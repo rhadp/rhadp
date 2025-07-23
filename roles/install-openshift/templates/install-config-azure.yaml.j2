@@ -1,8 +1,10 @@
 additionalTrustBundlePolicy: Proxyonly
 apiVersion: v1
 baseDomain: {{ cluster_domain }}
+metadata:
+  name: {{ cluster_name }}
 compute:
-- architecture: {{ secondary_architecture }}
+- architecture: {{ azure_secondary_architecture }}
   hyperthreading: Enabled
   name: worker
   platform:
@@ -10,9 +12,9 @@ compute:
       type: {{ azure_secondary_instance_type }}
       osDisk:
         diskType: {{ azure_secondary_volume_type }}
-  replicas: {{ secondary_instance_count }}
+  replicas: {{ azure_secondary_instance_count }}
 controlPlane:
-  architecture: {{ primary_architecture }}
+  architecture: {{ azure_primary_architecture }}
   hyperthreading: Enabled
   name: master
   platform:
@@ -20,9 +22,7 @@ controlPlane:
       type: {{ azure_primary_instance_type }}
       osDisk:
         diskType: {{ azure_primary_volume_type }}
-  replicas: {{ primary_instance_count }}
-metadata:
-  name: {{ cluster_name }}
+  replicas: {{ azure_primary_instance_count }}
 networking:
   clusterNetwork:
   - cidr: 10.128.0.0/14
@@ -37,7 +37,7 @@ platform:
     baseDomainResourceGroupName: {{ azure_resource_group }}
     cloudName: AzurePublicCloud
     outboundType: Loadbalancer
-    region: {{ azure_location }}
+    region: {{ azure_default_region }}
 publish: External
 pullSecret: '{{ cluster_pull_secret['content'] | b64decode }}'
 sshKey: |

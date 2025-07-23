@@ -6,13 +6,13 @@
   openssh_keypair:
     type: rsa
     size: 2048
-    path: "{{ cluster_ssh_key }}"
+    path: "{{ cluster_ssh_key_dir }}/{{ cluster_fqn }}"
 
 - name: import the public key
   slurp:
-    src: "{{ cluster_ssh_key }}.pub"
+    src: "{{ cluster_ssh_key_dir }}/{{ cluster_fqn }}.pub"
   register: cluster_ssh_pub_key
-
+    
 - name: import pull secret
   slurp:
     src: "{{ pull_secret_file }}"
