@@ -1,9 +1,15 @@
 ---
+
+installer_binary: "openshift-install"
+
+openshift_install_dir: "bin" # where to store the openshift-install binary
+openshift_clients_url: "https://mirror.openshift.com/pub/openshift-v4/multi/clients/ocp/stable/arm64"
+
 #------------------------------------------------------------------------------------------------
 # aws defaults
 #------------------------------------------------------------------------------------------------
 
-aws_default_region: "us-east-2"
+#aws_default_region: "us-east-2"
 
 aws_primary_architecture: "arm64" # control plane
 aws_primary_instance_count: 3 # 3 nodes minimum, on 3 different availability zones
@@ -41,7 +47,7 @@ aws_default_storage_class: "gp3-csi" # for AWS
 # azure defaults  
 #------------------------------------------------------------------------------------------------
 
-azure_default_region: "westus" # https://gist.github.com/ausfestivus/04e55c7d80229069bf3bc75870630ec8
+#azure_default_region: "westus" # https://gist.github.com/ausfestivus/04e55c7d80229069bf3bc75870630ec8
 
 azure_primary_architecture: "amd64" # control plane
 azure_primary_instance_count: 3 # 3 nodes minimum, on 3 different availability zones
@@ -77,7 +83,7 @@ azure_default_storage_class: "managed-csi" # for Azure
 # gcp defaults
 #------------------------------------------------------------------------------------------------
 
-gcp_default_region: "us-central1"
+#gcp_default_region: "us-central1"
 
 gcp_primary_architecture: "arm64" # control plane
 gcp_primary_instance_count: 3 # 3 nodes minimum, on 3 different availability zones

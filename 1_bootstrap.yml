@@ -11,9 +11,9 @@
       include_role:
         name: roles/install-openshift
 
-    - name: configure the openshift cluster infrastructure
+    - name: configure certificates
       include_role:
-        name: roles/infra-openshift
+        name: roles/setup-cert-manager
 
     - name: configure openshift cluster authentication
       include_role:
@@ -22,7 +22,3 @@
     - name: bootstrap the essential operators e.g. gitops, pipelines, DevSpaces, Developer Hub etc.
       include_role:
         name: roles/setup-operators
-
-    - name: bootstrap the developer platform
-      include_role:
-        name: roles/setup-platform

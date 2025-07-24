@@ -5,7 +5,7 @@ all:
 
     # cluster variables
     cluster_name: "rhadp"
-    cluster_version: "4.19.5"
+    cluster_version: "4.19.4"
     cluster_domain: "rhadp.example.com"
 
     pull_secret_file: "inventory/pull-secret-aws.txt" # place the pull secret at this loacation
@@ -13,7 +13,8 @@ all:
     # aws specific variables
     aws_access_key_id: "abc123"
     aws_secret_access_key: "abc123"
-    
+    aws_default_region: "us-east-2"
+
     # azure specific variables
     #azure_guid: "guid123"
     #azure_client_id: "abc123"
@@ -21,10 +22,12 @@ all:
     #azure_tenant: "redhatOn.example.com"
     #azure_subscription: "abc123"
     #azure_resource_group: "abc123"
- 
+    #azure_default_region: "westus" # https://gist.github.com/ausfestivus/04e55c7d80229069bf3bc75870630ec8
+
     # gcp specific variables
     #gcp_service_account_key_file: "$HOME/.gcp/osServiceAccount.json" # place the service account key at this location
     #gcp_project_id: "project-123"
+    #gcp_default_region: "us-central1"
     
     # github secrets
     github_oauth_client_id: "abc123"

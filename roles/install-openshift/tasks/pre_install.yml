@@ -11,7 +11,7 @@
   block:
     - name: set download url
       set_fact:
-        installer_binary_url: "{{ openshift_clients_url }}/{{ cluster_version }}/{{ installer_binary }}-{{ installer_architecture }}.tar.gz"
+        installer_binary_url: "{{ openshift_clients_url }}/{{ installer_binary }}-{{ installer_architecture }}.tar.gz"
 
     - name: download the installer binary
       shell: |

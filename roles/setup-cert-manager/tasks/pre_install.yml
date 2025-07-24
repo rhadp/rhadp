@@ -1,0 +1,40 @@
+# Implement your pre-install deployment tasks here
+# -------------------------------------------------
+
+- name: install cert-manager operator
+  include_role:
+    name: roles/install-operator
+  vars:
+    operator_name: "openshift-cert-manager-operator"
+    operator_group_name: "openshift-cert-manager-operator"
+    operator_subscription_name: "openshift-cert-manager-operator"
+    operator_namespace: "{{ cert_manager_namespace }}"
+    operator_deployment_name: "{{ cert_manager_deployment_name }}"
+    subscription_channel: "{{ cert_manager_subscription_channel }}"
+    subscription_starting_csv: "{{ cert_manager_subscription_starting_csv }}"
+    install_plan_approval: "Automatic"
+    create_operator_namespace: true
+    create_operator_group: true
+    wait_for_operator: true
+
+# FIXME this is conditional on the cloud provider
+- name: create AWS credentials secret
+  k8s:
+    definition:
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        name: route53-credentials
+        namespace: "{{ item }}"
+      type: Opaque
+      data:
+        access-key-id: "{{ aws_access_key_id | b64encode }}"
+        secret-access-key: "{{ aws_secret_access_key | b64encode }}"
+    state: present
+    apply: yes
+    kubeconfig: "{{ local_kubeconfig_file }}"
+  with_items: # FIXME: check which namespaces are needed
+    - "{{ cert_manager_namespace }}"
+    - "cert-manager"
+    - "openshift-ingress"
+    - "openshift-ingress-operator"
