@@ -21,4 +21,4 @@
 
     - name: bootstrap the essential operators e.g. gitops, pipelines, DevSpaces, Developer Hub etc.
       include_role:
-        name: roles/setup-operators
+        name: roles/setup-dev-operators
