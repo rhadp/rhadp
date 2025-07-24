@@ -42,3 +42,7 @@
   copy:
     src: "~/.openshift/{{ cluster_fqn }}/auth/kubeconfig"
     dest: "~/.kube/{{ cluster_fqn }}"
+
+- name: pause to allow the cluster to settle
+  pause:
+    seconds: 300

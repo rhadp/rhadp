@@ -1,6 +1,23 @@
 # Implement your post-install deployment tasks here
 # -------------------------------------------------
 
+# add the 2nd arm machine sets to the cluster
+- name: add the arm machine sets
+  k8s:
+    definition: "{{ lookup('template', item ) | from_yaml }}"
+    state: present
+    apply: yes
+    kubeconfig: "{{ local_kubeconfig_file }}"
+  loop:
+    - "machineset_arm_a_{{ cloud_provider }}.yml.j2"
+    - "machineset_arm_b_{{ cloud_provider }}.yml.j2"
+    - "machineset_arm_c_{{ cloud_provider }}.yml.j2"
+
+# FIXME add labels to the ARM worker nodes
+
+# FIXME add labels to the secorndary worker nodes (amd64)
+
+# remove cluster specific assets from the local machine
 - name: remove cluster specific assets
   file:
     path: "{{ item }}"

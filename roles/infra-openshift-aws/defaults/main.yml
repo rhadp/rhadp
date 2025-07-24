@@ -1,8 +1,0 @@
----
-# defaults
-
-cert_manager_subscription_channel: "stable-v1"  
-cert_manager_subscription_starting_csv: "cert-manager-operator.v1.16.0"
-
-cert_manager_namespace: "cert-manager-operator"
-cert_manager_deployment_name: "cert-manager-operator-controller-manager"
