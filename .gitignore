@@ -1,9 +1,13 @@
 secrets/**
 inventory/**
 **/users.htpasswd
+
 openshift-install
+bin/**
+bin/
 **/.env-*.sh
 **/venv/**
+
 hack/**
 hack.*
 **hack**.yml

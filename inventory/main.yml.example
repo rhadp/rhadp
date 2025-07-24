@@ -5,7 +5,7 @@ all:
 
     # cluster variables
     cluster_name: "rhadp"
-    cluster_version: "4.19.3"
+    cluster_version: "4.19.5"
     cluster_domain: "rhadp.example.com"
 
     pull_secret_file: "inventory/pull-secret-aws.txt" # place the pull secret at this loacation
@@ -49,3 +49,7 @@ all:
     # ansible configuration
     #ansible_user: ec2-user # ec2-user, azureuser
     #ansible_ssh_private_key_file: "~/.ssh/rhadp" # private key used to access the remote server
+
+    # installer architecture, see https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.19.5/
+    installer_architecture: "mac-arm64" # linux-arm64, linux, mac -> openshift-install-mac-arm64.tar.gz, openshift-install-linux-arm64.tar.gz
+    

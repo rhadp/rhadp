@@ -1,6 +1,37 @@
 # Implement your pre-install deployment tasks here
 # -------------------------------------------------
 
+- name: check if the installer binary exists
+  stat:
+    path: "{{ openshift_install_dir }}/{{ installer_binary }}"
+  register: installer_binary_stat
+
+- name: download the installer binary
+  when: installer_binary_stat.stat.exists == false
+  block:
+    - name: set download url
+      set_fact:
+        installer_binary_url: "{{ openshift_clients_url }}/{{ cluster_version }}/{{ installer_binary }}-{{ installer_architecture }}.tar.gz"
+
+    - name: download the installer binary
+      shell: |
+        cd {{ openshift_install_dir }}
+
+        curl -o {{ installer_binary }}-{{ installer_architecture }}.tar.gz \
+          -L {{ installer_binary_url }}
+
+        tar xzf ./{{ installer_binary }}-{{ installer_architecture }}.tar.gz
+
+        rm {{ installer_binary }}-{{ installer_architecture }}.tar.gz
+
+- name: create dirs
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0755
+  with_items:
+    - "{{ cluster_metadata_dir }}/{{ cluster_fqn }}"
+
 # FIXME: check if the keys already exist, otherwise generate them
 - name: generate SSH keys
   openssh_keypair:

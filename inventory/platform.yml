@@ -34,6 +34,8 @@ all:
     cluster_metadata_dir: "$HOME/.openshift"
 
     # where to store the openshift-install binary
+    installer_binary: "openshift-install"
+    openshift_clients_url: "https://mirror.openshift.com/pub/openshift-v4/clients/ocp"
     openshift_install_dir: "bin"
 
     # key used for the cluster nodes
