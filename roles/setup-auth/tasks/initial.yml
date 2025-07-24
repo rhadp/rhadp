@@ -1,9 +1,13 @@
 # Implement your initial tasks here
 # -------------------------------------------------
 
+- name: set cluster facts
+  set_fact:
+    cluster_fqn: "{{ cluster_name }}-{{ cloud_provider }}"
+
 - name: set the local kubeconfig location
   set_fact:
-    local_kubeconfig_file: "~/.kube/{{ cluster_name }}" # ~
+    local_kubeconfig_file: "~/.kube/{{ cluster_fqn }}"
 
 - name: set the keycloak client secret
   set_fact:
