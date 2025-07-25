@@ -18,22 +18,22 @@ aws_secondary_architecture: "amd64" # initial compute nodes, 2nd set of compute 
 aws_secondary_instance_count: 3 # 3 nodes minimum, on 3 different availability zones
 
 # control plane
-aws_primary_instance_type: "m7g.xlarge" # 4 vCPU, 16 GiB RAM
-aws_primary_ami_id: "ami-0b04071739ccf4af2" # ARM
+aws_primary_instance_type: "m8g.xlarge" # 4 vCPU, 16 GiB RAM
+#aws_primary_ami_id: "ami-0b04071739ccf4af2" # ARM
 aws_primary_vcpu: 4
 aws_primary_gpu: 0
 aws_primary_memory: 16384
 
 # primary set of compute nodes
 aws_secondary_instance_type: "m6a.xlarge" # 4 vCPU, 16 GiB RAM
-aws_secondary_ami_id: "ami-078e26f293629fe91" # AMD
+#aws_secondary_ami_id: "ami-078e26f293629fe91" # AMD
 aws_secondary_vcpu: 4
 aws_secondary_gpu: 0
 aws_secondary_memory: 16384
 
 # secondary set of compute nodes
 aws_arm_instance_type: "m8g.xlarge" # 4 vCPU, 16 GiB RAM
-aws_arm_ami_id: "ami-0b04071739ccf4af2" # ARM
+aws_arm_ami_id: "ami-02f30107e3441227b" # ARM, us-east-2
 aws_arm_instance_count: 1 # number of replicas per availability zone
 aws_arm_volume_size: 120
 aws_arm_volume_type: "gp3"
@@ -88,7 +88,7 @@ azure_default_storage_class: "managed-csi" # for Azure
 gcp_primary_architecture: "arm64" # control plane
 gcp_primary_instance_count: 3 # 3 nodes minimum, on 3 different availability zones
 
-gcp_secondary_architecture: "amd64" # initial compute nodes, 2nd set of compute nodes will be arm64
+gcp_secondary_architecture: "arm64" # initial compute nodes, 2nd set of compute nodes will be arm64
 gcp_secondary_instance_count: 3 # 3 nodes minimum, on 3 different availability zones
 
 gcp_default_storage_class: "pd-ssd" # for GCP

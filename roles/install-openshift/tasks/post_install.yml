@@ -3,6 +3,7 @@
 
 # add the 2nd arm machine sets to the cluster
 - name: add the arm machine sets
+  when: setup_arm_worker_nodes | default(false)
   k8s:
     definition: "{{ lookup('template', item ) | from_yaml }}"
     state: present

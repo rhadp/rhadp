@@ -22,7 +22,7 @@
     oc create secret generic htpasswd-secret \
       --from-file=htpasswd=roles/setup-auth/files/users.htpasswd \
       -n openshift-config \
-      --kubeconfig="$HOME/.kube/{{ cluster_name }}"
+      --kubeconfig="$HOME/.kube/{{ cluster_fqn }}"
 
 # configure OAuth
 

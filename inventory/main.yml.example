@@ -1,9 +1,9 @@
 all:
   vars:
-    # cloud provider
+    # cloud provider selection
     cloud_provider: "aws" # aws, azure, gcp
 
-    # cluster variables
+    # cluster related variables
     cluster_name: "rhadp"
     cluster_version: "4.19.4"
     cluster_domain: "rhadp.example.com"
@@ -34,7 +34,7 @@ all:
     github_oauth_client_secret: "abc123"
     github_api_pat: ""abc123"
 
-    # letsencrypt variables
+    # letsencrypt account email
     letsencrypt_email: "hello@example.com"
     
     # user setup
@@ -49,6 +49,9 @@ all:
     keycloak_db_user: "admin"
     keycloak_db_password: "openshift"
     
+    # cluster configuration options
+    setup_arm_worker_nodes: True # create a second set of ARM worker nodes if true
+
     # ansible configuration
     #ansible_user: ec2-user # ec2-user, azureuser
     #ansible_ssh_private_key_file: "~/.ssh/rhadp" # private key used to access the remote server

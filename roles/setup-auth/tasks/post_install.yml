@@ -17,7 +17,7 @@
   shell: |
     oc adm policy remove-cluster-role-from-group \
       self-provisioner system:authenticated:oauth \
-      --kubeconfig="$HOME/.kube/{{ cluster_name }}"
+      --kubeconfig="$HOME/.kube/{{ cluster_fqn }}"
   when: remove_selfprovisioning | bool
 
 # cleanup temp files
