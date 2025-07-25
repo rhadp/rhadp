@@ -19,14 +19,12 @@ aws_secondary_instance_count: 3 # 3 nodes minimum, on 3 different availability z
 
 # control plane
 aws_primary_instance_type: "m8g.xlarge" # 4 vCPU, 16 GiB RAM
-#aws_primary_ami_id: "ami-0b04071739ccf4af2" # ARM
 aws_primary_vcpu: 4
 aws_primary_gpu: 0
 aws_primary_memory: 16384
 
 # primary set of compute nodes
 aws_secondary_instance_type: "m6a.xlarge" # 4 vCPU, 16 GiB RAM
-#aws_secondary_ami_id: "ami-078e26f293629fe91" # AMD
 aws_secondary_vcpu: 4
 aws_secondary_gpu: 0
 aws_secondary_memory: 16384
@@ -55,20 +53,21 @@ azure_primary_instance_count: 3 # 3 nodes minimum, on 3 different availability z
 azure_secondary_architecture: "amd64" # initial compute nodes, 2nd set of compute nodes will be arm64
 azure_secondary_instance_count: 3 # 3 nodes minimum, on 3 different availability zones
 
+# control plane
 azure_primary_instance_type: "Standard_D4s_v5" # 4 vCPU, 16 GiB RAM, Standard_D4ps_v5
 azure_primary_vcpu: 4
 azure_primary_gpu: 0
 azure_primary_memory: 16384
 azure_primary_volume_type: "Premium_LRS"
 
-# initial compute nodes
+# primary set of compute nodes
 azure_secondary_instance_type: "Standard_D4s_v5" # 4 vCPU, 16 GiB RAM
 azure_secondary_vcpu: 4
 azure_secondary_gpu: 0
 azure_secondary_memory: 16384
 azure_secondary_volume_type: "Premium_LRS"
 
-# 2nd set of compute nodes
+# secondary set of compute nodes
 azure_arm_instance_type: "Standard_D4ps_v5" # 4 vCPU, 16 GiB RAM
 azure_arm_instance_count: 1 # number of replicas per availability zone
 azure_arm_volume_size: 120

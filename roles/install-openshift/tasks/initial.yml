@@ -5,6 +5,10 @@
   set_fact:
     cluster_fqn: "{{ cluster_name }}-{{ cloud_provider }}"
 
+- name: set the local kubeconfig location
+  set_fact:
+    local_kubeconfig_file: "~/.kube/{{ cluster_fqn }}"
+    
 - name: create .env file
   template:
     src: "roles/install-openshift/templates/env-{{ cloud_provider }}.j2"

@@ -41,7 +41,7 @@
 - name: copy KUBECONFIG to local location
   copy:
     src: "~/.openshift/{{ cluster_fqn }}/auth/kubeconfig"
-    dest: "~/.kube/{{ cluster_fqn }}"
+    dest: "{{ local_kubeconfig_file }}"
 
 - name: pause to allow the cluster to settle
   pause:

@@ -1,6 +1,19 @@
 # Implement your post-install deployment tasks here
 # -------------------------------------------------
 
+# extract some basic cluster information
+- name: get DNS information
+  k8s_info:
+    api_version: config.openshift.io/v1
+    kind: dns
+    name: cluster
+    kubeconfig: "{{ local_kubeconfig_file }}"
+  register: r_cluster_dns
+
+- name: set cluster facts
+  set_fact:
+    cluster_label: "{{ r_cluster_dns.resources.0.spec.privateZone.tags.Name.split('-')[:-1] | join('-') }}"
+
 # add the 2nd arm machine sets to the cluster
 - name: add the arm machine sets
   when: setup_arm_worker_nodes | default(false)

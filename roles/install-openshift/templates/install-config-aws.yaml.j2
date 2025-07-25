@@ -9,7 +9,6 @@ compute:
   name: worker
   platform:
     aws:
-      #amiID: {{ aws_secondary_ami_id }}
       type: {{ aws_secondary_instance_type }}
   replicas: {{ aws_secondary_instance_count }}
 controlPlane:
@@ -18,7 +17,6 @@ controlPlane:
   name: master
   platform:
     aws:
-      #amiID: {{ aws_primary_ami_id }}
       type: {{ aws_primary_instance_type }}
   replicas: {{ aws_primary_instance_count }}
 networking:
