@@ -11,11 +11,11 @@
     
 - name: create .env file
   template:
-    src: "roles/install-openshift/templates/env-{{ cloud_provider }}.j2"
+    src: "roles/create-cluster/templates/env-{{ cloud_provider }}.j2"
     dest: "{{ openshift_install_dir }}/.env-{{ cluster_fqn }}.sh"
 
 - name: create azure credentials file
   when: cloud_provider == "azure"
   template:
-    src: "roles/install-openshift/templates/azure_credentials.json.j2"
+    src: "roles/create-cluster/templates/azure_credentials.json.j2"
     dest: "~/.azure/osServicePrincipal.json"

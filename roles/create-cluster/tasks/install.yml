@@ -3,7 +3,7 @@
 
 - name: create cluster config file
   template:
-    src: "roles/install-openshift/templates/install-config-{{ cloud_provider }}.yaml.j2"
+    src: "roles/create-cluster/templates/install-config-{{ cloud_provider }}.yaml.j2"
     dest: "{{ cluster_metadata_dir }}/{{ cluster_fqn }}/install-config.yaml"
 
 - name: create cluster
