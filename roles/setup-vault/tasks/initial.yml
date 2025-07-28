@@ -7,8 +7,4 @@
 
 - name: set the local kubeconfig location
   set_fact:
-    local_kubeconfig_file: "~/.kube/{{ cluster_fqn }}"
-
-- name: set the keycloak client secret
-  set_fact:
-    keycloak_client_secret: "{{ temp_secret }}"
+    local_kubeconfig_file: "~/.kube/{{ cluster_fqn }}" 

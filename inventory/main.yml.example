@@ -7,6 +7,7 @@ all:
     cluster_name: "rhadp"
     cluster_version: "4.19.4"
     cluster_domain: "rhadp.example.com"
+    cluster_default_storage_class: "gp3-csi" # "managed-csi" (azure), "pd-ssd" (gcp)
 
     pull_secret_file: "inventory/pull-secret-aws.txt" # place the pull secret at this loacation
     

@@ -1,14 +1,21 @@
 ---
 # defaults
+install_devspaces: True
+install_devhub: False
+install_web_terminal: True
 
+# gitops operator
 gitops_subscription_channel: "latest"
 gitops_subscription_starting_csv: "openshift-gitops-operator.v1.16.1"
 
-vault_subscription_channel: "stable"
-vault_subscription_starting_csv: "vault-secrets-operator.v0.10.0"
-
+# devspaces operator
 devspaces_subscription_channel: "stable"
 devspaces_subscription_starting_csv: "devspacesoperator.v3.21.0"
 
+# devhub operator
 devhub_subscription_channel: "fast"
-devhub_subscription_starting_csv: "rhdh-operator.v1.6.2"
+devhub_subscription_starting_csv: "rhdh-operator.v1.3.1"
+
+# web terminal operator
+web_terminal_subscription_channel: "fast"
+web_terminal_subscription_starting_csv: "web-terminal.v1.13.0"

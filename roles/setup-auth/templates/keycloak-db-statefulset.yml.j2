@@ -44,7 +44,7 @@ spec:
       spec:
         accessModes:
           - ReadWriteOnce
-        storageClassName: "{{ default_storage_class }}"
+        storageClassName: "{{ cluster_default_storage_class }}"
         resources:
           requests:
             storage: 10Gi

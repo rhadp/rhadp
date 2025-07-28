@@ -6,9 +6,7 @@ all:
 
     # default namespaces
     gitops_namespace: "openshift-gitops" # the system wide GitOps instance
-    keycloak_namespace: "keycloak"
-    vault_namespace: "vault"    
-
+    
     # default openshift groups
     cluster_admin_group: "cluster-admins"
     platform_admin_group: "platform-admins"

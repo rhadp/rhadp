@@ -23,18 +23,10 @@
     operator_subscription_name: "openshift-pipelines-operator"
     operator_deployment_name: "openshift-pipelines-operator"
 
-- name: install hashicorp vault operator
-  include_role:
-    name: roles/install-operator
-  vars:
-    operator_name: "vault-secrets-operator"
-    operator_subscription_name: "vault-secrets-operator"
-    subscription_channel: "{{ vault_subscription_channel }}"
-    subscription_starting_csv: "{{ vault_subscription_starting_csv }}"
-    source: "certified-operators"
-    operator_deployment_name: "vault-secrets-operator-controller-manager"
+# optional operators
 
 - name: install devspaces operator
+  when: install_devspaces | bool
   include_role:
     name: roles/install-operator
   vars:
@@ -47,6 +39,7 @@
     create_operator_group: false
 
 - name: install developer hub operator
+  when: install_devhub | bool
   include_role:
     name: roles/install-operator
   vars:
@@ -58,3 +51,16 @@
     operator_group_name: "rhdh-operator"
     create_operator_namespace: true
     create_operator_group: true
+
+- name: install web terminal operator
+  when: install_web_terminal | bool
+  include_role:
+    name: roles/install-operator
+  vars:
+    operator_name: "web-terminal"
+    operator_subscription_name: "web-terminal"
+    subscription_channel: "{{ web_terminal_subscription_channel }}"
+    subscription_starting_csv: "{{ web_terminal_subscription_starting_csv }}"
+    operator_deployment_name: "web-terminal-controller"
+    create_operator_namespace: false
+    create_operator_group: false

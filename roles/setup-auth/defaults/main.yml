@@ -1,6 +1,8 @@
 ---
 # defaults
 
+keycloak_namespace: "keycloak"
+
 keycloak_subscription_channel: "stable-v26.2"
 keycloak_subscription_starting_csv: "rhbk-operator.v26.2.4-opr.2"
 

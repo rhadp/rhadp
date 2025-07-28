@@ -39,8 +39,6 @@ aws_arm_vcpu: 4
 aws_arm_gpu: 0
 aws_arm_memory: 16384
 
-aws_default_storage_class: "gp3-csi" # for AWS
-
 #------------------------------------------------------------------------------------------------
 # azure defaults  
 #------------------------------------------------------------------------------------------------
@@ -76,8 +74,6 @@ azure_arm_vcpu: 4
 azure_arm_gpu: 0
 azure_arm_memory: 16384
 
-azure_default_storage_class: "managed-csi" # for Azure
-
 #------------------------------------------------------------------------------------------------
 # gcp defaults
 #------------------------------------------------------------------------------------------------
@@ -89,5 +85,3 @@ gcp_primary_instance_count: 3 # 3 nodes minimum, on 3 different availability zon
 
 gcp_secondary_architecture: "arm64" # initial compute nodes, 2nd set of compute nodes will be arm64
 gcp_secondary_instance_count: 3 # 3 nodes minimum, on 3 different availability zones
-
-gcp_default_storage_class: "pd-ssd" # for GCP
