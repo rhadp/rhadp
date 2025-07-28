@@ -9,4 +9,4 @@
   tasks:
     - name: destroy the openshift cluster
       include_role:
-        name: roles/install-openshift
+        name: roles/create-cluster

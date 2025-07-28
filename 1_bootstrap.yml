@@ -9,7 +9,7 @@
   tasks:
     - name: bootstrap the openshift cluster
       include_role:
-        name: roles/install-openshift
+        name: roles/create-cluster
 
     - name: configure certificates
       include_role:
