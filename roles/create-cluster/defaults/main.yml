@@ -9,17 +9,15 @@ openshift_clients_url: "https://mirror.openshift.com/pub/openshift-v4/multi/clie
 # aws defaults
 #------------------------------------------------------------------------------------------------
 
-aws_primary_architecture: "arm64" # control plane
+# control plane
+aws_primary_architecture: "amd64" # control plane
+aws_primary_instance_type: "m6a.2xlarge" # 8 vCPU, 32 GiB RAM
 aws_primary_instance_count: 3 # 3 nodes minimum, on 3 different availability zones
 
-aws_secondary_architecture: "amd64" # initial compute nodes, 2nd set of compute nodes will be arm64
-aws_secondary_instance_count: 3 # 3 nodes minimum, on 3 different availability zones
-
-# control plane
-aws_primary_instance_type: "m8g.xlarge" # 4 vCPU, 16 GiB RAM
-
 # primary set of compute nodes
+aws_secondary_architecture: "amd64" # initial compute nodes, 2nd set of compute nodes will be arm64
 aws_secondary_instance_type: "m6a.xlarge" # 4 vCPU, 16 GiB RAM
+aws_secondary_instance_count: 3 # 3 nodes minimum, on 3 different availability zones
 
 # secondary set of compute nodes (arm64)
 aws_arm_instance_type: "m8g.xlarge" # 4 vCPU, 16 GiB RAM
@@ -35,18 +33,16 @@ aws_arm_memory: 16384
 # azure defaults  
 #------------------------------------------------------------------------------------------------
 
-azure_primary_architecture: "amd64" # control plane
-azure_primary_instance_count: 3 # 3 nodes minimum, on 3 different availability zones
-
-azure_secondary_architecture: "amd64" # initial compute nodes, 2nd set of compute nodes will be arm64
-azure_secondary_instance_count: 3 # 3 nodes minimum, on 3 different availability zones
-
 # control plane
+azure_primary_architecture: "amd64" # control plane
 azure_primary_instance_type: "Standard_D8s_v5" # 8 vCPU, 32 GiB RAM
+azure_primary_instance_count: 3 # 3 nodes minimum, on 3 different availability zones
 azure_primary_volume_type: "Premium_LRS"
 
 # primary set of compute nodes
+azure_secondary_architecture: "amd64" # initial compute nodes, 2nd set of compute nodes will be arm64
 azure_secondary_instance_type: "Standard_D4s_v5" # 4 vCPU, 16 GiB RAM
+azure_secondary_instance_count: 3 # 3 nodes minimum, on 3 different availability zones
 azure_secondary_volume_type: "Premium_LRS"
 
 # secondary set of compute nodes (arm64)
