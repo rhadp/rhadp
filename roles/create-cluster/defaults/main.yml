@@ -9,8 +9,6 @@ openshift_clients_url: "https://mirror.openshift.com/pub/openshift-v4/multi/clie
 # aws defaults
 #------------------------------------------------------------------------------------------------
 
-#aws_default_region: "us-east-2"
-
 aws_primary_architecture: "arm64" # control plane
 aws_primary_instance_count: 3 # 3 nodes minimum, on 3 different availability zones
 
@@ -19,17 +17,11 @@ aws_secondary_instance_count: 3 # 3 nodes minimum, on 3 different availability z
 
 # control plane
 aws_primary_instance_type: "m8g.xlarge" # 4 vCPU, 16 GiB RAM
-#aws_primary_vcpu: 4
-#aws_primary_gpu: 0
-#aws_primary_memory: 16384
 
 # primary set of compute nodes
 aws_secondary_instance_type: "m6a.xlarge" # 4 vCPU, 16 GiB RAM
-#aws_secondary_vcpu: 4
-#aws_secondary_gpu: 0
-#aws_secondary_memory: 16384
 
-# secondary set of compute nodes
+# secondary set of compute nodes (arm64)
 aws_arm_instance_type: "m8g.xlarge" # 4 vCPU, 16 GiB RAM
 aws_arm_ami_id: "ami-02f30107e3441227b" # ARM, us-east-2
 aws_arm_instance_count: 1 # number of replicas per availability zone
@@ -43,8 +35,6 @@ aws_arm_memory: 16384
 # azure defaults  
 #------------------------------------------------------------------------------------------------
 
-#azure_default_region: "westus" # https://gist.github.com/ausfestivus/04e55c7d80229069bf3bc75870630ec8
-
 azure_primary_architecture: "amd64" # control plane
 azure_primary_instance_count: 3 # 3 nodes minimum, on 3 different availability zones
 
@@ -52,20 +42,14 @@ azure_secondary_architecture: "amd64" # initial compute nodes, 2nd set of comput
 azure_secondary_instance_count: 3 # 3 nodes minimum, on 3 different availability zones
 
 # control plane
-azure_primary_instance_type: "Standard_D8s_v5" # 4 vCPU, 16 GiB RAM, Standard_D4ps_v5
-#azure_primary_vcpu: 4
-#azure_primary_gpu: 0
-#azure_primary_memory: 16384
+azure_primary_instance_type: "Standard_D8s_v5" # 8 vCPU, 32 GiB RAM
 azure_primary_volume_type: "Premium_LRS"
 
 # primary set of compute nodes
 azure_secondary_instance_type: "Standard_D4s_v5" # 4 vCPU, 16 GiB RAM
-#azure_secondary_vcpu: 4
-#azure_secondary_gpu: 0
-#azure_secondary_memory: 16384
 azure_secondary_volume_type: "Premium_LRS"
 
-# secondary set of compute nodes
+# secondary set of compute nodes (arm64)
 azure_arm_instance_type: "Standard_D4ps_v5" # 4 vCPU, 16 GiB RAM
 azure_arm_instance_count: 2 # number of replicas per availability zone
 azure_arm_volume_size: 128
@@ -77,8 +61,6 @@ azure_arm_memory: 16384
 #------------------------------------------------------------------------------------------------
 # gcp defaults
 #------------------------------------------------------------------------------------------------
-
-#gcp_default_region: "us-central1"
 
 gcp_primary_architecture: "arm64" # control plane
 gcp_primary_instance_count: 3 # 3 nodes minimum, on 3 different availability zones

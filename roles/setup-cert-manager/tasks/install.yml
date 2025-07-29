@@ -1,15 +1,49 @@
 # Implement your install deployment tasks here
 # -------------------------------------------------
 
-- name: fix permissions
+- name: create cloud provider credentials (aws)
+  when: cloud_provider == "aws"
   k8s:
+    definition:
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        name: route53-credentials
+        namespace: "{{ item }}"
+      type: Opaque
+      data:
+        access-key-id: "{{ aws_access_key_id | b64encode }}"
+        secret-access-key: "{{ aws_secret_access_key | b64encode }}"
     state: present
     apply: yes
-    definition: "{{ lookup('template', item ) | from_yaml }}"
     kubeconfig: "{{ local_kubeconfig_file }}"
-  loop:
-    - role_cert_manager.yml.j2
-    - rb_cert_manager.yml.j2
+  with_items: # FIXME: check which namespaces are really needed
+    - "{{ cert_manager_namespace }}"
+    - "cert-manager"
+    - "openshift-ingress"
+    - "openshift-ingress-operator"
+
+- name: create cloud provider credentials (azure)
+  when: cloud_provider == "azure"
+  k8s:
+    definition:
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        name: azure-dns-credentials
+        namespace: "{{ item }}"
+      type: Opaque
+      data:
+        client-id: "{{ azure_client_id | b64encode }}"
+        client-secret: "{{ azure_password | b64encode }}"
+    state: present
+    apply: yes
+    kubeconfig: "{{ local_kubeconfig_file }}"
+  with_items: # FIXME: check which namespaces are really needed
+    - "{{ cert_manager_namespace }}"
+    - "cert-manager"
+    - "openshift-ingress"
+    - "openshift-ingress-operator"
 
 - name: create cert-manager instance
   k8s:
@@ -35,8 +69,8 @@
   pause:
     seconds: 180
 
-# FIXME this is conditional on the cloud provider
-- name: create Let's Encrypt prod ClusterIssuer
+- name: create cluster issuer (aws)
+  when: cloud_provider == "aws"
   k8s:
     definition:
       apiVersion: cert-manager.io/v1
@@ -58,6 +92,39 @@
                   secretAccessKeySecretRef:
                     name: route53-credentials
                     key: secret-access-key
+              selector:
+                dnsZones:
+                  - "apps.{{ cluster_base_domain }}"
+                  - "api.{{ cluster_base_domain }}"
+    state: present
+    apply: yes
+    kubeconfig: "{{ local_kubeconfig_file }}"
+
+- name: create cluster issuer (azure)
+  when: cloud_provider == "azure"
+  k8s:
+    definition:
+      apiVersion: cert-manager.io/v1
+      kind: ClusterIssuer
+      metadata:
+        name: letsencrypt-prod
+      spec:
+        acme:
+          server: https://acme-v02.api.letsencrypt.org/directory
+          email: "{{ letsencrypt_email }}"
+          privateKeySecretRef:
+            name: letsencrypt-prod
+          solvers:
+            - dns01:
+                azureDNS:
+                  resourceGroupName: "{{ azure_resource_group }}"
+                  hostedZoneName: "{{ cluster_public_zone_id }}"
+                  subscriptionID: "{{ azure_subscription }}"
+                  tenantID: "{{ azure_tenant }}"
+                  clientID: "{{ azure_client_id }}"
+                  clientSecretSecretRef:
+                    name: azure-dns-credentials
+                    key: client-secret
               selector:
                 dnsZones:
                   - "apps.{{ cluster_base_domain }}"
@@ -116,7 +183,7 @@
   until:
     - r_certificate.resources | length | int > 0
 
-- name: pause to allow certificate to be registered
+- name: pause to allow certificate to be ready
   pause:
     seconds: 120
 
