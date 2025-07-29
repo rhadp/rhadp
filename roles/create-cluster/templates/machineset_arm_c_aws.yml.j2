@@ -6,10 +6,12 @@ metadata:
     machine.openshift.io/GPU: '{{ aws_arm_gpu }}'
     machine.openshift.io/memoryMb: '{{ aws_arm_memory }}'
     machine.openshift.io/vCPU: '{{ aws_arm_vcpu }}'
-  name: {{ cluster_label }}-worker-arm-{{ aws_default_region }}c
+  name: arm-worker-3
   namespace: openshift-machine-api
   labels:
     machine.openshift.io/cluster-api-cluster: {{ cluster_label }}
+    machine.openshift.io/cluster-api-machine-role: worker
+    machine.openshift.io/cluster-api-machine-type: worker
 spec:
   replicas: {{ aws_arm_instance_count }}
   selector:

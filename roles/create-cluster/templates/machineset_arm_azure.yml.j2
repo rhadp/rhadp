@@ -1,0 +1,68 @@
+﻿apiVersion: machine.openshift.io/v1beta1
+kind: MachineSet
+metadata:
+  annotations:
+    capacity.cluster-autoscaler.kubernetes.io/labels: kubernetes.io/arch=arm64
+    machine.openshift.io/GPU: '{{ azure_arm_gpu }}'
+    machine.openshift.io/memoryMb: '{{ azure_arm_memory }}'
+    machine.openshift.io/vCPU: '{{ azure_arm_vcpu }}'
+  name: arm-worker-1
+  namespace: openshift-machine-api
+  labels:
+    machine.openshift.io/cluster-api-cluster: {{ cluster_label }}
+    machine.openshift.io/cluster-api-machine-role: worker
+    machine.openshift.io/cluster-api-machine-type: worker
+spec:
+  replicas: {{ azure_arm_instance_count }}
+  selector:
+    matchLabels:
+      machine.openshift.io/cluster-api-cluster: {{ cluster_label }}
+      machine.openshift.io/cluster-api-machineset: {{ cluster_label }}-worker-arm-{{ azure_default_region }}
+  template:
+    metadata:
+      labels:
+        machine.openshift.io/cluster-api-cluster: {{ cluster_label }}
+        machine.openshift.io/cluster-api-machine-role: worker
+        machine.openshift.io/cluster-api-machine-type: worker
+        machine.openshift.io/cluster-api-machineset: {{ cluster_label }}-worker-arm-{{ azure_default_region }}
+    spec:
+      lifecycleHooks: {}
+      metadata: {}
+      providerSpec:
+        value:
+          osDisk:
+            diskSettings: {}
+            diskSizeGB: {{ azure_arm_volume_size }}
+            managedDisk:
+              securityProfile:
+                diskEncryptionSet: {}
+              storageAccountType: {{ azure_arm_volume_type }}
+            osType: Linux
+          networkResourceGroup: {{ cluster_label }}-rg
+          publicLoadBalancer: {{ cluster_label }}
+          userDataSecret:
+            name: worker-user-data
+          vnet: {{ cluster_label }}-vnet
+          securityProfile:
+            settings: {}
+          credentialsSecret:
+            name: azure-cloud-credentials
+            namespace: openshift-machine-api
+          diagnostics: {}
+          metadata:
+            creationTimestamp: null
+          publicIP: false
+          resourceGroup: {{ cluster_label }}-rg
+          kind: AzureMachineProviderSpec
+          location: {{ azure_default_region }}
+          vmSize: {{ azure_arm_instance_type}}
+          image:
+            offer: ''
+            publisher: ''
+            resourceID: /resourceGroups/{{ cluster_label }}-rg/providers/Microsoft.Compute/galleries/gallery_{{ _cluster_label }}/images/{{ cluster_label }}-gen2/versions/latest
+            sku: ''
+            version: ''
+          acceleratedNetworking: true
+          managedIdentity: {{ cluster_label }}-identity
+          subnet: {{ cluster_label }}-worker-subnet
+          apiVersion: machine.openshift.io/v1beta1
