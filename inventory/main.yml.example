@@ -9,7 +9,7 @@ all:
     cluster_domain: "rhadp.example.com"
     cluster_default_storage_class: "gp3-csi" # "gp3-csi" (aws), "managed-csi" (azure), "standard-csi" (gcp)
 
-    pull_secret_file: "inventory/pull-secret-aws.txt" # place the pull secret at this loacation
+    pull_secret_file: "inventory/pull-secret.txt" # place the pull secret at this loacation
     
     # aws specific variables
     aws_access_key_id: "abc123"

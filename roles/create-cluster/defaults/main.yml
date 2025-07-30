@@ -1,10 +1,5 @@
 ---
 
-installer_binary: "openshift-install"
-
-openshift_install_dir: "bin" # where to store the openshift-install binary
-openshift_clients_url: "https://mirror.openshift.com/pub/openshift-v4/multi/clients/ocp/stable/arm64"
-
 #------------------------------------------------------------------------------------------------
 # aws defaults
 #------------------------------------------------------------------------------------------------
@@ -79,3 +74,22 @@ gcp_arm_volume_type: "pd-ssd"
 gcp_arm_vcpu: 4
 gcp_arm_gpu: 0
 gcp_arm_memory: 16384
+
+#------------------------------------------------------------------------------------------------
+# other defaults
+#------------------------------------------------------------------------------------------------
+
+# name of the openshift-install binary
+installer_binary: "openshift-install"
+
+# directory where the openshift-install binary will be stored
+openshift_install_dir: "bin" 
+
+# url where the openshift-install binary will be downloaded from
+openshift_clients_url: "https://mirror.openshift.com/pub/openshift-v4/multi/clients/ocp/stable/arm64"
+
+# key used for the cluster nodes
+cluster_ssh_key_dir: "$HOME/.ssh"
+
+# local directory where the cluster metadata will be stored
+cluster_metadata_dir: "$HOME/.openshift"
