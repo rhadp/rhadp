@@ -7,13 +7,19 @@ compute:
 - architecture: {{ gcp_secondary_architecture }}
   hyperthreading: Enabled
   name: worker
-  platform: {}
+  platform:
+    gcp:
+      defaultMachinePlatform:
+        type: {{ gcp_secondary_instance_type }}
   replicas: 3
 controlPlane:
   architecture: {{ gcp_primary_architecture }}
   hyperthreading: Enabled
   name: master
-  platform: {}
+  platform:
+    gcp:
+      defaultMachinePlatform:
+        type: {{ gcp_primary_instance_type }}
   replicas: 3
 networking:
   clusterNetwork:

@@ -18,14 +18,16 @@
     kubeconfig: "{{ local_kubeconfig_file }}"
   register: r_cluster_dns
 
-- name: set cluster facts (aws)
+- name: set base domain (all clouds)
+  set_fact:
+    cluster_base_domain: "{{ r_cluster_dns.resources.0.spec.baseDomain }}"
+
+- name: set public zone id (aws)
   when: cloud_provider == "aws"
   set_fact:
-    cluster_base_domain: "{{ r_cluster_dns.resources.0.spec.baseDomain }}"
     cluster_public_zone_id: "{{ r_cluster_dns.resources.0.spec.publicZone.id }}" # Route53 hosted zone ID
 
-- name: set cluster facts (azure)
+- name: set public zone id (azure)
   when: cloud_provider == "azure"
   set_fact:
-    cluster_base_domain: "{{ r_cluster_dns.resources.0.spec.baseDomain }}"
     cluster_public_zone_id: "{{ r_cluster_dns.resources.0.spec.publicZone.id.split('/')[-1] }}" # Azure DNS zone ID

@@ -10,12 +10,12 @@
     kubeconfig: "{{ local_kubeconfig_file }}"
   register: r_cluster_dns
 
-- name: set cluster facts
+- name: set cluster facts (aws)
   when: cloud_provider == "aws"
   set_fact:
     cluster_label: "{{ r_cluster_dns.resources.0.spec.privateZone.tags.Name.split('-')[:-1] | join('-') }}"
 
-- name: set cluster facts
+- name: set cluster facts (azure)
   when: cloud_provider == "azure"
   set_fact:
     cluster_label: "{{ r_cluster_dns.resources.0.spec.privateZone.id.split('/')[4].split('-')[:-1] | join('-') }}"
@@ -23,7 +23,7 @@
 
 # add the 2nd arm machine sets to the cluster
 
-- name: add the arm machine sets
+- name: add the arm machine sets (aws)
   when: setup_arm_worker_nodes and cloud_provider == "aws"
   k8s:
     definition: "{{ lookup('template', item ) | from_yaml }}"
@@ -35,7 +35,7 @@
     - "machineset_arm_b_aws.yml.j2"
     - "machineset_arm_c_aws.yml.j2"
 
-- name: add the arm machine sets
+- name: add the arm machine sets (azure)
   when: setup_arm_worker_nodes and cloud_provider == "azure"
   k8s:
     definition: "{{ lookup('template', item ) | from_yaml }}"
