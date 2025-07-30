@@ -21,6 +21,8 @@
   vars:
     operator_name: "openshift-pipelines-operator-rh"
     operator_subscription_name: "openshift-pipelines-operator"
+    subscription_channel: "{{ pipelines_subscription_channel }}"
+    subscription_starting_csv: "{{ pipelines_subscription_starting_csv }}"
     operator_deployment_name: "openshift-pipelines-operator"
 
 # optional operators
