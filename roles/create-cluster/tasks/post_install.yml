@@ -21,6 +21,11 @@
     cluster_label: "{{ r_cluster_dns.resources.0.spec.privateZone.id.split('/')[4].split('-')[:-1] | join('-') }}"
     _cluster_label: "{{ r_cluster_dns.resources.0.spec.privateZone.id.split('/')[4].split('-')[:-1] | join('_') }}"
 
+- name: set cluster facts (gcp)
+  when: cloud_provider == "gcp"
+  set_fact:
+    cluster_label: "{{ r_cluster_dns.resources.0.spec.privateZone.id.split('-')[:2] | join('-') }}"
+
 # add the 2nd arm machine sets to the cluster
 
 - name: add the arm machine sets (aws)
