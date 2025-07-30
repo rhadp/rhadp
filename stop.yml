@@ -7,7 +7,6 @@
     ACTION: "STOP" # START, STOP, UNINSTALL, UPDATE
 
   tasks:
-    - name: stop the openshift cluster (AWS)
-      when: cloud_provider == "aws"
+    - name: stop the openshift cluster
       include_role:
-        name: roles/lifecycle-aws
+        name: roles/lifecycle-cluster

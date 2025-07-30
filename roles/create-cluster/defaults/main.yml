@@ -33,6 +33,9 @@ aws_arm_memory: 16384
 # azure defaults  
 #------------------------------------------------------------------------------------------------
 
+# see https://learn.microsoft.com/en-us/azure/virtual-machines/sizes/general-purpose/dv5-series
+# see https://learn.microsoft.com/en-us/azure/virtual-machines/sizes/general-purpose/dpsv5-series
+
 # control plane
 azure_primary_architecture: "amd64" # control plane
 azure_primary_instance_type: "Standard_D8s_v5" # 8 vCPU, 32 GiB RAM
@@ -58,8 +61,21 @@ azure_arm_memory: 16384
 # gcp defaults
 #------------------------------------------------------------------------------------------------
 
+# see https://cloud.google.com/compute/docs/general-purpose-machines
+
 gcp_primary_architecture: "arm64" # control plane
 gcp_primary_instance_count: 3 # 3 nodes minimum, on 3 different availability zones
+gcp_primary_instance_type: "t2a-standard-4" # 4 vCPU, 16 GiB RAM
 
 gcp_secondary_architecture: "arm64" # initial compute nodes, 2nd set of compute nodes will be arm64
 gcp_secondary_instance_count: 3 # 3 nodes minimum, on 3 different availability zones
+gcp_secondary_instance_type: "t2a-standard-4" # 4 vCPU, 16 GiB RAM
+
+# secondary set of compute nodes (arm64)
+gcp_arm_instance_type: "t2a-standard-4" # 4 vCPU, 16 GiB RAM
+gcp_arm_instance_count: 2 # number of replicas per availability zone
+gcp_arm_volume_size: 128
+gcp_arm_volume_type: "pd-ssd"
+gcp_arm_vcpu: 4
+gcp_arm_gpu: 0
+gcp_arm_memory: 16384

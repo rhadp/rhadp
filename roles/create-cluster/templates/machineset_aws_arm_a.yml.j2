@@ -17,14 +17,14 @@ spec:
   selector:
     matchLabels:
       machine.openshift.io/cluster-api-cluster: {{ cluster_label }}
-      machine.openshift.io/cluster-api-machineset: {{ cluster_label }}-worker-arm-{{ aws_default_region }}a
+      machine.openshift.io/cluster-api-machineset: arm-worker-1
   template:
     metadata:
       labels:
         machine.openshift.io/cluster-api-cluster: {{ cluster_label }}
         machine.openshift.io/cluster-api-machine-role: worker
         machine.openshift.io/cluster-api-machine-type: worker
-        machine.openshift.io/cluster-api-machineset: {{ cluster_label }}-worker-arm-{{ aws_default_region }}a
+        machine.openshift.io/cluster-api-machineset: arm-worker-1
     spec:
       lifecycleHooks: {}
       metadata: {}

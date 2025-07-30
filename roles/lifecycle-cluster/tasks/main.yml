@@ -3,14 +3,14 @@
 
 - name: run start tasks
   include_tasks:
-    file: ./start.yml
+    file: ./start_{{ cloud_provider }}.yml
     apply:
       become: "{{ become_override | bool }}"
   when: ACTION == "START"
 
 - name: run stop tasks
   include_tasks:
-    file: ./stop.yml
+    file: ./stop_{{ cloud_provider }}.yml
     apply:
       become: "{{ become_override | bool }}"
   when: ACTION == "STOP"

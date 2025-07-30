@@ -6,7 +6,7 @@ metadata:
     machine.openshift.io/GPU: '{{ aws_arm_gpu }}'
     machine.openshift.io/memoryMb: '{{ aws_arm_memory }}'
     machine.openshift.io/vCPU: '{{ aws_arm_vcpu }}'
-  name: arm-worker-3
+  name: arm-worker-2
   namespace: openshift-machine-api
   labels:
     machine.openshift.io/cluster-api-cluster: {{ cluster_label }}
@@ -17,14 +17,14 @@ spec:
   selector:
     matchLabels:
       machine.openshift.io/cluster-api-cluster: {{ cluster_label }}
-      machine.openshift.io/cluster-api-machineset: {{ cluster_label }}-worker-arm-{{ aws_default_region }}c
+      machine.openshift.io/cluster-api-machineset: arm-worker-2
   template:
     metadata:
       labels:
         machine.openshift.io/cluster-api-cluster: {{ cluster_label }}
         machine.openshift.io/cluster-api-machine-role: worker
         machine.openshift.io/cluster-api-machine-type: worker
-        machine.openshift.io/cluster-api-machineset: {{ cluster_label }}-worker-arm-{{ aws_default_region }}c
+        machine.openshift.io/cluster-api-machineset: arm-worker-2
     spec:
       lifecycleHooks: {}
       metadata: {}
@@ -33,7 +33,7 @@ spec:
           userDataSecret:
             name: worker-user-data
           placement:
-            availabilityZone: {{ aws_default_region }}c
+            availabilityZone: {{ aws_default_region }}b
             region: {{ aws_default_region }}
           credentialsSecret:
             name: aws-cloud-credentials
@@ -70,7 +70,7 @@ spec:
             filters:
               - name: 'tag:Name'
                 values:
-                  - {{ cluster_label }}-subnet-private-{{ aws_default_region }}c
+                  - {{ cluster_label }}-subnet-private-{{ aws_default_region }}b
           apiVersion: machine.openshift.io/v1beta1
           iamInstanceProfile:
             id: {{ cluster_label }}-worker-profile

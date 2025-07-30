@@ -8,7 +8,7 @@
     operator_name: "openshift-cert-manager-operator"
     operator_group_name: "openshift-cert-manager-operator"
     operator_subscription_name: "openshift-cert-manager-operator"
-    operator_namespace: "{{ cert_manager_namespace }}"
+    operator_namespace: "{{ cert_manager_operator_namespace }}"
     operator_deployment_name: "{{ cert_manager_deployment_name }}"
     subscription_channel: "{{ cert_manager_subscription_channel }}"
     subscription_starting_csv: "{{ cert_manager_subscription_starting_csv }}"

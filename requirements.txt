@@ -3,3 +3,7 @@ boto3
 ansible[azure]>=6.0.0
 psutil
 kubernetes
+google-auth
+google-cloud-compute
+requests
+google-auth-oauthlib

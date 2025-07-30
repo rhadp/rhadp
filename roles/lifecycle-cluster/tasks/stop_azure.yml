@@ -1,0 +1,47 @@
+# Implement your stop tasks here
+# -------------------------------------------------
+
+- name: stop openshift cluster
+  environment:
+    AZURE_CLIENT_ID: "{{ azure_client_id }}"
+    AZURE_SECRET: "{{ azure_password }}"
+    AZURE_SUBSCRIPTION_ID: "{{ azure_subscription }}"
+    AZURE_TENANT: "{{ azure_tenant }}"
+  block:
+    - name: gather azure VMs in running state
+      azure_rm_virtualmachine_info:
+        resource_group: "{{ azure_resource_group }}"
+        tags:
+          - "Name:{{ cluster_name }}*"
+      register: azure_vms
+
+    - name: filter running VMs
+      set_fact:
+        running_vms: "{{ azure_vms.vms | selectattr('power_state', 'equalto', 'running') | list }}"
+
+    - name: stop running VMs
+      azure_rm_virtualmachine:
+        resource_group: "{{ azure_resource_group }}"
+        name: "{{ item.name }}"
+        allocated: false
+        wait_timeout: 600
+      loop: "{{ running_vms }}"
+      when: running_vms | length > 0
+
+    - name: verify VMs are stopped
+      azure_rm_virtualmachine_info:
+        resource_group: "{{ azure_resource_group }}"
+        tags:
+          - "Name:{{ cluster_name }}*"
+      register: vm_status_check
+      when: verify_cluster | bool
+
+    - name: filter still running VMs after stop
+      set_fact:
+        still_running_vms: "{{ vm_status_check.vms | selectattr('power_state', 'equalto', 'running') | list }}"
+      when: verify_cluster | bool
+
+    - name: fail if VMs are still running
+      fail:
+        msg: "Some VMs are still running after stop operation: {{ still_running_vms | map(attribute='name') | list }}"
+      when: verify_cluster | bool and still_running_vms | length > 0

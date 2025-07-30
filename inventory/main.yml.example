@@ -7,7 +7,7 @@ all:
     cluster_name: "rhadp"
     cluster_version: "4.19.4"
     cluster_domain: "rhadp.example.com"
-    cluster_default_storage_class: "gp3-csi" # "managed-csi" (azure), "pd-ssd" (gcp)
+    cluster_default_storage_class: "gp3-csi" # "gp3-csi" (aws), "managed-csi" (azure), "standard-csi" (gcp)
 
     pull_secret_file: "inventory/pull-secret-aws.txt" # place the pull secret at this loacation
     
@@ -27,7 +27,9 @@ all:
 
     # gcp specific variables
     #gcp_service_account_key_file: "$HOME/.gcp/osServiceAccount.json" # place the service account key at this location
+    #gcp_service_account_email: "abc@123.iam.gserviceaccount.com"
     #gcp_project_id: "project-123"
+    #gcp_organization_id: "abc123"
     #gcp_default_region: "us-central1"
     
     # github secrets
