@@ -1,0 +1,78 @@
+# Implement your stop tasks here
+# -------------------------------------------------
+
+- name: stop openshift cluster
+  environment:
+    GOOGLE_APPLICATION_CREDENTIALS: "{{ gcp_service_account_key_file }}"
+  block:
+    - name: gather GCE instances in running state
+      google.cloud.gcp_compute_instance_info:
+        project: "{{ gcp_project_id }}"
+        zone: "{{ gcp_default_region }}-a"
+        filters:
+          - name = "{{ cluster_label }}*"
+          - status = "RUNNING"
+        auth_kind: serviceaccount
+        service_account_file: "{{ gcp_service_account_key_file }}"
+      register: gce_instances_a
+
+    - name: gather GCE instances in running state (zone b)
+      google.cloud.gcp_compute_instance_info:
+        project: "{{ gcp_project_id }}"
+        zone: "{{ gcp_default_region }}-b"
+        filters:
+          - name = "{{ cluster_label }}*"
+          - status = "RUNNING"
+        auth_kind: serviceaccount
+        service_account_file: "{{ gcp_service_account_key_file }}"
+      register: gce_instances_b
+
+    - name: gather GCE instances in running state (zone f)
+      google.cloud.gcp_compute_instance_info:
+        project: "{{ gcp_project_id }}"
+        zone: "{{ gcp_default_region }}-f"
+        filters:
+          - name = "{{ cluster_label }}*"
+          - status = "RUNNING"
+        auth_kind: serviceaccount
+        service_account_file: "{{ gcp_service_account_key_file }}"
+      register: gce_instances_f
+
+    - name: combine instances from all zones
+      set_fact:
+        all_running_instances: "{{ (gce_instances_a.resources | default([])) + (gce_instances_b.resources | default([])) + (gce_instances_f.resources | default([])) }}"
+
+    - name: stop running instances
+      google.cloud.gcp_compute_instance:
+        name: "{{ item.name }}"
+        zone: "{{ item.zone.split('/')[-1] }}"
+        project: "{{ gcp_project_id }}"
+        status: TERMINATED
+        auth_kind: serviceaccount
+        service_account_file: "{{ gcp_service_account_key_file }}"
+      loop: "{{ all_running_instances }}"
+      when: all_running_instances | length > 0
+
+    - name: verify instances are stopped
+      google.cloud.gcp_compute_instance_info:
+        project: "{{ gcp_project_id }}"
+        zone: "{{ gcp_default_region }}-{{ item }}"
+        filters:
+          - name = "{{ cluster_label }}*"
+          - status = "RUNNING"
+        auth_kind: serviceaccount
+        service_account_file: "{{ gcp_service_account_key_file }}"
+      register: running_instances_check
+      loop: ['a', 'b', 'f']
+      when: verify_cluster | bool
+
+    - name: combine running instances check from all zones
+      set_fact:
+        still_running_instances: "{{ running_instances_check.results | selectattr('resources', 'defined') | map(attribute='resources') | flatten | list }}"
+      when: verify_cluster | bool
+
+    - name: fail if instances are still running
+      fail:
+        msg: "Some instances are still running after stop operation: {{ still_running_instances | map(attribute='name') | list }}"
+      when: verify_cluster | bool and still_running_instances | length > 0
+

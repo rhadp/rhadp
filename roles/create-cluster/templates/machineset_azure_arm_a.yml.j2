@@ -6,7 +6,7 @@ metadata:
     machine.openshift.io/GPU: '{{ azure_arm_gpu }}'
     machine.openshift.io/memoryMb: '{{ azure_arm_memory }}'
     machine.openshift.io/vCPU: '{{ azure_arm_vcpu }}'
-  name: arm-worker-1
+  name: {{ cluster_label }}-arm-worker-1
   namespace: openshift-machine-api
   labels:
     machine.openshift.io/cluster-api-cluster: {{ cluster_label }}
@@ -17,14 +17,14 @@ spec:
   selector:
     matchLabels:
       machine.openshift.io/cluster-api-cluster: {{ cluster_label }}
-      machine.openshift.io/cluster-api-machineset: {{ cluster_label }}-worker-arm-{{ azure_default_region }}
+      machine.openshift.io/cluster-api-machineset: {{ cluster_label }}-arm-worker-1
   template:
     metadata:
       labels:
         machine.openshift.io/cluster-api-cluster: {{ cluster_label }}
         machine.openshift.io/cluster-api-machine-role: worker
         machine.openshift.io/cluster-api-machine-type: worker
-        machine.openshift.io/cluster-api-machineset: {{ cluster_label }}-worker-arm-{{ azure_default_region }}
+        machine.openshift.io/cluster-api-machineset: {{ cluster_label }}-arm-worker-1
     spec:
       lifecycleHooks: {}
       metadata: {}

@@ -1,3 +1,35 @@
 # Implement your start tasks here
 # -------------------------------------------------
 
+- name: start openshift cluster
+  environment:
+    AZURE_CLIENT_ID: "{{ azure_client_id }}"
+    AZURE_SECRET: "{{ azure_password }}"
+    AZURE_SUBSCRIPTION_ID: "{{ azure_subscription }}"
+    AZURE_TENANT: "{{ azure_tenant }}"
+  block:
+    - name: gather azure VMs in stopped state
+      azure_rm_virtualmachine_info:
+        resource_group: "{{ azure_resource_group }}"
+        tags:
+          - "Name:{{ cluster_name }}*"
+      register: azure_vms
+
+    - name: filter stopped VMs
+      set_fact:
+        stopped_vms: "{{ azure_vms.vms | selectattr('power_state', 'equalto', 'deallocated') | list }}"
+
+    - name: start stopped VMs
+      azure_rm_virtualmachine:
+        resource_group: "{{ azure_resource_group }}"
+        name: "{{ item.name }}"
+        allocated: true
+        wait_timeout: 600
+      loop: "{{ stopped_vms }}"
+      when: stopped_vms | length > 0
+
+    - name: wait until the cluster is ready
+      pause:
+        seconds: "{{ wait_timeout }}"
+      when: verify_cluster | bool
+
