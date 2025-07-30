@@ -6,16 +6,6 @@ The cluster is configured with a hybrid architecture featuring ARM control plane
 and configurations for development and production workloads.
 
 
-## Prerequisites
-
-### Required Software
-- OpenShift CLI (`oc`) v4.19 or later
-- Azure CLI
-- Google Compute Platfrom CLI
-- Python 3.9 or later with pip
-- Git
-
-
 ## Installation
 
 ### Repository Setup
