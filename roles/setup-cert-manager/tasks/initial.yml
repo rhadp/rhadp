@@ -31,3 +31,8 @@
   when: cloud_provider == "azure"
   set_fact:
     cluster_public_zone_id: "{{ r_cluster_dns.resources.0.spec.publicZone.id.split('/')[-1] }}" # Azure DNS zone ID
+
+- name: set public zone id (gcp)
+  when: cloud_provider == "gcp"
+  set_fact:
+    cluster_public_zone_id: "{{ r_cluster_dns.resources.0.spec.publicZone.id }}" # Google Cloud DNS zone ID

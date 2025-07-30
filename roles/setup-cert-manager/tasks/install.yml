@@ -18,7 +18,7 @@
     apply: yes
     kubeconfig: "{{ local_kubeconfig_file }}"
   with_items: # FIXME: check which namespaces are really needed
-    - "{{ cert_manager_namespace }}"
+    - "{{ cert_manager_operator_namespace }}"
     - "cert-manager"
     - "openshift-ingress"
     - "openshift-ingress-operator"
@@ -40,7 +40,7 @@
     apply: yes
     kubeconfig: "{{ local_kubeconfig_file }}"
   with_items: # FIXME: check which namespaces are really needed
-    - "{{ cert_manager_namespace }}"
+    - "{{ cert_manager_operator_namespace }}"
     - "cert-manager"
     - "openshift-ingress"
     - "openshift-ingress-operator"
@@ -63,15 +63,15 @@
             namespace: "{{ item }}"
           type: Opaque
           data:
-            service-account-json: "{{ gcp_service_account_json.content | b64encode }}"
+            service-account-json: '{{ gcp_service_account_json.content }}'
         state: present
         apply: yes
         kubeconfig: "{{ local_kubeconfig_file }}"
       with_items: # FIXME: check which namespaces are really needed
-        - "{{ cert_manager_namespace }}"
         - "cert-manager"
-        - "openshift-ingress"
-        - "openshift-ingress-operator"
+        #- "{{ cert_manager_operator_namespace }}"
+        #- "openshift-ingress"
+        #- "openshift-ingress-operator"
 
 - name: create cert-manager instance
   k8s:
@@ -171,6 +171,7 @@
         name: letsencrypt-prod
       spec:
         acme:
+          preferredChain: ""
           server: https://acme-v02.api.letsencrypt.org/directory
           email: "{{ letsencrypt_email }}"
           privateKeySecretRef:
@@ -182,10 +183,10 @@
                   serviceAccountSecretRef:
                     name: gcp-service-account
                     key: service-account-json
-              selector:
-                dnsZones:
-                  - "apps.{{ cluster_base_domain }}"
-                  - "api.{{ cluster_base_domain }}"
+              #selector:
+              #  dnsZones:
+              #    - "apps.{{ cluster_base_domain }}"
+              #    - "api.{{ cluster_base_domain }}"
     state: present
     apply: yes
     kubeconfig: "{{ local_kubeconfig_file }}"
