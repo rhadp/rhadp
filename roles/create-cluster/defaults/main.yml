@@ -40,7 +40,7 @@ azure_primary_volume_type: "Premium_LRS"
 
 # primary set of compute nodes
 azure_secondary_architecture: "amd64" # initial compute nodes, 2nd set of compute nodes will be arm64
-azure_secondary_instance_type: "Standard_D4s_v5" # 4 vCPU, 16 GiB RAM
+azure_secondary_instance_type: "Standard_D8s_v5" # 8 vCPU, 32 GiB RAM
 azure_secondary_instance_count: 3 # 3 nodes minimum, on 3 different availability zones
 azure_secondary_volume_type: "Premium_LRS"
 
