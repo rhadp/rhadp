@@ -42,7 +42,7 @@
       set_fact:
         all_running_instances: "{{ (gce_instances_a.resources | default([])) + (gce_instances_b.resources | default([])) + (gce_instances_f.resources | default([])) }}"
 
-    - name: stop running instances
+    - name: stop running instances (async)
       google.cloud.gcp_compute_instance:
         name: "{{ item.name }}"
         zone: "{{ item.zone.split('/')[-1] }}"
@@ -52,6 +52,22 @@
         service_account_file: "{{ gcp_service_account_key_file }}"
       loop: "{{ all_running_instances }}"
       when: all_running_instances | length > 0
+      async: 600  # Allow up to 10 minutes for each stop operation
+      poll: 0     # Fire and forget - don't wait for completion
+      register: stop_jobs
+
+    - name: wait for all instances to finish stopping
+      async_status:
+        jid: "{{ item.ansible_job_id }}"
+      loop: "{{ stop_jobs.results | default([]) }}"
+      when: 
+        - all_running_instances | length > 0
+        - item.ansible_job_id is defined
+        - verify_cluster | bool  # Only wait if we're going to verify
+      register: stop_jobs_result
+      until: stop_jobs_result.finished
+      retries: 60
+      delay: 10
 
     - name: verify instances are stopped
       google.cloud.gcp_compute_instance_info:

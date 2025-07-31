@@ -1,11 +1,11 @@
 # Do not modify this file.
 # Implement pre-/post-install, install/uninstall tasks in their own files.
 
-- name: running initial tasks
-  include_tasks:
-    file: ./initial.yml
-    apply:
-      become: "{{ become_override | bool }}"
+#- name: running initial tasks
+#  include_tasks:
+#    file: ./initial.yml
+#    apply:
+#      become: "{{ become_override | bool }}"
       
 - name: run start tasks
   include_tasks:
