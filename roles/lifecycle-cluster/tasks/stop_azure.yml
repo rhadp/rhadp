@@ -8,40 +8,49 @@
     AZURE_SUBSCRIPTION_ID: "{{ azure_subscription }}"
     AZURE_TENANT: "{{ azure_tenant }}"
   block:
-    - name: gather azure VMs in running state
+    - name: gather all azure instances from resource group
       azure_rm_virtualmachine_info:
-        resource_group: "{{ azure_resource_group }}"
-        tags:
-          - "Name:{{ cluster_name }}*"
+        subscription_id: "{{ azure_subscription }}" # FIXME: this is not correct, it might 'catch' other VMs that are not part of the cluster
       register: azure_vms
 
-    - name: filter running VMs
+    - name: filter instances by cluster name and running state
       set_fact:
         running_vms: "{{ azure_vms.vms | selectattr('power_state', 'equalto', 'running') | list }}"
-
-    - name: stop running VMs
+        
+    - name: stop running instances (async)
       azure_rm_virtualmachine:
-        resource_group: "{{ azure_resource_group }}"
+        resource_group: "{{ item.resource_group }}"
         name: "{{ item.name }}"
-        allocated: false
-        wait_timeout: 600
+        state: present
+        started: false
       loop: "{{ running_vms }}"
       when: running_vms | length > 0
+      async: 600  # Allow up to 10 minutes for each stop operation
+      poll: 0     # Fire and forget - don't wait for completion
+      register: stop_jobs
 
-    - name: verify VMs are stopped
+    - name: wait for all instances to finish stopping
+      async_status:
+        jid: "{{ item.ansible_job_id }}"
+      loop: "{{ stop_jobs.results | default([]) }}"
+      when: 
+        - running_vms | length > 0
+        - item.ansible_job_id is defined
+      register: stop_jobs_result
+      until: stop_jobs_result.finished
+      retries: 60
+      delay: 10
+
+    - name: verify instances are stopped
       azure_rm_virtualmachine_info:
-        resource_group: "{{ azure_resource_group }}"
-        tags:
-          - "Name:{{ cluster_name }}*"
+        subscription_id: "{{ azure_subscription }}"
       register: vm_status_check
-      when: verify_cluster | bool
 
-    - name: filter still running VMs after stop
+    - name: filter still running instances after stop
       set_fact:
         still_running_vms: "{{ vm_status_check.vms | selectattr('power_state', 'equalto', 'running') | list }}"
-      when: verify_cluster | bool
 
-    - name: fail if VMs are still running
+    - name: fail if instances are still running
       fail:
         msg: "Some VMs are still running after stop operation: {{ still_running_vms | map(attribute='name') | list }}"
-      when: verify_cluster | bool and still_running_vms | length > 0
+      when: still_running_vms | length > 0

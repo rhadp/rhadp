@@ -21,6 +21,10 @@ Create a Python virtual environment (recommended):
 python3.12 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
+
+# install the azure collection
+ansible-galaxy collection install azure.azcollection --force
+pip install -r ~/.ansible/collections/ansible_collections/azure/azcollection/requirements.txt
 ```
 
 ### Inventory Setup

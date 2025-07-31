@@ -5,7 +5,7 @@
   environment:
     GOOGLE_APPLICATION_CREDENTIALS: "{{ gcp_service_account_key_file }}"
   block:
-    - name: gather GCE instances in running state
+    - name: gather instances in running state
       google.cloud.gcp_compute_instance_info:
         project: "{{ gcp_project_id }}"
         zone: "{{ gcp_default_region }}-a"
@@ -16,7 +16,7 @@
         service_account_file: "{{ gcp_service_account_key_file }}"
       register: gce_instances_a
 
-    - name: gather GCE instances in running state (zone b)
+    - name: gather instances in running state (zone b)
       google.cloud.gcp_compute_instance_info:
         project: "{{ gcp_project_id }}"
         zone: "{{ gcp_default_region }}-b"
@@ -27,7 +27,7 @@
         service_account_file: "{{ gcp_service_account_key_file }}"
       register: gce_instances_b
 
-    - name: gather GCE instances in running state (zone f)
+    - name: gather instances in running state (zone f)
       google.cloud.gcp_compute_instance_info:
         project: "{{ gcp_project_id }}"
         zone: "{{ gcp_default_region }}-f"
@@ -63,7 +63,6 @@
       when: 
         - all_running_instances | length > 0
         - item.ansible_job_id is defined
-        - verify_cluster | bool  # Only wait if we're going to verify
       register: stop_jobs_result
       until: stop_jobs_result.finished
       retries: 60
@@ -80,15 +79,13 @@
         service_account_file: "{{ gcp_service_account_key_file }}"
       register: running_instances_check
       loop: ['a', 'b', 'f']
-      when: verify_cluster | bool
-
+      
     - name: combine running instances check from all zones
       set_fact:
         still_running_instances: "{{ running_instances_check.results | selectattr('resources', 'defined') | map(attribute='resources') | flatten | list }}"
-      when: verify_cluster | bool
-
+      
     - name: fail if instances are still running
       fail:
         msg: "Some instances are still running after stop operation: {{ still_running_instances | map(attribute='name') | list }}"
-      when: verify_cluster | bool and still_running_instances | length > 0
+      when: still_running_instances | length > 0
 

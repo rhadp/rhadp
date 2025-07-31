@@ -5,7 +5,7 @@
   environment:
     GOOGLE_APPLICATION_CREDENTIALS: "{{ gcp_service_account_key_file }}"
   block:
-    - name: gather GCE instances in stopped state
+    - name: gather instances in stopped state
       google.cloud.gcp_compute_instance_info:
         project: "{{ gcp_project_id }}"
         zone: "{{ gcp_default_region }}-a"
@@ -16,7 +16,7 @@
         service_account_file: "{{ gcp_service_account_key_file }}"
       register: gce_instances_a
 
-    - name: gather GCE instances in stopped state (zone b)
+    - name: gather instances in stopped state (zone b)
       google.cloud.gcp_compute_instance_info:
         project: "{{ gcp_project_id }}"
         zone: "{{ gcp_default_region }}-b"
@@ -27,7 +27,7 @@
         service_account_file: "{{ gcp_service_account_key_file }}"
       register: gce_instances_b
 
-    - name: gather GCE instances in stopped state (zone f)
+    - name: gather instances in stopped state (zone f)
       google.cloud.gcp_compute_instance_info:
         project: "{{ gcp_project_id }}"
         zone: "{{ gcp_default_region }}-f"
@@ -42,7 +42,7 @@
       set_fact:
         all_stopped_instances: "{{ (gce_instances_a.resources | default([])) + (gce_instances_b.resources | default([])) + (gce_instances_f.resources | default([])) }}"
 
-    - name: start stopped instances
+    - name: start instances
       google.cloud.gcp_compute_instance:
         name: "{{ item.name }}"
         zone: "{{ item.zone.split('/')[-1] }}"
@@ -52,9 +52,10 @@
         service_account_file: "{{ gcp_service_account_key_file }}"
       loop: "{{ all_stopped_instances }}"
       when: all_stopped_instances | length > 0
+      async: 600  # Allow up to 10 minutes for each stop operation
+      poll: 0     # Fire and forget - don't wait for completion
 
     - name: wait until the cluster is ready
       pause:
         seconds: "{{ wait_timeout }}"
-      when: verify_cluster | bool
 
