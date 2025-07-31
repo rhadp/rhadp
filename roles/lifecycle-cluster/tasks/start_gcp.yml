@@ -10,7 +10,7 @@
         project: "{{ gcp_project_id }}"
         zone: "{{ gcp_default_region }}-a"
         filters:
-          - name = "{{ cluster_label }}*"
+          - name = "{{ cluster_name }}*"
           - status = "TERMINATED"
         auth_kind: serviceaccount
         service_account_file: "{{ gcp_service_account_key_file }}"
@@ -21,7 +21,7 @@
         project: "{{ gcp_project_id }}"
         zone: "{{ gcp_default_region }}-b"
         filters:
-          - name = "{{ cluster_label }}*"
+          - name = "{{ cluster_name }}*"
           - status = "TERMINATED"
         auth_kind: serviceaccount
         service_account_file: "{{ gcp_service_account_key_file }}"
@@ -32,7 +32,7 @@
         project: "{{ gcp_project_id }}"
         zone: "{{ gcp_default_region }}-f"
         filters:
-          - name = "{{ cluster_label }}*"
+          - name = "{{ cluster_name }}*"
           - status = "TERMINATED"
         auth_kind: serviceaccount
         service_account_file: "{{ gcp_service_account_key_file }}"
