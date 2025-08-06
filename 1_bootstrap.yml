@@ -22,3 +22,7 @@
     - name: bootstrap the essential operators e.g. gitops, pipelines, DevSpaces, Developer Hub etc.
       include_role:
         name: roles/setup-dev-operators
+
+    - name: show web console url
+      debug:
+        msg: "Access the OpenShift web-console here: https://console-openshift-console.apps.{{ cluster_name }}.{{ cluster_domain }}"
