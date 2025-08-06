@@ -1,8 +1,8 @@
 ---
 # VM configuration
-vm_size: "Standard_D4ps_v5"  # ARM-based Azure VM, 4 vCPU, 16 GiB RAM
+vm_instance_type: "Standard_D4ps_v5"  # ARM-based Azure VM, 4 vCPU, 16 GiB RAM
 boot_disk_size: 64
-additional_disk_size: 100
+data_disk_size: 100
 
 # Network configuration
 vnet_cidr: "10.0.0.0/16"

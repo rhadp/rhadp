@@ -8,7 +8,7 @@
     location: "{{ azure_default_region }}"
     resource_group: "{{ azure_resource_group }}"
     image: "{{ vm_image }}"
-    vm_size: "{{ vm_size }}"
+    vm_size: "{{ vm_instance_type }}"
     admin_username: "{{ ansible_user }}"
     ssh_password_enabled: false
     ssh_public_keys:
@@ -24,7 +24,7 @@
       - lun: 0
         name: "{{ instance_name }}-data"
         managed_disk_type: "Premium_LRS"
-        disk_size_gb: "{{ additional_disk_size }}"
+        disk_size_gb: "{{ data_disk_size }}"
         caching: "ReadWrite"
     state: present
     # azure credentials

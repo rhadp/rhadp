@@ -7,10 +7,10 @@
     ACTION: "INSTALL" # INSTALL, UNINSTALL, UPDATE
 
   tasks:
-    #- name: create the vm (AWS)
-    #  include_role:
-    #    name: roles/create_vm_aws
-    #  when: cloud_provider == "aws"
+    - name: create the vm (AWS)
+      include_role:
+        name: roles/create-vm-aws
+      when: cloud_provider == "aws"
 
     - name: create the vm (Azure)
       include_role:
