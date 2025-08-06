@@ -1,0 +1,28 @@
+# Implement your install deployment tasks here
+# -------------------------------------------------
+
+- name: remove directories
+  delegate_to: "{{ instance_public_ip }}"
+  become: true
+  ansible.builtin.file:
+    path: "{{ work_dir }}/{{ item }}"
+    state: absent
+  with_items:
+    - "{{ aib_work_dir }}"
+    - "{{ github_runner_dir }}"
+    - "{{ workspace_dir }}"
+    
+- name: re-create directories
+  delegate_to: "{{ instance_public_ip }}"
+  become: true
+  ansible.builtin.file:
+    path: "{{ work_dir }}/{{ item }}"
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "0755"
+  with_items:
+    - "{{ aib_work_dir }}"
+    - "{{ workspace_dir }}"
+    - "{{ images_dir }}"
+

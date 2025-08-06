@@ -28,7 +28,7 @@
 - name: delete data disks
   azure.azcollection.azure_rm_manageddisk:
     resource_group: "{{ azure_resource_group }}"
-    name: "{{ instance_name }}_DataDisk_0"
+    name: "{{ instance_name }}-data"
     state: absent
     client_id: "{{ azure_client_id }}"
     secret: "{{ azure_password }}"
@@ -39,7 +39,7 @@
 - name: delete OS disk
   azure.azcollection.azure_rm_manageddisk:
     resource_group: "{{ azure_resource_group }}"
-    name: "{{ instance_name }}_OsDisk_1_{{ ansible_date_time.epoch }}"
+    name: "{{ instance_name }}-os"
     state: absent
     client_id: "{{ azure_client_id }}"
     secret: "{{ azure_password }}"
@@ -75,7 +75,7 @@
 - name: delete network interface
   azure.azcollection.azure_rm_networkinterface:
     resource_group: "{{ azure_resource_group }}"
-    name: "{{ instance_name }}-nic"
+    name: "{{ nic_name }}"
     state: absent
     client_id: "{{ azure_client_id }}"
     secret: "{{ azure_password }}"

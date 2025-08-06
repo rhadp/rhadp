@@ -1,0 +1,28 @@
+- name: create the vm and install the software
+  hosts: localhost
+  vars:
+    # set the following to control the install/uninstall process
+    silent: false
+    become_override: false
+    ACTION: "UNINSTALL" # INSTALL, UNINSTALL, UPDATE
+
+  tasks:
+    - name: gather facts
+      include_role:
+        name: roles/gather-vm-facts
+
+    - name: remove the github runner
+      include_role:
+        name: roles/setup-github-runner
+        
+    - name: delete the vm (AWS)
+      include_role:
+        name: roles/create-vm-aws
+      when: cloud_provider == "aws"
+
+    - name: delete the vm (Azure)
+      include_role:
+        name: roles/create-vm-azure
+      when: cloud_provider == "azure"
+
+    

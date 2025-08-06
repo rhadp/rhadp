@@ -14,23 +14,27 @@
 
     - name: create the vm (Azure)
       include_role:
-        name: roles/create_vm_azure
+        name: roles/create-vm-azure
       when: cloud_provider == "azure"
-        
-    #- name: prepare the runner vm
-    #  include_role:
-    #    name: roles/prepare_runner_vm
 
-    #- name: install the github runner
-    #  include_role:
-    #    name: roles/github_runner
+    - name: gather vm facts
+      include_role:
+        name: roles/gather-vm-facts
+
+    - name: prepare the vm
+      include_role:
+        name: roles/setup-vm
+
+    - name: install the github runner
+      include_role:
+        name: roles/setup-github-runner
 
     - name: show login command (AWS)
       debug:
-        msg: "ssh -i {{ ansible_ssh_private_key_file }} {{ ansible_user }}@{{ instance_public_dns }}"
+        msg: "Access the VM: ssh -i {{ ansible_ssh_private_key_file }} {{ ansible_user }}@{{ instance_public_dns }}"
       when: cloud_provider == "aws"
 
     - name: show login command (Azure)
       debug:
-        msg: "ssh -i {{ ansible_ssh_private_key_file }} {{ ansible_user }}@{{ instance_public_ip }}"
+        msg: "Access the VM: ssh -i {{ ansible_ssh_private_key_file }} {{ ansible_user }}@{{ instance_public_ip }}"
       when: cloud_provider == "azure"

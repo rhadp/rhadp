@@ -1,0 +1,24 @@
+# Implement your pre-install deployment tasks here
+# -------------------------------------------------
+
+# FIXME: investigate why the github runner does not work without the following directories ...
+
+- name: create directories
+  delegate_to: "{{ instance_public_ip }}"
+  become: true
+  ansible.builtin.file:
+    path: "{{ work_dir }}/{{ item }}"
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "0755"
+  with_items:
+    - "{{ github_runner_dir }}"
+    - "{{ workspace_dir }}/github/home" # used by the github runner, to create containers ...
+    - "{{ workspace_dir }}/github/workspace"
+
+- name: create a symlink to the workspace directory
+  delegate_to: "{{ instance_public_ip }}"
+  become: true
+  shell: |
+    ln -s {{ work_dir }}/{{ workspace_dir }}/github /github

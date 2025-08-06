@@ -36,6 +36,7 @@ all:
     github_oauth_client_id: "abc123"
     github_oauth_client_secret: "abc123"
     github_api_pat: ""abc123"
+    github_org: "example.org-examples"
 
     # letsencrypt account email
     letsencrypt_email: "hello@example.com"
