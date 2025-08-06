@@ -1,0 +1,36 @@
+- name: create the vm and install the software
+  hosts: localhost
+  vars:
+    # set the following to control the install/uninstall process
+    silent: false
+    become_override: false
+    ACTION: "INSTALL" # INSTALL, UNINSTALL, UPDATE
+
+  tasks:
+    #- name: create the vm (AWS)
+    #  include_role:
+    #    name: roles/create_vm_aws
+    #  when: cloud_provider == "aws"
+
+    - name: create the vm (Azure)
+      include_role:
+        name: roles/create_vm_azure
+      when: cloud_provider == "azure"
+        
+    #- name: prepare the runner vm
+    #  include_role:
+    #    name: roles/prepare_runner_vm
+
+    #- name: install the github runner
+    #  include_role:
+    #    name: roles/github_runner
+
+    - name: show login command (AWS)
+      debug:
+        msg: "ssh -i {{ ansible_ssh_private_key_file }} {{ ansible_user }}@{{ instance_public_dns }}"
+      when: cloud_provider == "aws"
+
+    - name: show login command (Azure)
+      debug:
+        msg: "ssh -i {{ ansible_ssh_private_key_file }} {{ ansible_user }}@{{ instance_public_ip }}"
+      when: cloud_provider == "azure"

@@ -1,0 +1,20 @@
+---
+# VM configuration
+vm_size: "Standard_D4ps_v5"  # ARM-based Azure VM, 4 vCPU, 16 GiB RAM
+boot_disk_size: 64
+additional_disk_size: 100
+
+# Network configuration
+vnet_cidr: "10.0.0.0/16"
+subnet_cidr: "10.0.1.0/24"
+
+# Image configuration for RHEL 10 ARM64
+vm_image:
+  publisher: "RedHat"
+  offer: "rhel-arm64"
+  sku: "10_0-arm64"
+  version: "latest"
+
+# other configuration
+delete_resource_group: false
+cluster_ssh_key_dir: "~/.ssh" # "$HOME/.ssh"

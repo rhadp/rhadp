@@ -1,0 +1,88 @@
+# Implement your post-install deployment tasks here
+# -------------------------------------------------
+
+- name: list available block devices
+  delegate_to: "{{ instance_public_ip }}"
+  become: true
+  command: lsblk
+  register: block_devices
+
+- name: show available block devices
+  debug:
+    var: block_devices.stdout_lines
+
+- name: find the additional storage device (data volume)
+  delegate_to: "{{ instance_public_ip }}"
+  become: true
+  shell: |
+    # Find all disk devices
+    ALL_DISKS=$(lsblk -rno NAME,TYPE | grep disk | awk '{print $1}')
+    
+    # For each disk, check if it has any mounted partitions
+    for disk in $ALL_DISKS; do
+      # Check if this disk has any partitions with mountpoints
+      MOUNTED_PARTITIONS=$(lsblk -rno NAME,MOUNTPOINT /dev/$disk | grep -v "^$disk" | awk '$2 != "" {print $1}' | wc -l)
+      
+      # If no mounted partitions, this is likely our data volume
+      if [ "$MOUNTED_PARTITIONS" -eq 0 ]; then
+        echo "$disk"
+        break
+      fi
+    done
+  register: additional_device_result
+
+- name: set additional device name
+  set_fact:
+    additional_device_name: "{{ additional_device_result.stdout }}"
+  when: additional_device_result.stdout != ""
+
+- name: show additional device found
+  debug:
+    var: additional_device_name
+
+- name: create filesystem on additional storage device
+  delegate_to: "{{ instance_public_ip }}"
+  become: true
+  filesystem:
+    fstype: ext4
+    dev: "/dev/{{ additional_device_name }}"
+    force: no
+  when: additional_device_name is defined
+
+- name: create mount point directory
+  delegate_to: "{{ instance_public_ip }}"
+  become: true
+  file:
+    path: "{{ volume_mount_point }}"
+    state: directory
+    mode: '0755'
+
+- name: mount additional storage device
+  delegate_to: "{{ instance_public_ip }}"
+  become: true
+  mount:
+    path: "{{ volume_mount_point }}"
+    src: "/dev/{{ additional_device_name }}"
+    fstype: ext4
+    state: mounted
+    opts: defaults
+  when: additional_device_name is defined
+
+- name: set proper ownership on mount point
+  delegate_to: "{{ instance_public_ip }}"
+  become: true
+  file:
+    path: "{{ volume_mount_point }}"
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: update fstab for persistent mount
+  delegate_to: "{{ instance_public_ip }}"
+  become: true
+  lineinfile:
+    path: /etc/fstab
+    line: "/dev/{{ additional_device_name }} {{ volume_mount_point }} ext4 defaults 0 2"
+    state: present
+  when: additional_device_name is defined
+

@@ -1,0 +1,65 @@
+# Implement your install deployment tasks here
+# -------------------------------------------------
+
+# see https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_virtualmachine_module.html
+- name: create virtual machine
+  azure.azcollection.azure_rm_virtualmachine:
+    name: "{{ instance_name }}"
+    location: "{{ azure_default_region }}"
+    resource_group: "{{ azure_resource_group }}"
+    image: "{{ vm_image }}"
+    vm_size: "{{ vm_size }}"
+    admin_username: "{{ ansible_user }}"
+    ssh_password_enabled: false
+    ssh_public_keys:
+      - path: "/home/{{ ansible_user }}/.ssh/authorized_keys"
+        key_data: "{{ lookup('file', '{{ ssh_public_key_path }}') }}"
+    network_interface_names:
+      - "{{ instance_name }}-nic"
+    managed_disk_type: "Premium_LRS"
+    os_disk_name: "{{ instance_name }}-os"
+    os_disk_size_gb: "{{ boot_disk_size }}"
+    os_disk_caching: "ReadOnly"
+    data_disks:
+      - lun: 0
+        name: "{{ instance_name }}-data"
+        managed_disk_type: "Premium_LRS"
+        disk_size_gb: "{{ additional_disk_size }}"
+        caching: "ReadWrite"
+    state: present
+    # azure credentials
+    client_id: "{{ azure_client_id }}"
+    secret: "{{ azure_password }}"
+    tenant: "{{ azure_tenant }}"
+    subscription_id: "{{ azure_subscription }}"
+  register: vm
+
+- name: get public IP address
+  azure.azcollection.azure_rm_publicipaddress_info:
+    name: "{{ instance_name }}-pip"
+    resource_group: "{{ azure_resource_group }}"
+    # azure credentials
+    client_id: "{{ azure_client_id }}"
+    secret: "{{ azure_password }}"
+    tenant: "{{ azure_tenant }}"
+    subscription_id: "{{ azure_subscription }}"
+  register: pip_info
+
+- name: set public ip fact
+  set_fact:
+    instance_public_ip: "{{ pip_info.publicipaddresses[0].ip_address }}"
+
+- name: wait for ssh to be available on the new instance
+  wait_for:
+    host: "{{ instance_public_ip }}"
+    port: 22
+    delay: 30
+    timeout: 600
+    state: started
+
+- name: add host key to known_hosts
+  known_hosts:
+    name: "{{ instance_public_ip }}"
+    key: "{{ lookup('pipe', 'ssh-keyscan -H ' + instance_public_ip) }}"
+    state: present
+
