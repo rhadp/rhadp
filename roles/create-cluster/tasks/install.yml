@@ -9,7 +9,7 @@
 - name: create cluster
   shell: |
     source .env-{{ cluster_fqn }}.sh && \
-    ./openshift-install create cluster --dir="{{ cluster_metadata_dir }}/{{ cluster_fqn }}"
+    ./{{ installer_binary_fqn }} create cluster --dir="{{ cluster_metadata_dir }}/{{ cluster_fqn }}"
   args:
     chdir: "{{ openshift_install_dir }}"
 
@@ -27,14 +27,14 @@
 - name: wait for bootstrap to complete
   shell: |
     source .env-{{ cluster_fqn }}.sh && \
-    ./openshift-install wait-for bootstrap-complete --dir="{{ cluster_metadata_dir }}/{{ cluster_fqn }}"
+    ./{{ installer_binary_fqn }} wait-for bootstrap-complete --dir="{{ cluster_metadata_dir }}/{{ cluster_fqn }}"
   args:
     chdir: "{{ openshift_install_dir }}"
 
 - name: wait for the cluster
   shell: |
     source .env-{{ cluster_fqn }}.sh
-    ./openshift-install wait-for install-complete --dir="{{ cluster_metadata_dir }}/{{ cluster_fqn }}"
+    ./{{ installer_binary_fqn }} wait-for install-complete --dir="{{ cluster_metadata_dir }}/{{ cluster_fqn }}"
   args:
     chdir: "{{ openshift_install_dir }}"
 

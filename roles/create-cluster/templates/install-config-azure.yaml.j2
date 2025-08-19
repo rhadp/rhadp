@@ -4,25 +4,32 @@ baseDomain: {{ cluster_domain }}
 metadata:
   name: {{ cluster_name }}
 compute:
-- architecture: {{ azure_secondary_architecture }}
+{% if cluster_topology == "compact" %}
+- name: worker
+  platform: {}
+  replicas: 0
+{% else %}
+- name: worker
+  architecture: {{ azure_worker_architecture }}
   hyperthreading: Enabled
   name: worker
   platform:
     azure:
-      type: {{ azure_secondary_instance_type }}
+      type: {{ azure_worker_instance_type }}
       osDisk:
-        diskType: {{ azure_secondary_volume_type }}
-  replicas: {{ azure_secondary_instance_count }}
+        diskType: {{ azure_worker_volume_type }}
+  replicas: {{ azure_worker_instance_count }}
+{% endif %}
 controlPlane:
-  architecture: {{ azure_primary_architecture }}
+  architecture: {{ azure_control_plane_architecture }}
   hyperthreading: Enabled
   name: master
   platform:
     azure:
-      type: {{ azure_primary_instance_type }}
+      type: {{ azure_control_plane_instance_type }}
       osDisk:
-        diskType: {{ azure_primary_volume_type }}
-  replicas: {{ azure_primary_instance_count }}
+        diskType: {{ azure_control_plane_volume_type }}
+  replicas: {{ azure_control_plane_instance_count }}
 networking:
   clusterNetwork:
   - cidr: 10.128.0.0/14

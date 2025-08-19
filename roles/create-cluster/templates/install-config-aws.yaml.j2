@@ -4,21 +4,27 @@ baseDomain: {{ cluster_domain }}
 metadata:
   name: {{ cluster_name }}
 compute:
-- architecture: {{ aws_secondary_architecture }}
+{% if cluster_topology == "compact" %}
+- name: worker
+  platform: {}
+  replicas: 0
+{% else %}
+- name: worker
+  architecture: {{ aws_worker_architecture }}
   hyperthreading: Enabled
-  name: worker
   platform:
     aws:
-      type: {{ aws_secondary_instance_type }}
-  replicas: {{ aws_secondary_instance_count }}
+      type: {{ aws_worker_instance_type }}
+  replicas: {{ aws_worker_instance_count }}
+{% endif %}
 controlPlane:
-  architecture: {{ aws_primary_architecture }}
-  hyperthreading: Enabled
   name: master
+  architecture: {{ aws_control_plane_architecture }}
+  hyperthreading: Enabled
   platform:
     aws:
-      type: {{ aws_primary_instance_type }}
-  replicas: {{ aws_primary_instance_count }}
+      type: {{ aws_control_plane_instance_type }}
+  replicas: {{ aws_control_plane_instance_count }}
 networking:
   clusterNetwork:
   - cidr: 10.128.0.0/14

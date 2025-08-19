@@ -3,14 +3,27 @@ all:
     # cloud provider selection
     cloud_provider: "aws" # aws, azure, gcp
 
-    # cluster related variables
+    # cluster topology and cluster_version
+    cluster_version: "4.19.9"
+    cluster_arch: "aarch64" # x86_64, aarch64, multi -> multi is only available on aws & azure !
+    control_plane_arch: "arm64" #  amd64, arm64, only used when cluster_arch == multi
+    cluster_topology: "default" # default, compact
+
+    # cluster variables
     cluster_name: "rhadp"
-    cluster_version: "4.19.4"
     cluster_domain: "rhadp.example.com"
     cluster_default_storage_class: "gp3-csi" # "gp3-csi" (aws), "managed-csi" (azure), "standard-csi" (gcp)
-
-    pull_secret_file: "inventory/pull-secret.txt" # place the pull secret at this loacation
     
+    # cluster configuration options
+    setup_arm_worker_nodes: True # create a second set of ARM worker nodes if true
+    setup_baremetal_worker_node: False # create a bare-metal ARM worker node (AWS only)
+
+    # installer architecture, see https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.19.9/
+    installer_architecture: "mac-arm64" # mac, mac-arm64, linux, linux-amd64
+    
+    # pull secret, see https://console.redhat.com/openshift/create
+    pull_secret_file: "inventory/pull-secret.txt" # place the pull secret at this loacation
+
     # aws specific variables
     aws_access_key_id: "abc123"
     aws_secret_access_key: "abc123"
@@ -52,14 +65,9 @@ all:
     # keycloak instance variables
     keycloak_db_user: "admin"
     keycloak_db_password: "openshift"
-    
-    # cluster configuration options
-    setup_arm_worker_nodes: True # create a second set of ARM worker nodes if true
 
     # ansible configuration
     ansible_user: ec2-user # ec2-user, azureuser
     ansible_ssh_private_key_file: "~/.ssh/{{ cluster_name }}-{{ cloud_provider }}" # private key used to access the remote server
 
-    # installer architecture, see https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.19.5/
-    installer_architecture: "mac-arm64" # linux-arm64, linux, mac -> openshift-install-mac-arm64.tar.gz, openshift-install-linux-arm64.tar.gz
     

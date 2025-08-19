@@ -14,6 +14,10 @@
     src: "roles/create-cluster/templates/env-{{ cloud_provider }}.j2"
     dest: "{{ openshift_install_dir }}/.env-{{ cluster_fqn }}.sh"
 
+- name: set installer name
+  set_fact:
+    installer_binary_fqn: "openshift-install-{{ cluster_arch }}_{{ control_plane_arch }}-{{ cluster_version }}"
+    
 - name: create azure credentials file
   when: cloud_provider == "azure"
   template:

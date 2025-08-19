@@ -4,23 +4,30 @@ baseDomain: {{ cluster_domain }}
 metadata:
   name: rhadp
 compute:
-- architecture: {{ gcp_secondary_architecture }}
+{% if cluster_topology == "compact" %}
+- name: worker
+  platform: {}
+  replicas: 0
+{% else %}
+- name: worker
+  architecture: {{ gcp_worker_architecture }}
   hyperthreading: Enabled
   name: worker
   platform:
     gcp:
       defaultMachinePlatform:
-        type: {{ gcp_secondary_instance_type }}
-  replicas: 3
+        type: {{ gcp_worker_instance_type }}
+  replicas: {{ gcp_worker_instance_count }}
+{% endif %}
 controlPlane:
-  architecture: {{ gcp_primary_architecture }}
+  architecture: {{ gcp_control_plane_architecture }}
   hyperthreading: Enabled
   name: master
   platform:
     gcp:
       defaultMachinePlatform:
-        type: {{ gcp_primary_instance_type }}
-  replicas: 3
+        type: {{ gcp_control_plane_instance_type }}
+  replicas: {{ gcp_control_plane_instance_count }}
 networking:
   clusterNetwork:
   - cidr: 10.128.0.0/14

@@ -5,7 +5,7 @@
   ignore_errors: true
   shell: |
     source .env-{{ cluster_fqn }}.sh && \
-    ./openshift-install destroy cluster --dir="{{ cluster_metadata_dir }}/{{ cluster_fqn }}"
+    ./{{ installer_binary_fqn }} destroy cluster --dir="{{ cluster_metadata_dir }}/{{ cluster_fqn }}"
   args:
     chdir: "{{ openshift_install_dir }}"
 
