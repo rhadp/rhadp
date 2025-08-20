@@ -14,6 +14,9 @@ all:
     cluster_domain: "rhadp.example.com"
     cluster_default_storage_class: "gp3-csi" # "gp3-csi" (aws), "managed-csi" (azure), "standard-csi" (gcp)
     
+    # cluster overrides
+    # see 'roles/create-cluster/defaults/main.yml' for available variables
+
     # cluster configuration options
     setup_arm_worker_nodes: True # create a second set of ARM worker nodes if true
     setup_baremetal_worker_node: False # create a bare-metal ARM worker node (AWS only)

@@ -7,7 +7,11 @@
     ACTION: "UNINSTALL" # INSTALL, UNINSTALL, UPDATE
 
   tasks:
-    - name: gather facts
+    - name: gather cluster facts
+      include_role:
+        name: roles/gather-cluster-facts
+        
+    - name: gather vm facts
       include_role:
         name: roles/gather-vm-facts
 

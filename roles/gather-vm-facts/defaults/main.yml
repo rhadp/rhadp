@@ -2,3 +2,5 @@
 # defaults
 
 cluster_ssh_key_dir: "~/.ssh" # "$HOME/.ssh"
+
+cluster_label: "rhel" # default label for the cluster, should be overridden by role 'gather-cluster-facts' if there is a cluster already

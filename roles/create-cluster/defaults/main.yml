@@ -55,8 +55,8 @@ azure_worker_instance_count: 3 # 3 nodes minimum, on 3 different availability zo
 azure_worker_volume_type: "Premium_LRS"
 
 # secondary set of compute nodes (arm64)
-azure_arm_instance_type: "Standard_D4ps_v5" # 4 vCPU, 16 GiB RAM
-azure_arm_instance_count: 2 # number of replicas per availability zone
+azure_arm_instance_type: "Standard_D8ps_v5" # 8 vCPU, 32 GiB RAM
+azure_arm_instance_count: 1 # number of replicas per availability zone
 azure_arm_volume_size: 128
 azure_arm_volume_type: "Premium_LRS"
 azure_arm_vcpu: 4

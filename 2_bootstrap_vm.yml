@@ -7,6 +7,10 @@
     ACTION: "INSTALL" # INSTALL, UNINSTALL, UPDATE
 
   tasks:
+    - name: gather cluster facts
+      include_role:
+        name: roles/gather-cluster-facts
+        
     - name: create the vm (AWS)
       include_role:
         name: roles/create-vm-aws

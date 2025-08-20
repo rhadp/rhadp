@@ -17,4 +17,3 @@ vm_image:
 
 # other configuration
 delete_resource_group: false
-cluster_ssh_key_dir: "~/.ssh" # "$HOME/.ssh"

@@ -7,6 +7,10 @@
     ACTION: "UNINSTALL" # INSTALL, UNINSTALL, UPDATE
 
   tasks:
+    - name: gather cluster facts
+      include_role:
+        name: roles/gather-cluster-facts
+        
     - name: destroy the openshift cluster
       include_role:
         name: roles/create-cluster
