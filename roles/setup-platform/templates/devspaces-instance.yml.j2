@@ -14,6 +14,8 @@ spec:
     cheServer:
       debug: false
       logLevel: INFO
+      extraProperties:
+        CHE_FORCE_REFRESH_PERSONAL_ACCESS_TOKEN: "true"
 
     dashboard:
       logLevel: INFO
@@ -29,15 +31,6 @@ spec:
     metrics:
       enable: true
     pluginRegistry: {}
-    
-    #database:
-    #  credentialsSecretName: postgres-credentials
-    #  externalDb: false
-    #  postgresDb: dbche
-    #  postgresHostName: postgres
-    #  postgresPort: '5432'
-    #  pvc:
-    #    claimSize: 1Gi
     
   containerRegistry: {}
   
@@ -76,19 +69,14 @@ spec:
         claimSize: 5Gi
       pvcStrategy: per-user
   
-  #gitServices: {}
-  #  github:
-  #    - secretName: "github-oauth-config"
+  gitServices:
+    github:
+      - secretName: "github-oauth-config"
   
-  #networking: {}
-  #  auth:
-  #    gateway:
-  #      configLabels:
-  #        app: che
-  #        component: che-gateway-config
-  #      kubeRbacProxy:
-  #        logLevel: 0
-  #      oAuthProxy:
-  #        cookieExpireSeconds: 86400
-  #      traefik:
-  #        logLevel: INFO
+  networking:
+    auth:
+      gateway:
+        configLabels:
+          app: che
+          component: che-gateway-config
+          

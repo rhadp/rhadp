@@ -10,7 +10,7 @@ metadata:
     che.eclipse.org/oauth-scm-server: github
     che.eclipse.org/scm-server-endpoint: "{{ github_endpoint }}"
 type: Opaque
-data:
-  id: "{{ github_oauth_client_id }}"
-  secret: "{{ github_oauth_client_secret }}"
+stringData:
+  id: "{{ github_git_client_id }}"
+  secret: "{{ github_git_client_secret }}"
   
