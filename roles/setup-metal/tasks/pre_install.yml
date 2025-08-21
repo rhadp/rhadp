@@ -1,3 +1,37 @@
 # Implement your pre-install deployment tasks here
 # -------------------------------------------------
 
+- name: configure the 'metal' cluster topology
+  when: cluster_topology == 'metal' and rhadp_deploy_metal | bool == True
+  block:
+    - name: make control plane nodes schedulable
+      shell: |
+        oc patch scheduler cluster --type merge -p '{"spec":{"mastersSchedulable":true}}' \
+        --kubeconfig="$HOME/.kube/{{ cluster_fqn }}"
+
+    - name: pause to allow control plane nodes to adjust
+      pause:
+        seconds: 180
+
+    - name: find all worker machine sets
+      kubernetes.core.k8s_info:
+        api_version: machine.openshift.io/v1beta1
+        kind: MachineSet
+        namespace: openshift-machine-api
+        kubeconfig: "{{ local_kubeconfig_file }}"
+      register: found_machinesets
+
+    - name: set replica count to 0 for existing machine sets
+      kubernetes.core.k8s:
+        api_version: machine.openshift.io/v1beta1
+        kind: MachineSet
+        name: "{{ item.metadata.name }}"
+        namespace: "{{ item.metadata.namespace }}"
+        definition:
+          spec:
+            replicas: 0
+        state: present
+        apply: yes
+        kubeconfig: "{{ local_kubeconfig_file }}"
+      loop: "{{ found_machinesets.resources }}"
+      when: found_machinesets.resources | length > 0

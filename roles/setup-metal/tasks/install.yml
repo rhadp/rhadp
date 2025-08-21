@@ -2,7 +2,7 @@
 # -------------------------------------------------
 
 # add the bare-metal worker node to the cluster
-- name: add the bare-metal machine sets (aws)
+- name: add the bare-metal machine sets
   k8s:
     definition: "{{ lookup('template', item ) | from_yaml }}"
     state: present
@@ -11,7 +11,7 @@
   loop:
     - "machineset_aws_metal_a.yml.j2"
 
-- name: wait for metal nodes to be ready
+- name: wait for metal node(s) to be ready
   kubernetes.core.k8s_info:
     api_version: v1
     kind: Node
@@ -25,3 +25,4 @@
   retries: 100
   
 # FIXME add labels to the metal worker node
+

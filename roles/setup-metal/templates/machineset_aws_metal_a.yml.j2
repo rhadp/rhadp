@@ -11,7 +11,7 @@ metadata:
   labels:
     machine.openshift.io/cluster-api-cluster: {{ cluster_label }}
     machine.openshift.io/cluster-api-machine-role: worker
-    machine.openshift.io/cluster-api-machine-type: worker
+    machine.openshift.io/cluster-api-machine-type: metal
 spec:
   replicas: {{ aws_metal_instance_count }}
   selector:
@@ -74,7 +74,7 @@ spec:
           apiVersion: machine.openshift.io/v1beta1
           iamInstanceProfile:
             id: {{ cluster_label }}-worker-profile
-      taints:
-        - effect: NoSchedule
-          key: architecture
-          value: arm
+      #taints:
+      #  - effect: NoSchedule
+      #    key: architecture
+      #    value: arm
