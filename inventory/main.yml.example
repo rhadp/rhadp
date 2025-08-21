@@ -6,31 +6,34 @@ all:
     # cluster topology and cluster_version
     cluster_version: "4.19.9"
     cluster_arch: "aarch64" # x86_64, aarch64, multi -> multi is only available on aws & azure !
-    control_plane_arch: "arm64" #  amd64, arm64, only used when cluster_arch == multi
-    cluster_topology: "default" # default, compact
+    control_plane_arch: "arm64" #  amd64, arm64, -> only relevant when cluster_arch == multi
+    cluster_topology: "default" # default, compact, metal
 
     # cluster variables
     cluster_name: "rhadp"
     cluster_domain: "rhadp.example.com"
     cluster_default_storage_class: "gp3-csi" # "gp3-csi" (aws), "managed-csi" (azure), "standard-csi" (gcp)
     
-    # cluster overrides
-    # see 'roles/create-cluster/defaults/main.yml' for available variables
-
     # cluster configuration options
     setup_arm_worker_nodes: True # create a second set of ARM worker nodes if true
     setup_baremetal_worker_node: False # create a bare-metal ARM worker node (AWS only)
 
+    # cluster overrides
+    # see 'roles/create-cluster/defaults/main.yml' for available variables
+
+    # platform overrides
+    # see 'roles/setup-platform/defaults/main.yml' for available variables
+
     # installer architecture, see https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.19.9/
-    installer_architecture: "mac-arm64" # mac, mac-arm64, linux, linux-amd64
+    installer_architecture: "mac-arm64" # mac, mac-arm64, linux, linux-arm64
     
     # pull secret, see https://console.redhat.com/openshift/create
     pull_secret_file: "inventory/pull-secret.txt" # place the pull secret at this loacation
 
     # aws specific variables
-    aws_access_key_id: "abc123"
-    aws_secret_access_key: "abc123"
-    aws_default_region: "us-east-2"
+    #aws_access_key_id: "abc123"
+    #aws_secret_access_key: "abc123"
+    #aws_default_region: "us-east-2"
 
     # azure specific variables
     #azure_guid: "guid123"
@@ -49,11 +52,11 @@ all:
     #gcp_default_region: "us-central1"
     
     # github secrets
-    github_endpoint: "https://github.com"
-    github_oauth_client_id: "abc123"
-    github_oauth_client_secret: "abc123"
-    github_api_pat: ""abc123"
-    github_org: "example.org-examples"
+    #github_endpoint: "https://github.com"
+    #github_oauth_client_id: "abc123"
+    #github_oauth_client_secret: "abc123"
+    #github_api_pat: ""abc123"
+    #github_org: "example.org-examples"
 
     # letsencrypt account email
     letsencrypt_email: "hello@example.com"

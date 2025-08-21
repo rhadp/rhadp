@@ -20,7 +20,7 @@
     kubeconfig: "{{ local_kubeconfig_file }}"
   register: r_nodes
   until:
-  - r_nodes.resources | length | int == {{aws_metal_instance_count }}| int
+  - r_nodes.resources | length | int == aws_metal_instance_count | int
   delay: 30
   retries: 100
   
