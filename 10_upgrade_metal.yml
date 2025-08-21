@@ -11,13 +11,10 @@
       include_role:
         name: roles/gather-cluster-facts
 
-    - name: upgrade essential devops operators e.g. gitops, pipelines, etc.
+    - name: upgrade the cluster with a bare-metal worker node
+      when: setup_baremetal_worker_node and cloud_provider == "aws"
       include_role:
-        name: roles/setup-devops
-
-    - name: upgrade the platform
-      include_role:
-        name: roles/setup-platform
+        name: roles/setup-metal
 
     - name: show web console url
       debug:

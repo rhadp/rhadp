@@ -12,7 +12,6 @@ compute:
 - name: worker
   architecture: {{ azure_worker_architecture }}
   hyperthreading: Enabled
-  name: worker
   platform:
     azure:
       type: {{ azure_worker_instance_type }}
@@ -46,6 +45,7 @@ platform:
     outboundType: Loadbalancer
     region: {{ azure_default_region }}
 publish: External
-pullSecret: '{{ cluster_pull_secret['content'] | b64decode }}'
+pullSecret: |
+  {{ cluster_pull_secret['content'] | b64decode }}
 sshKey: |
   {{ cluster_ssh_pub_key['content'] | b64decode }}

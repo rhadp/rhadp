@@ -12,7 +12,6 @@ compute:
 - name: worker
   architecture: {{ gcp_worker_architecture }}
   hyperthreading: Enabled
-  name: worker
   platform:
     gcp:
       defaultMachinePlatform:
@@ -42,6 +41,7 @@ platform:
     projectID: {{ gcp_project_id }}
     region: {{ gcp_default_region }}
 publish: External
-pullSecret: '{{ cluster_pull_secret['content'] | b64decode }}'
+pullSecret: |
+  {{ cluster_pull_secret['content'] | b64decode }}
 sshKey: |
   {{ cluster_ssh_pub_key['content'] | b64decode }}

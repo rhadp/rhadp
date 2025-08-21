@@ -6,25 +6,25 @@ metadata:
     machine.openshift.io/GPU: '{{ aws_metal_gpu }}'
     machine.openshift.io/memoryMb: '{{ aws_metal_memory }}'
     machine.openshift.io/vCPU: '{{ aws_metal_vcpu }}'
-  name: {{ cluster_label }}-metal-worker-1
+  name: {{ cluster_label }}-metal-{{ aws_metal_subregion }}
   namespace: openshift-machine-api
   labels:
     machine.openshift.io/cluster-api-cluster: {{ cluster_label }}
     machine.openshift.io/cluster-api-machine-role: worker
     machine.openshift.io/cluster-api-machine-type: worker
 spec:
-  replicas: 1
+  replicas: {{ aws_metal_instance_count }}
   selector:
     matchLabels:
       machine.openshift.io/cluster-api-cluster: {{ cluster_label }}
-      machine.openshift.io/cluster-api-machineset: {{ cluster_label }}-metal-worker-1
+      machine.openshift.io/cluster-api-machineset: {{ cluster_label }}-metal-{{ aws_metal_subregion }}
   template:
     metadata:
       labels:
         machine.openshift.io/cluster-api-cluster: {{ cluster_label }}
         machine.openshift.io/cluster-api-machine-role: worker
         machine.openshift.io/cluster-api-machine-type: worker
-        machine.openshift.io/cluster-api-machineset: {{ cluster_label }}-metal-worker-1
+        machine.openshift.io/cluster-api-machineset: {{ cluster_label }}-metal-{{ aws_metal_subregion }}
     spec:
       lifecycleHooks: {}
       metadata: {}
@@ -33,7 +33,7 @@ spec:
           userDataSecret:
             name: worker-user-data
           placement:
-            availabilityZone: {{ aws_default_region }}a
+            availabilityZone: {{ aws_default_region }}{{ aws_metal_subregion }}
             region: {{ aws_default_region }}
           credentialsSecret:
             name: aws-cloud-credentials
@@ -70,7 +70,7 @@ spec:
             filters:
               - name: 'tag:Name'
                 values:
-                  - {{ cluster_label }}-subnet-private-{{ aws_default_region }}a
+                  - {{ cluster_label }}-subnet-private-{{ aws_default_region }}{{ aws_metal_subregion }}
           apiVersion: machine.openshift.io/v1beta1
           iamInstanceProfile:
             id: {{ cluster_label }}-worker-profile

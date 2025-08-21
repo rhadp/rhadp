@@ -49,6 +49,7 @@ all:
     #gcp_default_region: "us-central1"
     
     # github secrets
+    github_endpoint: "https://github.com"
     github_oauth_client_id: "abc123"
     github_oauth_client_secret: "abc123"
     github_api_pat: ""abc123"

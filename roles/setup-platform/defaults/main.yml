@@ -1,5 +1,28 @@
 ---
 # defaults
 
-platform_infra_namespace: "rhadp-infra"
-platform_gitops_namespace: "rhadp-gitops" # the platform's GitOps instance
+# devspaces operator
+devspaces_subscription_channel: "stable"
+devspaces_subscription_starting_csv: "devspacesoperator.v3.22.0"
+
+# developer hub operator
+devhub_subscription_channel: "fast"
+devhub_subscription_starting_csv: "rhdh-operator.v1.3.1"
+
+# platform namespaces
+platform_infra_namespace: "{{ rhadp_prefix }}-infra"
+platform_gitops_namespace: "{{ rhadp_prefix }}-gitops" # the platform's GitOps instance
+
+platform_devspaces_namespace: "{{ rhadp_prefix }}-devspaces"
+platform_developer_hub_namespace: "{{ rhadp_prefix }}-devhub"
+
+# devspaces instance
+devspaces_instance_name: "{{ rhadp_prefix }}-devspaces"
+devspaces_instance_description: "{{ rhadp_prefix }} development environment"
+devspaces_instance_workspaces_per_user: -1 # no limit
+devspaces_instance_running_workspaces_per_user: 1
+devspaces_instance_default_container_image: "quay.io/rhadp/codespaces:latest"
+devspaces_instance_cpu_requested: 1
+devspaces_instance_memory_requested: "1Gi"
+devspaces_instance_cpu_limit: 2
+devspaces_instance_memory_limit: "4Gi"

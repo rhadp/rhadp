@@ -7,9 +7,13 @@ all:
     # default namespaces
     gitops_namespace: "openshift-gitops" # namespace of the system gitops instance
     
-    # RHADP specific variables
+    # RHADP options
+    rhadp_deploy_devspaces: True # deploy the devspaces operator
     rhadp_deploy_developer_hub: False # deploy the developer hub
     rhadp_deploy_jumpstart: False # deploy the jumpstart operator
+
+    # RHADP overrides
+    # see 'roles/setup-platform/defaults/main.yml' for available variables
 
     # default openshift groups
     cluster_admin_group: "cluster-admins"

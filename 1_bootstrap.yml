@@ -15,6 +15,15 @@
       include_role:
         name: roles/create-cluster
 
+    - name: gather cluster facts (again)
+      include_role:
+        name: roles/gather-cluster-facts
+
+    - name: upgrade the cluster with a bare-metal worker node
+      when: setup_baremetal_worker_node and cloud_provider == "aws"
+      include_role:
+        name: roles/setup-metal
+
     - name: configure certificates
       include_role:
         name: roles/setup-cert-manager
@@ -23,9 +32,13 @@
       include_role:
         name: roles/setup-auth
 
-    - name: bootstrap the essential operators e.g. gitops, pipelines, DevSpaces, Developer Hub etc.
+    - name: install essential devops operators e.g. gitops, pipelines, etc.
       include_role:
-        name: roles/setup-dev-operators
+        name: roles/setup-devops
+
+    - name: bootstrap the developer platform
+      include_role:
+        name: roles/setup-platform
 
     - name: show web console url
       debug:
