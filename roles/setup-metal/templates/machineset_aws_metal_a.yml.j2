@@ -22,9 +22,10 @@ spec:
     metadata:
       labels:
         machine.openshift.io/cluster-api-cluster: {{ cluster_label }}
+        machine.openshift.io/cluster-api-machineset: {{ cluster_label }}-metal-{{ aws_default_region }}{{ aws_metal_subregion }}
         machine.openshift.io/cluster-api-machine-role: worker
         machine.openshift.io/cluster-api-machine-type: worker
-        machine.openshift.io/cluster-api-machineset: {{ cluster_label }}-metal-{{ aws_default_region }}{{ aws_metal_subregion }}
+        rhadp.node-role: builder
     spec:
       lifecycleHooks: {}
       metadata: {}

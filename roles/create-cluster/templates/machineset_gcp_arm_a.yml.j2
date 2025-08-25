@@ -20,9 +20,10 @@ spec:
     metadata:
       labels:
         machine.openshift.io/cluster-api-cluster: {{ cluster_label }}
+        machine.openshift.io/cluster-api-machineset: {{ cluster_label }}-arm-worker-1
         machine.openshift.io/cluster-api-machine-role: worker
         machine.openshift.io/cluster-api-machine-type: worker
-        machine.openshift.io/cluster-api-machineset: {{ cluster_label }}-arm-worker-1
+        rhadp.node-role: builder
     spec:
       lifecycleHooks: {}
       metadata: {}

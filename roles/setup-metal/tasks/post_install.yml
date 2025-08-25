@@ -19,10 +19,6 @@
       create_operator_namespace: true
       create_operator_group: true
 
-  - name: pause to allow cnv operator to be ready
-    pause:
-      seconds: 120
-
   - name: create cnv
     k8s:
       definition: "{{ lookup('template', item) | from_yaml }}"

@@ -26,6 +26,45 @@
   set_fact:
     cluster_label: "{{ r_cluster_dns.resources.0.spec.privateZone.id.split('-')[:2] | join('-') }}"
 
+# add RHADP labels to the nodes
+
+- name: find default worker nodes
+  k8s_info:
+    api_version: v1
+    kind: Node
+    label_selectors:
+      - node-role.kubernetes.io/worker
+    kubeconfig: "{{ local_kubeconfig_file }}"
+  register: found_worker_nodes
+
+- name: label worker nodes
+  shell: |
+    oc label node {{ item }} rhadp.node-role=infra \
+    --overwrite=true \
+    --kubeconfig="$HOME/.kube/{{ cluster_fqn }}"
+  with_items:
+    - "{{ found_worker_nodes.resources | map(attribute='metadata.name') | list }}"
+
+- name: label control plane nodes
+  when: cluster_topology == 'compact' or cluster_topology == 'metal'
+  block:
+    - name: find control plane nodes
+      k8s_info:
+        api_version: v1
+        kind: Node
+        label_selectors:
+          - node-role.kubernetes.io/master
+        kubeconfig: "{{ local_kubeconfig_file }}"
+      register: found_control_plane_nodes
+      
+    - name: label control plane nodes
+      shell: |
+        oc label node {{ item }} rhadp.node-role=infra \
+        --overwrite=true \
+        --kubeconfig="$HOME/.kube/{{ cluster_fqn }}"
+      with_items:
+        - "{{ found_control_plane_nodes.resources | map(attribute='metadata.name') | list }}"
+
 # add the 2nd arm machine sets to the cluster
 
 - name: add the arm machine sets (aws)
