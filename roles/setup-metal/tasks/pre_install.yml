@@ -22,6 +22,7 @@
       register: found_machinesets
 
     - name: set replica count to 0 for existing machine sets
+      ignore_errors: true
       kubernetes.core.k8s:
         api_version: machine.openshift.io/v1beta1
         kind: MachineSet

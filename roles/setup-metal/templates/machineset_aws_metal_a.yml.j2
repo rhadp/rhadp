@@ -10,8 +10,10 @@ metadata:
   namespace: openshift-machine-api
   labels:
     machine.openshift.io/cluster-api-cluster: {{ cluster_label }}
+    machine.openshift.io/cluster-api-machineset: {{ cluster_label }}-metal-{{ aws_default_region }}{{ aws_metal_subregion }}
     machine.openshift.io/cluster-api-machine-role: worker
     machine.openshift.io/cluster-api-machine-type: metal
+    rhadp.node-role: builder
 spec:
   replicas: {{ aws_metal_instance_count }}
   selector:
@@ -24,7 +26,7 @@ spec:
         machine.openshift.io/cluster-api-cluster: {{ cluster_label }}
         machine.openshift.io/cluster-api-machineset: {{ cluster_label }}-metal-{{ aws_default_region }}{{ aws_metal_subregion }}
         machine.openshift.io/cluster-api-machine-role: worker
-        machine.openshift.io/cluster-api-machine-type: worker
+        machine.openshift.io/cluster-api-machine-type: metal
         rhadp.node-role: builder
     spec:
       lifecycleHooks: {}

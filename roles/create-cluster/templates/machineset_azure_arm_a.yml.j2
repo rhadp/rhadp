@@ -10,8 +10,10 @@ metadata:
   namespace: openshift-machine-api
   labels:
     machine.openshift.io/cluster-api-cluster: {{ cluster_label }}
+    machine.openshift.io/cluster-api-machineset: {{ cluster_label }}-arm-worker-1
     machine.openshift.io/cluster-api-machine-role: worker
     machine.openshift.io/cluster-api-machine-type: worker
+    rhadp.node-role: builder
 spec:
   replicas: {{ azure_arm_instance_count }}
   selector:
