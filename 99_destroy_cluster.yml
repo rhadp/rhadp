@@ -1,4 +1,4 @@
-- name: remove the openshift cluster
+- name: destroy the openshift cluster and developer platform
   hosts: localhost
   vars:
     # set the following to control the install/uninstall process

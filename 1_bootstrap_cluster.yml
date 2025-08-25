@@ -1,0 +1,33 @@
+- name: bootstrap the openshift cluster
+  hosts: localhost
+  vars:
+    # set the following to control the install/uninstall process
+    silent: false
+    become_override: false
+    ACTION: "INSTALL" # INSTALL, UNINSTALL, UPDATE
+
+  tasks:
+    - name: gather cluster facts
+      include_role:
+        name: roles/gather-cluster-facts
+
+    - name: bootstrap the openshift cluster
+      include_role:
+        name: roles/create-cluster
+
+    - name: gather cluster facts (again)
+      include_role:
+        name: roles/gather-cluster-facts
+
+    - name: upgrade the cluster with a bare-metal worker node
+      when: setup_baremetal_worker_node and cloud_provider == "aws"
+      include_role:
+        name: roles/setup-metal
+
+    #- name: configure certificates
+    #  include_role:
+    #    name: roles/setup-cert-manager
+        
+    - name: show web console url
+      debug:
+        msg: "Access the OpenShift web-console here: https://console-openshift-console.apps.{{ cluster_name }}.{{ cluster_domain }}"

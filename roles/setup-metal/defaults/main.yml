@@ -12,3 +12,16 @@ aws_metal_volume_type: "gp3"
 aws_metal_vcpu: 64
 aws_metal_gpu: 0
 aws_metal_memory: 262144
+
+# cnv operator
+cnv_operator_name: "kubevirt-hyperconverged"
+cnv_operator_subscription_name: "kubevirt-hyperconverged"
+cnv_subscription_channel: "stable"
+cnv_subscription_starting_csv: "kubevirt-hyperconverged-operator.v4.19.1"
+cnv_operator_namespace: "openshift-cnv"
+cnv_operator_group: "openshift-cnv"
+
+#name: kubevirt-hyperconverged
+#  source: redhat-operators
+#  sourceNamespace: openshift-marketplace
+#  startingCSV: kubevirt-hyperconverged-operator.v4.19.1
