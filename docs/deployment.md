@@ -1,11 +1,8 @@
-# Red Hat Automotive Development Platform
+## Depployment Guide
 
-## Overview
+This document is outlines the basic steps to deploy the Red Hat Automotive Development Platform (RHADP). It is the TL;DR version.
 
-
-## Installation
-
-### Repository Setup
+### Repository setup
 
 Clone the repository:
 ```bash
@@ -13,7 +10,12 @@ git clone https://github.com/rhadp/rhadp-bootstrap.git
 cd rhadp-bootstrap
 ```
 
-Create a Python virtual environment (recommended):
+In case you want to make changes to the Ansible playbooks, roles or to any of the configuration templates, `fork` the repository, instead of cloning it.
+
+### Environment preparation
+
+Create a Python virtual environment and install Ansible and all other dependencies:
+
 ```bash
 python3.12 -m venv venv
 source venv/bin/activate
@@ -26,7 +28,9 @@ ansible-galaxy collection install azure.azcollection --force
 pip install -r ~/.ansible/collections/ansible_collections/azure/azcollection/requirements.txt
 ```
 
-### Inventory Setup
+### Inventory setup
+
+Folder `inventory` contains examples of different cluster configurations. Select a configuration example (e.g. main.yml.example) and adjust it to your needs.
 
 Copy the inventory template:
 ```bash
@@ -39,9 +43,10 @@ Configure your environment:
 vi inventory/main.yml
 ```
 
-### Cluster Bootstrap
+### Cluster bootstrap
 
-Initialize the cluster:
+To deploy RHADP with all enabled features, run the following playbook:
+
 ```bash
 ansible-playbook -i inventory/ 0_bootstrap_all.yml
 ```
@@ -51,7 +56,7 @@ Monitor the installation process:
 tail -f $HOME/.openshift/<cluster-name>-<cloud-provider>/.openshift-install.log
 ```
 
-Destroy the cluster:
+In order to destroy the cluster, use the following playbook:
 ```bash
 ansible-playbook -i inventory/ 99_destroy_cluster.yml
 ```
