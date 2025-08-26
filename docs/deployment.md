@@ -2,7 +2,7 @@
 
 This document is outlines the basic steps to deploy the Red Hat Automotive Development Platform (RHADP). 
 
-It is the TL;DR version.
+It is the TL;DR version. For in-depth documentation, start [here](README.md).
 
 ### Repository setup
 
@@ -32,7 +32,7 @@ pip install -r ~/.ansible/collections/ansible_collections/azure/azcollection/req
 
 ### Inventory setup
 
-Folder `inventory` contains examples of different cluster configurations. Select a configuration example (e.g. main.yml.example) and modify it to your needs.
+Folder `inventory` contains examples of different cluster configurations. Select a configuration example (e.g. inventory/main.yml.example) and modify it to your needs.
 
 Copy the inventory template:
 ```bash
@@ -52,12 +52,24 @@ To deploy RHADP with all enabled features, run the following playbook:
 ```bash
 ansible-playbook -i inventory/ 0_bootstrap_all.yml
 ```
-**NOTE:** Depending on the cluster topology, this will take up to 90 minutes.
+**NOTE:** Depending on the cluster topology, this will take up to 90 minutes!
 
 To monitor the installation process:
 ```bash
 tail -f $HOME/.openshift/<cluster-name>-<cloud-provider>/.openshift-install.log
 ```
+
+### Cluster lifecycle
+
+In order to start and stop the cluster, you can use the following playbooks:
+```bash
+# start the cluster
+ansible-playbook -i inventory/ start.yml
+
+# stop the cluster
+ansible-playbook -i inventory/ stop.yml
+```
+
 
 In order to destroy the cluster, use the following playbook:
 ```bash
