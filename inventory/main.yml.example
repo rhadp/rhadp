@@ -1,20 +1,29 @@
 all:
+  # default values that control the OpenShift cluster deployment
   vars:
     # cloud provider selection
     cloud_provider: "aws" # aws, azure, gcp
 
-    # cluster topology and cluster_version
+    # cluster version
     cluster_version: "4.19.9"
+
+    # installer architecture, see https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.19.9/
+    installer_architecture: "mac-arm64" # mac, mac-arm64, linux, linux-arm64
+        
+    # cluster topology
     cluster_arch: "aarch64" # x86_64, aarch64, multi -> multi is only available on aws & azure !
     control_plane_arch: "arm64" #  amd64, arm64, -> only relevant when cluster_arch == multi
     cluster_topology: "default" # default, compact, metal
 
-    # cluster variables
+    # cluster configuration
     cluster_name: "rhadp"
     cluster_domain: "rhadp.example.com"
     cluster_default_storage_class: "gp3-csi" # "gp3-csi" (aws), "managed-csi" (azure), "standard-csi" (gcp)
     
-    # cluster configuration options
+    # pull secret, see https://console.redhat.com/openshift/create
+    pull_secret_file: "inventory/pull-secret.txt" # place the pull secret at this loacation
+
+    # cluster deployment options
     setup_arm_worker_nodes: False # create a second set of ARM worker nodes if true
     setup_baremetal_worker_node: False # create a bare-metal ARM worker node (AWS only)
     setup_virtualization: False # setup cnv operator on bare-metal ARM worker node (AWS only)
@@ -24,12 +33,6 @@ all:
 
     # platform overrides
     # see 'roles/setup-platform/defaults/main.yml' for available variables
-
-    # installer architecture, see https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.19.9/
-    installer_architecture: "mac-arm64" # mac, mac-arm64, linux, linux-arm64
-    
-    # pull secret, see https://console.redhat.com/openshift/create
-    pull_secret_file: "inventory/pull-secret.txt" # place the pull secret at this loacation
 
     # aws specific variables
     #aws_access_key_id: "abc123"

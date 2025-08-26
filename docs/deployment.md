@@ -1,6 +1,8 @@
 ## Depployment Guide
 
-This document is outlines the basic steps to deploy the Red Hat Automotive Development Platform (RHADP). It is the TL;DR version.
+This document is outlines the basic steps to deploy the Red Hat Automotive Development Platform (RHADP). 
+
+It is the TL;DR version.
 
 ### Repository setup
 
@@ -10,11 +12,11 @@ git clone https://github.com/rhadp/rhadp-bootstrap.git
 cd rhadp-bootstrap
 ```
 
-In case you want to make changes to the Ansible playbooks, roles or to any of the configuration templates, `fork` the repository, instead of cloning it.
+In case you want to make changes to the Ansible playbooks, roles or to any of the configuration templates, `fork` the repository, instead of just cloning it.
 
 ### Environment preparation
 
-Create a Python virtual environment and install Ansible and all other dependencies:
+Create a Python virtual environment, install Ansible and its dependencies:
 
 ```bash
 python3.12 -m venv venv
@@ -30,14 +32,14 @@ pip install -r ~/.ansible/collections/ansible_collections/azure/azcollection/req
 
 ### Inventory setup
 
-Folder `inventory` contains examples of different cluster configurations. Select a configuration example (e.g. main.yml.example) and adjust it to your needs.
+Folder `inventory` contains examples of different cluster configurations. Select a configuration example (e.g. main.yml.example) and modify it to your needs.
 
 Copy the inventory template:
 ```bash
 cp inventory/main.yml.example inventory/main.yml
 ```
 
-Configure your environment:
+Configure the inventory file:
 ```bash
 # Edit the inventory file with your specific settings
 vi inventory/main.yml
@@ -50,8 +52,9 @@ To deploy RHADP with all enabled features, run the following playbook:
 ```bash
 ansible-playbook -i inventory/ 0_bootstrap_all.yml
 ```
+**NOTE:** Depending on the cluster topology, this will take up to 90 minutes.
 
-Monitor the installation process:
+To monitor the installation process:
 ```bash
 tail -f $HOME/.openshift/<cluster-name>-<cloud-provider>/.openshift-install.log
 ```

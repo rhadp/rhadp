@@ -1,5 +1,5 @@
 all:
-  # default values to configure the development platform deployment
+  # default values that control the development platform deployment
   vars:
     # resource prefix
     rhadp_prefix: "rhadp" # used in e.g. namespace creation
