@@ -3,31 +3,31 @@ kind: MachineSet
 metadata:
   annotations:
     capacity.cluster-autoscaler.kubernetes.io/labels: kubernetes.io/arch=arm64
-    machine.openshift.io/GPU: '{{ aws_metal_gpu }}'
-    machine.openshift.io/memoryMb: '{{ aws_metal_memory }}'
-    machine.openshift.io/vCPU: '{{ aws_metal_vcpu }}'
-  name: {{ cluster_label }}-metal-{{ aws_default_region }}{{ aws_metal_subregion }}
+    machine.openshift.io/GPU: '{{ aws_arm_gpu }}'
+    machine.openshift.io/memoryMb: '{{ aws_arm_memory }}'
+    machine.openshift.io/vCPU: '{{ aws_arm_vcpu }}'
+  name: {{ cluster_label }}-arm-worker-1
   namespace: openshift-machine-api
   labels:
     machine.openshift.io/cluster-api-cluster: {{ cluster_label }}
-    machine.openshift.io/cluster-api-machineset: {{ cluster_label }}-metal-{{ aws_default_region }}{{ aws_metal_subregion }}
+    machine.openshift.io/cluster-api-machineset: {{ cluster_label }}-arm-worker-1
     machine.openshift.io/cluster-api-machine-role: worker
-    machine.openshift.io/cluster-api-machine-type: metal
-    rhadp.node-role: builder
+    machine.openshift.io/cluster-api-machine-type: worker
+    rhadp.node-role/builder: 'true'
 spec:
-  replicas: {{ aws_metal_instance_count }}
+  replicas: {{ aws_arm_instance_count }}
   selector:
     matchLabels:
       machine.openshift.io/cluster-api-cluster: {{ cluster_label }}
-      machine.openshift.io/cluster-api-machineset: {{ cluster_label }}-metal-{{ aws_default_region }}{{ aws_metal_subregion }}
+      machine.openshift.io/cluster-api-machineset: {{ cluster_label }}-arm-worker-1
   template:
     metadata:
       labels:
         machine.openshift.io/cluster-api-cluster: {{ cluster_label }}
-        machine.openshift.io/cluster-api-machineset: {{ cluster_label }}-metal-{{ aws_default_region }}{{ aws_metal_subregion }}
+        machine.openshift.io/cluster-api-machineset: {{ cluster_label }}-arm-worker-1
         machine.openshift.io/cluster-api-machine-role: worker
-        machine.openshift.io/cluster-api-machine-type: metal
-        rhadp.node-role: builder
+        machine.openshift.io/cluster-api-machine-type: worker
+        rhadp.node-role/builder: 'true'
     spec:
       lifecycleHooks: {}
       metadata: {}
@@ -36,12 +36,12 @@ spec:
           userDataSecret:
             name: worker-user-data
           placement:
-            availabilityZone: {{ aws_default_region }}{{ aws_metal_subregion }}
+            availabilityZone: {{ aws_default_region }}a
             region: {{ aws_default_region }}
           credentialsSecret:
             name: aws-cloud-credentials
           capacityReservationId: ''
-          instanceType: {{ aws_metal_instance_type }}
+          instanceType: {{ aws_arm_instance_type }}
           metadata:
             creationTimestamp: null
           blockDevices:
@@ -50,8 +50,8 @@ spec:
                 iops: 0
                 kmsKey:
                   arn: ''
-                volumeSize: {{ aws_metal_volume_size }}
-                volumeType: {{ aws_metal_volume_type }}
+                volumeSize: {{ aws_arm_volume_size }}
+                volumeType: {{ aws_arm_volume_type }}
           securityGroups:
             - filters:
                 - name: 'tag:Name'
@@ -68,16 +68,16 @@ spec:
               value: owned
           deviceIndex: 0
           ami:
-            id: {{ aws_metal_ami_id }}
+            id: {{ aws_arm_ami_id }}
           subnet:
             filters:
               - name: 'tag:Name'
                 values:
-                  - {{ cluster_label }}-subnet-private-{{ aws_default_region }}{{ aws_metal_subregion }}
+                  - {{ cluster_label }}-subnet-private-{{ aws_default_region }}a
           apiVersion: machine.openshift.io/v1beta1
           iamInstanceProfile:
             id: {{ cluster_label }}-worker-profile
-      #taints:
-      #  - effect: NoSchedule
-      #    key: architecture
-      #    value: arm
+      taints:
+        - effect: NoSchedule
+          key: architecture
+          value: arm

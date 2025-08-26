@@ -15,7 +15,7 @@
       include_role:
         name: roles/setup-cert-manager
 
-    - name: configure openshift cluster authentication
+    - name: configure cluster authentication
       include_role:
         name: roles/setup-auth
 

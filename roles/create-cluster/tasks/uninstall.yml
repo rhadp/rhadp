@@ -19,3 +19,4 @@
     - "{{ cluster_ssh_key_dir }}/{{ cluster_fqn }}"
     - "{{ cluster_ssh_key_dir }}/{{ cluster_fqn }}.pub"
     - "{{ openshift_install_dir }}/.env-{{ cluster_fqn }}.sh"
+    - "{{ openshift_install_dir }}/{{ installer_binary_fqn }}"

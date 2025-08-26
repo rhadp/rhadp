@@ -13,7 +13,7 @@ metadata:
     machine.openshift.io/cluster-api-machineset: {{ cluster_label }}-arm-worker-3
     machine.openshift.io/cluster-api-machine-role: worker
     machine.openshift.io/cluster-api-machine-type: worker
-    rhadp.node-role: builder
+    rhadp.node-role/builder: 'true'
 spec:
   replicas: {{ aws_arm_instance_count }}
   selector:
@@ -27,7 +27,7 @@ spec:
         machine.openshift.io/cluster-api-machineset: {{ cluster_label }}-arm-worker-3
         machine.openshift.io/cluster-api-machine-role: worker
         machine.openshift.io/cluster-api-machine-type: worker
-        rhadp.node-role: builder
+        rhadp.node-role/builder: 'true'
     spec:
       lifecycleHooks: {}
       metadata: {}

@@ -1,4 +1,4 @@
-# Implement your pre-install deployment tasks here
+# Implement your install deployment tasks here
 # -------------------------------------------------
 
 - name: configure the 'metal' cluster topology
@@ -9,10 +9,6 @@
         oc patch scheduler cluster --type merge -p '{"spec":{"mastersSchedulable":true}}' \
         --kubeconfig="$HOME/.kube/{{ cluster_fqn }}"
 
-    - name: pause to allow control plane nodes to adjust
-      pause:
-        seconds: 180
-
     - name: find all worker machine sets
       kubernetes.core.k8s_info:
         api_version: machine.openshift.io/v1beta1
@@ -21,7 +17,7 @@
         kubeconfig: "{{ local_kubeconfig_file }}"
       register: found_machinesets
 
-    - name: set replica count to 0 for existing machine sets
+    - name: set replica count to 0 for existing machine sets (worker nodes)
       ignore_errors: true
       kubernetes.core.k8s:
         api_version: machine.openshift.io/v1beta1
@@ -36,3 +32,32 @@
         kubeconfig: "{{ local_kubeconfig_file }}"
       loop: "{{ found_machinesets.resources }}"
       when: found_machinesets.resources | length > 0
+
+    - name: pause to allow control plane nodes to adjust
+      pause:
+        seconds: 180
+      
+# add the bare-metal worker node to the cluster
+- name: add the bare-metal machine sets
+  k8s:
+    definition: "{{ lookup('template', item ) | from_yaml }}"
+    state: present
+    apply: yes
+    kubeconfig: "{{ local_kubeconfig_file }}"
+  loop:
+    - "machineset_aws_metal_a.yml.j2"
+
+- name: wait for metal node(s) to be ready
+  kubernetes.core.k8s_info:
+    api_version: v1
+    kind: Node
+    label_selectors:
+    - "node.kubernetes.io/instance-type={{ aws_metal_instance_type }}"
+    kubeconfig: "{{ local_kubeconfig_file }}"
+  register: r_nodes
+  until:
+  - r_nodes.resources | length | int == aws_metal_instance_count | int
+  delay: 30
+  retries: 100
+  
+

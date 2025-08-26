@@ -19,14 +19,9 @@
       include_role:
         name: roles/gather-cluster-facts
 
-    - name: upgrade the cluster with a bare-metal worker node
-      when: setup_baremetal_worker_node and cloud_provider == "aws"
+    - name: adjust the cluster configuration and topology
       include_role:
-        name: roles/setup-metal
-
-    #- name: configure certificates
-    #  include_role:
-    #    name: roles/setup-cert-manager
+        name: roles/config-cluster
         
     - name: show web console url
       debug:

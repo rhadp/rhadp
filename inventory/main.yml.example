@@ -20,7 +20,7 @@ all:
     setup_virtualization: False # setup cnv operator on bare-metal ARM worker node (AWS only)
 
     # cluster overrides
-    # see 'roles/create-cluster/defaults/main.yml' for available variables
+    # see 'roles/create-cluster/defaults/main.yml' and 'roles/config-cluster/defaults/main.yml' for available variables
 
     # platform overrides
     # see 'roles/setup-platform/defaults/main.yml' for available variables

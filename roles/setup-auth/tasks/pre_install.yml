@@ -1,6 +1,10 @@
 # Implement your pre-install deployment tasks here
 # -------------------------------------------------
 
+- name: set the keycloak client secret
+  set_fact:
+    keycloak_client_secret: "{{ lookup('password', '/dev/null length=24 chars=ascii_letters,digits,punctuation') }}"
+
 - name: generate password hash for admin user
   shell: >-
     htpasswd -nb "{{ default_admin_user }}" "{{ default_admin_password }}"|cut -d: -f2
@@ -14,6 +18,19 @@
   when:
     - default_admin_password is defined
     - default_line is succeeded
-    
+
+- name: generate password hash for nobody user
+  shell: >-
+    htpasswd -nb "{{ default_nobody_user }}" "{{ default_nobody_password }}"|cut -d: -f2
+  register: default_line
+  when:
+    - default_nobody_password is defined
+
+- name: set fact nobody user password
+  set_fact:
+    default_nobody_password_hash: "{{ default_line.stdout }}"
+  when:
+    - default_nobody_password is defined
+    - default_line is succeeded
 
 

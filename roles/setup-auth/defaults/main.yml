@@ -6,4 +6,5 @@ keycloak_namespace: "keycloak"
 keycloak_subscription_channel: "stable-v26.2"
 keycloak_subscription_starting_csv: "rhbk-operator.v26.2.4-opr.2"
 
-temp_secret: "{{ lookup('password', '/dev/null length=24 chars=ascii_letters,digits,punctuation') }}"
+default_nobody_user: "nobody"
+default_nobody_password: "nobody"

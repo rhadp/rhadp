@@ -1,6 +1,2 @@
 # Implement your initial tasks here
 # -------------------------------------------------
-
-- name: set the keycloak client secret
-  set_fact:
-    keycloak_client_secret: "{{ temp_secret }}"

@@ -14,6 +14,7 @@
   when: remove_kubeadmin | bool
 
 - name: remove self-provisioner
+  ignore_errors: true
   shell: |
     oc adm policy remove-cluster-role-from-group \
       self-provisioner system:authenticated:oauth \
