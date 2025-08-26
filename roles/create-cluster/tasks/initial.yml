@@ -1,6 +1,10 @@
 # Implement your initial tasks here
 # -------------------------------------------------
 
+- name: set cluster fqn
+  set_fact:
+    cluster_fqn: "{{ cluster_name }}-{{ cloud_provider }}"
+    
 - name: set installer name
   set_fact:
     installer_binary_fqn: "openshift-install-{{ cluster_arch }}_{{ control_plane_arch }}-{{ cluster_version }}"
