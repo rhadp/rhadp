@@ -22,6 +22,9 @@ RHADP supports advanced use cases to address automotive-specific needs:
 
 ## Getting started
 
+To deploy RHADP, follow the steps described in the [deployment guide](docs/deployment.md).
+
+The complete set of documentation is [here](docs/README.md).
 
 ## Contributing
 
