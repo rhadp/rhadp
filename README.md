@@ -1,77 +1,27 @@
-# RHADP Bootstrap
+# Red Hat Automotive Development Platform
 
 This repository contains "Infrastructure as Code (IaC)" for deploying the **Red Hat Automotive Development Platform (RHADP)** — a cloud-native development environment purpose-built for automotive software development.  
 
-The setup automatically provisions multi-cloud OpenShift clusters (AWS, Azure, or GCP) with a **hybrid ARM/x86 architecture**, and installs a curated set of tools to accelerate the development of automotive applications and the **Red Hat In-Vehicle Operating System (RHIVOS)**.  
+The setup automatically provisions multi-cloud OpenShift clusters (on AWS, Azure, or GCP) with a hybrid ARM/x86 architecture, and installs a curated set of tools to accelerate the development of automotive applications and the **Red Hat In-Vehicle Operating System (RHIVOS)**.  
+
+## Platform overview
 
 Upon deployment, the following core components are available out of the box:  
-- **OpenShift Dev Spaces** – cloud-based developer workspaces  
-- **OpenShift GitOps** – declarative management of infrastructure and applications  
-- **OpenShift Pipelines** – CI/CD pipelines for building and testing automotive software  
+- OpenShift Dev Spaces – cloud-based developer workspaces  
+- OpenShift GitOps – declarative management of infrastructure and applications  
+- OpenShift Pipelines – CI/CD pipelines for building and testing automotive software  
 
 The platform also installs following key services:  
-- **cert-manager Operator for OpenShift** – automated TLS certificate management (via Let’s Encrypt)  
-- **Red Hat build of Keycloak** – integrated identity and access management  
+- cert-manager Operator for OpenShift – for certificate management (via Let’s Encrypt)  
+- Red Hat build of Keycloak – for identity and access management  
 
 RHADP supports advanced use cases to address automotive-specific needs:  
-- **ARM bare-metal node integration**  
-- **OpenShift Virtualization** for running isolated virtual machines  
-- **Building and testing RHIVOS images** directly in the cloud (software-in-the-loop)
-- **Jumpstarter** for accessing automotive development boards from the cloud (hardware-in-the-loop)
- 
+- Building and testing RHIVOS images directly in the cloud
+- Project [Jumpstarter](https://jumpstarter.dev) for accessing automotive development boards from the cloud (Hardware-in-the-loop testing)
+- OpenShift Virtualization for running isolated RHIVOS virtual machines on ARM bare-metal node (Software-in-the-loop testing)
 
-## Installation
+## Getting started
 
-### Repository Setup
-
-Clone the repository:
-```bash
-git clone https://github.com/rhadp/rhadp-bootstrap.git
-cd rhadp-bootstrap
-```
-
-Create a Python virtual environment (recommended):
-```bash
-python3.12 -m venv venv
-source venv/bin/activate
-
-# install the dependencies
-pip install -r requirements.txt
-
-# install the azure collection
-ansible-galaxy collection install azure.azcollection --force
-pip install -r ~/.ansible/collections/ansible_collections/azure/azcollection/requirements.txt
-```
-
-### Inventory Setup
-
-Copy the inventory template:
-```bash
-cp inventory/main.yml.example inventory/main.yml
-```
-
-Configure your environment:
-```bash
-# Edit the inventory file with your specific settings
-vi inventory/main.yml
-```
-
-### Cluster Bootstrap
-
-Initialize the cluster:
-```bash
-ansible-playbook -i inventory/ 0_bootstrap_all.yml
-```
-
-Monitor the installation process:
-```bash
-tail -f $HOME/.openshift/<cluster-name>-<cloud-provider>/.openshift-install.log
-```
-
-Destroy the cluster:
-```bash
-ansible-playbook -i inventory/ 99_destroy_cluster.yml
-```
 
 ## Contributing
 
