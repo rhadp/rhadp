@@ -60,4 +60,19 @@
   delay: 30
   retries: 100
   
-
+- name: find metal nodes
+  k8s_info:
+    api_version: v1
+    kind: Node
+    label_selectors:
+      - node.kubernetes.io/instance-type={{ aws_metal_instance_type }}
+    kubeconfig: "{{ local_kubeconfig_file }}"
+  register: found_metal_nodes
+  
+- name: label metal nodes (infra)
+  shell: |
+    oc label node {{ item }} rhadp.node-role/builder='true' \
+    --overwrite=true \
+    --kubeconfig="$HOME/.kube/{{ cluster_fqn }}"
+  with_items:
+    - "{{ found_metal_nodes.resources | map(attribute='metadata.name') | list }}"

@@ -33,6 +33,10 @@ all:
 
     # platform overrides
     # see 'roles/setup-platform/defaults/main.yml' for available variables
+    #rhadp_deploy_devspaces: True # deploy the devspaces operator
+    #rhadp_deploy_developer_hub: False # deploy the developer hub
+    #rhadp_deploy_jumpstart: False # deploy the jumpstart operator
+    #rhadp_deploy_builder: False # deploy the builder VMs
 
     # aws specific variables
     #aws_access_key_id: "abc123"

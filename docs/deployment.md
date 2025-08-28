@@ -70,7 +70,6 @@ ansible-playbook -i inventory/ start.yml
 ansible-playbook -i inventory/ stop.yml
 ```
 
-
 In order to destroy the cluster, use the following playbook:
 ```bash
 ansible-playbook -i inventory/ 99_destroy_cluster.yml

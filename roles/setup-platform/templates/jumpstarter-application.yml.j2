@@ -1,0 +1,50 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: jumpstarter
+  namespace: "{{ gitops_namespace }}"
+spec:
+  destination:
+    name: in-cluster
+    namespace: "{{ platform_jumpstarter_namespace }}"
+  project: default
+  source:
+    chart: jumpstarter
+    helm:
+      valuesObject:
+        global:
+          baseDomain: "{{ cluster_base_domain }}"
+          metrics:
+            enabled: true
+        jumpstarter-controller:
+          grpc:
+            mode: "route"
+            endpoint: "jumpstarter-grpc.{{ platform_jumpstarter_namespace }}.svc.cluster.local:8082"
+            routerEndpoint: "jumpstarter-router-grpc.{{ platform_jumpstarter_namespace }}.svc.cluster.local:8083"
+          config:
+            authentication:
+              jwt:
+                - issuer:
+                    url: "https://keycloak-keycloak.apps.{{ cluster_name }}.{{ cluster_base_domain }}/realms/openshift"
+                    #certificateAuthority: <PEM encoded CA certificates>
+                    audiences:
+                      - jumpstarter-cli
+                  claimMappings:
+                    username:
+                      claim: preferred_username
+                      prefix: "keycloak:"
+    repoURL: "{{ jumpstarter_helm_repo }}"
+    targetRevision: "{{ jumpstarter_helm_repo_version }}"
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    retry:
+      backoff:
+        duration: 10s5s
+        factor: 2
+        maxDuration: 10m0s
+      limit: 2
+    syncOptions:
+      - RespectIgnoreDifferences=true
+      - CreateNamespace=true

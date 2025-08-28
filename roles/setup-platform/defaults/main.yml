@@ -1,6 +1,10 @@
 ---
 # defaults
-
+rhadp_deploy_devspaces: True # deploy the devspaces operator
+rhadp_deploy_developer_hub: False # deploy the developer hub
+rhadp_deploy_jumpstart: False # deploy the jumpstart operator
+rhadp_deploy_builder: False # deploy the builder VMs
+    
 # devspaces operator
 devspaces_subscription_channel: "stable"
 devspaces_subscription_starting_csv: "devspacesoperator.v3.22.0"
@@ -11,6 +15,9 @@ devhub_subscription_starting_csv: "rhdh-operator.v1.3.1"
 
 # platform namespaces
 platform_infra_namespace: "{{ rhadp_prefix }}-infra"
+platform_builder_namespace: "{{ rhadp_prefix }}-builder"
+platform_jumpstarter_namespace: "{{ rhadp_prefix }}-jumpstarter"
+platform_exporter_namespace: "{{ rhadp_prefix }}-exporter"
 platform_gitops_namespace: "{{ rhadp_prefix }}-gitops" # the platform's GitOps instance
 
 platform_devspaces_namespace: "{{ rhadp_prefix }}-devspaces"
@@ -26,3 +33,15 @@ devspaces_instance_cpu_requested: 1
 devspaces_instance_memory_requested: "1Gi"
 devspaces_instance_cpu_limit: 2
 devspaces_instance_memory_limit: "4Gi"
+
+# jumpstarter version and location
+jumpstarter_helm_repo: "quay.io/jumpstarter-dev/helm"
+jumpstarter_helm_repo_version: "0.7.0-dev-8-g83e23d3"
+jumpstarter_qemu_exporter_count: 5
+
+# builder
+builder_instance_count: 1
+builder_instance_default_user: "rhel"
+builder_instance_default_user_password: "rhel"
+
+builder_ssh_key_dir: "$HOME/.ssh"

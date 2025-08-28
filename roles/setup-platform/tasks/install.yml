@@ -1,14 +1,24 @@
 # Implement your install deployment tasks here
 # -------------------------------------------------
 
-- name: create devspaces instance
+- name: deploy devspaces
   when: rhadp_deploy_devspaces | bool
-  k8s:
-    definition: "{{ lookup('template', item ) | from_yaml }}"
-    state: present
-    apply: yes
-    kubeconfig: "{{ local_kubeconfig_file }}"
-  loop:
-    - devspaces-github-oauth-config.yml.j2
-    - devspaces-fuse-overlay.yml.j2
-    - devspaces-instance.yml.j2
+  block:
+    - name: create devspaces instance
+      k8s:
+        definition: "{{ lookup('template', item ) | from_yaml }}"
+        state: present
+        apply: yes
+        kubeconfig: "{{ local_kubeconfig_file }}"
+      loop:
+        - devspaces-github-oauth-config.yml.j2
+        - devspaces-fuse-overlay.yml.j2
+        - devspaces-instance.yml.j2
+
+- name: deploy jumpstarter
+  when: rhadp_deploy_jumpstart | bool
+  import_tasks: install_jumpstarter.yml
+
+- name: deploy builder
+  when: rhadp_deploy_builder | bool
+  import_tasks: install_builder.yml
