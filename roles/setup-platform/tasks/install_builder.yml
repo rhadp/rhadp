@@ -60,7 +60,7 @@
     instance_count: "{{ builder_instance_count }}"
     instance_default_user: "{{ builder_instance_default_user }}"
     instance_default_user_password: "{{ builder_instance_default_user_password }}"
-    instance_public_key_name: "{{ cluster_name }}-vm.pub"
+    instance_key_name: "{{ cluster_name }}-vm"
     runner_type: "{{ builder_runner_type }}"
     runner_count: "{{ builder_runner_count }}"
     

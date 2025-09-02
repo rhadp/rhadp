@@ -1,9 +1,0 @@
-# Implement your initial tasks here
-# -------------------------------------------------
-
-- name: set VM facts
-  set_fact:
-    vnet_name: "{{ cluster_label }}-vm-vnet"
-    subnet_name: "{{ cluster_label }}-vm-subnet"
-    nsg_name: "{{ cluster_label }}-vm-nsg"
-    nic_name: "{{ cluster_label }}-vm-nic"

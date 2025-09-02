@@ -1,9 +1,0 @@
-# Implement your initial tasks here
-# -------------------------------------------------
-
-- name: set VM facts
-  set_fact:
-    ssh_key_name: "{{ cluster_fqn }}-key"
-    vpc_name: "{{ cluster_label }}-vpc"
-    subnet_name: "{{ cluster_label }}-vm-subnet"
-    security_group_name: "{{ cluster_label }}-vm-sg"
