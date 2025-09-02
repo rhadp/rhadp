@@ -11,6 +11,8 @@ all:
     cluster_admin_group: "cluster-admins"
     platform_admin_group: "platform-admins"
     platform_user_group: "platform-users"
+    jumpstarter_admin_group: "jumpstarter-admins"
+    jumpstarter_user_group: "jumpstarter-users"
 
     # default repo for all the developer hub templates
     rhadp_templates_repo_url: "https://github.com/rhadp/rhadp-templates"

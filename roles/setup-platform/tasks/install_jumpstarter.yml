@@ -58,5 +58,6 @@
     apply: yes
     definition: "{{ lookup('template', item ) | from_yaml_all }}"
   loop:
+    - qemu-exporter-role-binding.yaml.j2
     - qemu-exporter-statefulset.yaml.j2
     - qemu-exporter-client.yaml.j2

@@ -2,7 +2,6 @@
 # create a custom 'platform developer' role
 
 #- name: create the platform developer role
-#
 
 # prepare the default admin user and groups
 
@@ -15,6 +14,8 @@
     - "{{ cluster_admin_group }}"
     - "{{ platform_admin_group }}"
     - "{{ platform_user_group }}"
+    - "{{ jumpstarter_admin_group }}"
+    - "{{ jumpstarter_user_group }}"
 
 - name: add the cluster-admin ClusterRole to the admin group
   shell: |
@@ -37,6 +38,15 @@
       --kubeconfig="$HOME/.kube/{{ cluster_fqn }}"
 
     oc adm groups add-users {{ platform_admin_group }} {{ default_admin_user }} \
+      --kubeconfig="$HOME/.kube/{{ cluster_fqn }}"
+  when: default_admin_user is defined
+
+- name: add the admin groups to the default groups
+  shell: |
+    oc adm groups add-users {{ platform_admin_group }} {{ cluster_admin_group }} \
+      --kubeconfig="$HOME/.kube/{{ cluster_fqn }}"
+
+    oc adm groups add-users {{ platform_user_group }} {{ platform_admin_group }} \
       --kubeconfig="$HOME/.kube/{{ cluster_fqn }}"
   when: default_admin_user is defined
 
