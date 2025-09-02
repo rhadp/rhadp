@@ -1,0 +1,28 @@
+# Implement your install deployment tasks here
+# -------------------------------------------------
+
+- name: create cnv vm instances
+  when: instance_type == "cnv"
+  k8s:
+    definition: "{{ lookup('template', item ) | from_yaml }}"
+    state: present
+    apply: yes
+    kubeconfig: "{{ local_kubeconfig_file }}"
+  loop:
+    - builder-virtualmachine.yml.j2
+
+- name: create aws vm instances
+  when: instance_type == "aws"
+  include_tasks:
+    file: ./install_aws.yml
+  vars:
+    vm_name: "{{ instance_name }}-{{ item + 1 }}"
+  loop: "{{ range(0, instance_count) }}"
+
+- name: create azure vm instances
+  when: instance_type == "azure"
+  include_tasks:
+    file: ./install_azure.yml
+  vars:
+    vm_name: "{{ instance_name }}-{{ item + 1 }}"
+  loop: "{{ range(0, instance_count) }}"

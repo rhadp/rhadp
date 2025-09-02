@@ -2,7 +2,7 @@
 # -------------------------------------------------
 
 - name: configure the 'metal' cluster topology
-  when: cluster_topology == 'metal' and setup_baremetal_worker_node | bool == True
+  when: cluster_topology == 'metal' and setup_baremetal_worker_node | bool == true
   block:
     - name: make control plane nodes schedulable
       shell: |

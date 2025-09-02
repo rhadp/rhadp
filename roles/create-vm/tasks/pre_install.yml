@@ -1,0 +1,17 @@
+# Implement your pre-install deployment tasks here
+# -------------------------------------------------
+
+- name: prepare aws infrastructure
+  when: instance_type == "aws"
+  include_tasks:
+    file: ./pre_install_aws.yml
+
+- name: prepare azure infrastructure
+  when: instance_type == "azure"
+  include_tasks:
+    file: ./pre_install_azure.yml
+
+- name: prepare gcp infrastructure
+  when: instance_type == "gcp"
+  include_tasks:
+    file: ./pre_install_gcp.yml

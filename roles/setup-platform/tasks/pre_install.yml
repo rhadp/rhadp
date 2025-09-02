@@ -2,7 +2,7 @@
 # -------------------------------------------------
 
 - name: prepare devspaces installation
-  when: rhadp_deploy_devspaces | bool == True
+  when: rhadp_deploy_devspaces | bool == true
   block:
     - name: install devspaces operator
       include_role:
@@ -25,7 +25,7 @@
         kubeconfig: "{{ local_kubeconfig_file }}"
 
 - name: prepare developer hub installation
-  when: rhadp_deploy_developer_hub | bool == True
+  when: rhadp_deploy_developer_hub | bool == true
   block:
     - name: install developer hub operator
       include_role:

@@ -1,9 +1,9 @@
 ---
 # defaults
-rhadp_deploy_devspaces: True # deploy the devspaces operator
-rhadp_deploy_developer_hub: False # deploy the developer hub
-rhadp_deploy_jumpstart: False # deploy the jumpstart operator
-rhadp_deploy_builder: False # deploy the builder VMs
+rhadp_deploy_devspaces: true # deploy the devspaces operator
+rhadp_deploy_developer_hub: false # deploy the developer hub
+rhadp_deploy_jumpstart: false # deploy the jumpstart operator
+rhadp_deploy_builder: false # deploy the builder VMs
     
 # devspaces operator
 devspaces_subscription_channel: "stable"
@@ -40,8 +40,12 @@ jumpstarter_helm_repo_version: "0.7.0-dev-8-g83e23d3"
 jumpstarter_qemu_exporter_count: 5
 
 # builder
-builder_instance_count: 1
-builder_instance_default_user: "rhel"
+builder_instance_type: "cnv" # cnv, aws, azure, gcp
+builder_instance_count: 2
+builder_instance_default_user: "rhel" # cnv -> rhel, aws -> ec2-user, azure -> azureuser
 builder_instance_default_user_password: "rhel"
+
+builder_runner_type: "github" # github or gitlab
+builder_runner_count: 1
 
 builder_ssh_key_dir: "$HOME/.ssh"

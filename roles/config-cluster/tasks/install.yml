@@ -3,17 +3,17 @@
 
 # add the 2nd machine sets to the cluster
 - name: configure additional machine sets
-  when: setup_arm_worker_nodes | bool == True
+  when: setup_arm_worker_nodes | bool == true
   import_tasks: install_machineset.yml
 
 # add the bare-metal worker node to the cluster
 - name: configure the 'metal' cluster topology
-  when: setup_baremetal_worker_node | bool == True
+  when: setup_baremetal_worker_node | bool == true
   import_tasks: install_metal.yml
 
-# setup virtualization
+# setup virtualization (currently aws only)
 - name: create cnv
-  when: setup_virtualization | bool == True and setup_baremetal_worker_node | bool == True and cloud_provider == "aws"
+  when: setup_virtualization | bool == true and setup_baremetal_worker_node | bool == true and cloud_provider == "aws"
   block:
   - name: install cnv operator
     include_role:

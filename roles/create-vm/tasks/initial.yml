@@ -1,0 +1,10 @@
+# Implement your initial tasks here
+# -------------------------------------------------
+
+- name: set some vm facts
+  set_fact:
+    vnet_name: "{{ instance_name }}-vm-vnet" # was vpc_name
+    subnet_name: "{{ instance_name }}-vm-subnet"
+    nsg_name: "{{ instance_name }}-vm-nsg" # was security_group_name
+    ssh_key_name: "{{ instance_name }}-key"
+    

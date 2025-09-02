@@ -2,7 +2,7 @@
 # -------------------------------------------------
 
 - name: prepare devspaces installation
-  when: rhadp_deploy_devspaces | bool == True
+  when: rhadp_deploy_devspaces | bool == true
   block:
     - name: uninstall devspaces operator
       include_role:
@@ -11,7 +11,6 @@
         operator_name: "devspaces"
         operator_subscription_name: "devspaces"
         
-
     - name: remove devspaces namespace
       k8s:
         kind: Namespace
@@ -21,7 +20,7 @@
         kubeconfig: "{{ local_kubeconfig_file }}"
 
 - name: prepare developer hub installation
-  when: rhadp_deploy_developer_hub | bool == True
+  when: rhadp_deploy_developer_hub | bool == true
   block:
     - name: uninstall developer hub operator
       include_role:

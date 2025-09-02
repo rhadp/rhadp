@@ -1,0 +1,97 @@
+# Implement your install deployment tasks here
+# -------------------------------------------------
+
+- name: create public ip address
+  azure.azcollection.azure_rm_publicipaddress:
+    resource_group: "{{ azure_resource_group }}"
+    allocation_method: Static
+    name: "{{ vm_name }}-pip"
+    location: "{{ azure_default_region }}"
+    sku: Standard
+    state: present
+    client_id: "{{ azure_client_id }}"
+    secret: "{{ azure_password }}"
+    tenant: "{{ azure_tenant }}"
+    subscription_id: "{{ azure_subscription }}"
+  register: vm_public_ip
+
+- name: create network interface
+  azure.azcollection.azure_rm_networkinterface:
+    resource_group: "{{ azure_resource_group }}"
+    name: "{{ vm_name }}-nic"
+    location: "{{ azure_default_region }}"
+    virtual_network: "{{ vnet_name }}"
+    subnet_name: "{{ subnet_name }}"
+    security_group: "{{ nsg_name }}"
+    ip_configurations:
+      - name: "{{ vm_name }}-ipconfig"
+        public_ip_address_name: "{{ vm_name }}-pip"
+        #primary: true
+    state: present
+    client_id: "{{ azure_client_id }}"
+    secret: "{{ azure_password }}"
+    tenant: "{{ azure_tenant }}"
+    subscription_id: "{{ azure_subscription }}"
+  register: nic
+
+# see https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_virtualmachine_module.html
+- name: create virtual machine
+  azure.azcollection.azure_rm_virtualmachine:
+    name: "{{ vm_name }}"
+    location: "{{ azure_default_region }}"
+    resource_group: "{{ azure_resource_group }}"
+    image: "{{ azure_vm_image }}"
+    vm_size: "{{ azure_instance_type }}"
+    admin_username: "{{ ansible_user }}"
+    ssh_password_enabled: false
+    ssh_public_keys:
+      - path: "/home/{{ instance_default_user }}/.ssh/authorized_keys"
+        key_data: "{{ lookup('file', '{{ public_key_dir }}/{{ instance_public_key_name }}') }}"
+    network_interface_names:
+      - "{{ vm_name }}-nic"
+    managed_disk_type: "Premium_LRS"
+    os_disk_name: "{{ vm_name }}-os"
+    os_disk_size_gb: "{{ azure_boot_disk_size }}"
+    os_disk_caching: "ReadOnly"
+    data_disks:
+      - lun: 0
+        name: "{{ vm_name }}-data"
+        managed_disk_type: "Premium_LRS"
+        disk_size_gb: "{{ azure_data_disk_size }}"
+        caching: "ReadWrite"
+    state: present
+    # azure credentials
+    client_id: "{{ azure_client_id }}"
+    secret: "{{ azure_password }}"
+    tenant: "{{ azure_tenant }}"
+    subscription_id: "{{ azure_subscription }}"
+  register: vm
+
+- name: get public ip address
+  azure.azcollection.azure_rm_publicipaddress_info:
+    name: "{{ vm_name }}-pip"
+    resource_group: "{{ azure_resource_group }}"
+    # azure credentials
+    client_id: "{{ azure_client_id }}"
+    secret: "{{ azure_password }}"
+    tenant: "{{ azure_tenant }}"
+    subscription_id: "{{ azure_subscription }}"
+  register: pip_info
+
+- name: set public ip fact
+  set_fact:
+    instance_public_ip: "{{ pip_info.publicipaddresses[0].ip_address }}"
+
+- name: wait for ssh to be available on the new instance
+  wait_for:
+    host: "{{ instance_public_ip }}"
+    port: 22
+    delay: 30
+    timeout: 600
+    state: started
+
+- name: add host key to known_hosts
+  known_hosts:
+    name: "{{ instance_public_ip }}"
+    key: "{{ lookup('pipe', 'ssh-keyscan -H ' + instance_public_ip) }}"
+    state: present
