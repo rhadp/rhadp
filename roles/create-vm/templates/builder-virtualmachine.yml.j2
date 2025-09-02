@@ -1,7 +1,7 @@
 ﻿apiVersion: kubevirt.io/v1
 kind: VirtualMachine
 metadata:
-  name: builder-rhel-10-arm64
+  name: {{ vm_name }}
   namespace: "{{ platform_builder_namespace }}"
   finalizers:
     - kubevirt.io/virtualMachineControllerFinalize
@@ -43,7 +43,7 @@ spec:
       subdomain: headless
       volumes:
         - dataVolume:
-            name: builder-rhel-10-arm64-volume
+            name: {{ vm_name }}-volume
           name: rootdisk
         - cloudInitNoCloud:
             userData: |
@@ -57,7 +57,7 @@ spec:
   dataVolumeTemplates:
     - metadata:
         creationTimestamp: null
-        name: builder-rhel-10-arm64-volume
+        name: {{ vm_name }}-volume
       spec:
         sourceRef:
           kind: DataSource
