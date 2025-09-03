@@ -1,7 +1,0 @@
----
-# defaults
-
-vault_namespace: "vault"
-
-vault_subscription_channel: "stable"
-vault_subscription_starting_csv: "vault-secrets-operator.v0.10.0"

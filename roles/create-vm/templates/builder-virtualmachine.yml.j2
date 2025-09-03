@@ -1,7 +1,7 @@
 ﻿apiVersion: kubevirt.io/v1
 kind: VirtualMachine
 metadata:
-  name: {{ vm_name }}
+  name: {{ instance_name }}
   namespace: "{{ platform_builder_namespace }}"
   finalizers:
     - kubevirt.io/virtualMachineControllerFinalize
@@ -43,7 +43,7 @@ spec:
       subdomain: headless
       volumes:
         - dataVolume:
-            name: {{ vm_name }}-volume
+            name: {{ instance_name }}-volume
           name: rootdisk
         - cloudInitNoCloud:
             userData: |
@@ -57,7 +57,7 @@ spec:
   dataVolumeTemplates:
     - metadata:
         creationTimestamp: null
-        name: {{ vm_name }}-volume
+        name: {{ instance_name }}-volume
       spec:
         sourceRef:
           kind: DataSource

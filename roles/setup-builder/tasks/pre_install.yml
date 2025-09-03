@@ -2,6 +2,7 @@
 # -------------------------------------------------
 
 - name: update and upgrade all packages
+  when: upgrade_all_packages | bool == true
   delegate_to: "{{ instance_public_ip }}"
   become: true
   dnf:
@@ -28,7 +29,6 @@
       - virt-install
       - virt-viewer
       
-
 - name: install builder packages
   delegate_to: "{{ instance_public_ip }}"
   become: true
@@ -51,14 +51,3 @@
       - cmake
       - gcc
       - g++
-
-- name: clone the automotive-image-builder repo
-  delegate_to: "{{ instance_public_ip }}"
-  become: true
-  git:
-    repo: "{{ aib_repo }}"
-    dest: "{{ work_dir }}/{{ aib_work_dir }}/{{ aib_dest }}"
-    version: "{{ aib_branch }}"
-    single_branch: true
-    force: true
-    depth: 1

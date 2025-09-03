@@ -1,6 +1,14 @@
 # Implement your uninstall deployment tasks here
 # -------------------------------------------------
 
+- name: uninstall builder
+  when: rhadp_deploy_builder | bool
+  import_tasks: uninstall_builder.yml
+
+- name: uninstall jumpstarter
+  when: rhadp_deploy_jumpstart | bool
+  import_tasks: uninstall_jumpstarter.yml
+
 - name: prepare devspaces installation
   when: rhadp_deploy_devspaces | bool == true
   block:

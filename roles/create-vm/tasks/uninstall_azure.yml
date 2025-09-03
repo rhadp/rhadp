@@ -1,0 +1,154 @@
+# Implement your uninstall deployment tasks here
+# -------------------------------------------------
+
+- name: get virtual machine information
+  azure.azcollection.azure_rm_virtualmachine_info:
+    resource_group: "{{ azure_resource_group }}"
+    name: "{{ instance_name }}"
+    # azure credentials
+    client_id: "{{ azure_client_id }}"
+    secret: "{{ azure_password }}"
+    tenant: "{{ azure_tenant }}"
+    subscription_id: "{{ azure_subscription }}"
+  register: vm_info
+  ignore_errors: true
+
+- name: delete virtual machine
+  azure.azcollection.azure_rm_virtualmachine:
+    resource_group: "{{ azure_resource_group }}"
+    name: "{{ instance_name }}"
+    state: absent
+    remove_on_absent: ["all"]
+    # azure credentials
+    client_id: "{{ azure_client_id }}"
+    secret: "{{ azure_password }}"
+    tenant: "{{ azure_tenant }}"
+    subscription_id: "{{ azure_subscription }}"
+  when: vm_info.vms | length > 0
+  ignore_errors: true
+
+- name: delete data disks
+  azure.azcollection.azure_rm_manageddisk:
+    resource_group: "{{ azure_resource_group }}"
+    name: "{{ instance_name }}-data"
+    state: absent
+    # azure credentials
+    client_id: "{{ azure_client_id }}"
+    secret: "{{ azure_password }}"
+    tenant: "{{ azure_tenant }}"
+    subscription_id: "{{ azure_subscription }}"
+  ignore_errors: true
+
+- name: delete OS disk
+  azure.azcollection.azure_rm_manageddisk:
+    resource_group: "{{ azure_resource_group }}"
+    name: "{{ instance_name }}-os"
+    state: absent
+    # azure credentials
+    client_id: "{{ azure_client_id }}"
+    secret: "{{ azure_password }}"
+    tenant: "{{ azure_tenant }}"
+    subscription_id: "{{ azure_subscription }}"
+  ignore_errors: true
+
+#- name: get all managed disks in resource group
+#  azure.azcollection.azure_rm_manageddisk_info:
+#    resource_group: "{{ azure_resource_group }}"
+#    # azure credentials
+#    client_id: "{{ azure_client_id }}"
+#    secret: "{{ azure_password }}"
+#    tenant: "{{ azure_tenant }}"
+#    subscription_id: "{{ azure_subscription }}"
+#  register: disk_info
+#  ignore_errors: true
+
+#- name: delete all managed disks with vm name prefix
+#  azure.azcollection.azure_rm_manageddisk:
+#    resource_group: "{{ azure_resource_group }}"
+#    name: "{{ item.name }}"
+#    state: absent
+#    # azure credentials
+#    client_id: "{{ azure_client_id }}"
+#    secret: "{{ azure_password }}"
+#    tenant: "{{ azure_tenant }}"
+#    subscription_id: "{{ azure_subscription }}"
+#  loop: "{{ disk_info.disks }}"
+#  when: 
+#    - disk_info.disks is defined
+#    - item.name is search(instance_name)
+#  ignore_errors: true
+
+- name: delete network interface
+  azure.azcollection.azure_rm_networkinterface:
+    resource_group: "{{ azure_resource_group }}"
+    name: "{{ instance_name }}-nic"
+    state: absent
+    # azure credentials
+    client_id: "{{ azure_client_id }}"
+    secret: "{{ azure_password }}"
+    tenant: "{{ azure_tenant }}"
+    subscription_id: "{{ azure_subscription }}"
+  ignore_errors: true
+
+- name: delete public IP address
+  azure.azcollection.azure_rm_publicipaddress:
+    resource_group: "{{ azure_resource_group }}"
+    name: "{{ instance_name }}-pip"
+    state: absent
+    # azure credentials
+    client_id: "{{ azure_client_id }}"
+    secret: "{{ azure_password }}"
+    tenant: "{{ azure_tenant }}"
+    subscription_id: "{{ azure_subscription }}"
+  ignore_errors: true
+
+#- name: delete network security group
+#  azure.azcollection.azure_rm_securitygroup:
+#    resource_group: "{{ azure_resource_group }}"
+#    name: "{{ nsg_name }}"
+#    state: absent
+#    # azure credentials
+#    client_id: "{{ azure_client_id }}"
+#    secret: "{{ azure_password }}"
+#    tenant: "{{ azure_tenant }}"
+#    subscription_id: "{{ azure_subscription }}"
+#  ignore_errors: true
+
+#- name: delete subnet
+#  azure.azcollection.azure_rm_subnet:
+#    resource_group: "{{ azure_resource_group }}"
+#    name: "{{ subnet_name }}"
+#    virtual_network: "{{ vnet_name }}"
+#    state: absent
+#    # azure credentials
+#    client_id: "{{ azure_client_id }}"
+#    secret: "{{ azure_password }}"
+#    tenant: "{{ azure_tenant }}"
+#    subscription_id: "{{ azure_subscription }}"
+#  ignore_errors: true
+
+#- name: delete virtual network
+#  azure.azcollection.azure_rm_virtualnetwork:
+#    resource_group: "{{ azure_resource_group }}"
+#    name: "{{ vnet_name }}"
+#    state: absent
+#    # azure credentials
+#    client_id: "{{ azure_client_id }}"
+#    secret: "{{ azure_password }}"
+#    tenant: "{{ azure_tenant }}"
+#    subscription_id: "{{ azure_subscription }}"
+#  ignore_errors: true
+
+#- name: delete resource group
+#  when: delete_resource_group
+#  azure.azcollection.azure_rm_resourcegroup:
+#    name: "{{ azure_resource_group }}"
+#    state: absent
+#    force_delete_nonempty: true
+#    # azure credentials
+#    client_id: "{{ azure_client_id }}"
+#    secret: "{{ azure_password }}"
+#    tenant: "{{ azure_tenant }}"
+#    subscription_id: "{{ azure_subscription }}"
+#  ignore_errors: true
+

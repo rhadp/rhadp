@@ -15,7 +15,7 @@
     cd {{ work_dir }}/{{ github_runner_dir }}
     ./svc.sh uninstall
 
-- name: remove the github runner
+- name: unregister the github runner
   delegate_to: "{{ instance_public_ip }}"
   shell: |
     cd {{ work_dir }}/{{ github_runner_dir }}

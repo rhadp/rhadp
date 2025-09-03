@@ -1,0 +1,30 @@
+# Implement your uninstall deployment tasks here
+# -------------------------------------------------
+
+- name: uninstall builder runner instances
+  include_role:
+    name: roles/setup-builder
+  vars:
+    instance_name: "{{ cluster_label }}-builder-{{ instance_index + 1 }}"
+    instance_base_name: "{{ cluster_label }}-builder"
+    instance_type: "{{ builder_instance_type }}"
+    instance_default_user: "{{ builder_instance_default_user }}"
+    instance_key_name: "{{ cluster_name }}-vm"
+    runner_type: "{{ builder_runner_type }}"
+  loop: "{{ range(0, builder_instance_count) }}"
+  loop_control:
+    loop_var: instance_index
+
+- name: uninstall builder vm instances
+  include_role:
+    name: roles/create-vm
+  vars:
+    instance_name: "{{ cluster_label }}-builder-{{ instance_index + 1 }}"
+    instance_base_name: "{{ cluster_label }}-builder"
+    instance_type: "{{ builder_instance_type }}"
+    instance_default_user: "{{ builder_instance_default_user }}"
+    instance_default_user_password: "{{ builder_instance_default_user_password }}"
+    instance_key_name: "{{ cluster_name }}-vm"
+  loop: "{{ range(0, builder_instance_count) }}"
+  loop_control:
+    loop_var: instance_index

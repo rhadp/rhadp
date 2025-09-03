@@ -3,9 +3,9 @@
 
 - name: set some vm facts
   set_fact:
-    vnet_name: "{{ instance_name }}-vm-vnet" # was vpc_name
-    subnet_name: "{{ instance_name }}-vm-subnet"
-    nsg_name: "{{ instance_name }}-vm-nsg" # was security_group_name
+    vnet_name: "{{ instance_base_name }}-vm-vnet" # was vpc_name
+    subnet_name: "{{ instance_base_name }}-vm-subnet"
+    nsg_name: "{{ instance_base_name }}-vm-nsg" # was security_group_name
     
 - name: set some ansible facts
   set_fact:

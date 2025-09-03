@@ -1,6 +1,5 @@
 ---
 # defaults
-
 public_key_dir: "{{ lookup('env', 'HOME') }}/.ssh"
 
 # data volume

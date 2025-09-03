@@ -31,3 +31,9 @@ This role performs the following tasks:
 - [Relevant Documentation](https://docs.example.com)
 - [Additional Resources](https://resources.example.com)
 
+instance_name: "{{ cluster_label }}-builder"
+instance_type: "{{ builder_instance_type }}"
+instance_count: "{{ builder_instance_count }}"
+instance_default_user: "{{ builder_instance_default_user }}"
+instance_default_user_password: "{{ builder_instance_default_user_password }}"
+instance_key_name: "{{ cluster_name }}-vm"

@@ -3,4 +3,4 @@
 
 - name: debug
   debug:
-    msg: "create aws vm instances {{ vm_name }}"
+    msg: "create aws vm instances {{ instance_name }}"

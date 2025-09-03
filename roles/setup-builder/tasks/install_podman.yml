@@ -1,4 +1,4 @@
-# Implement your post-install deployment tasks here
+# Implement your install deployment tasks here
 # -------------------------------------------------
 
 # make sure that podman works in the same way as docker does ...
@@ -16,8 +16,8 @@
   ansible.builtin.file:
     path: ".docker"
     state: directory
-    owner: "{{ ansible_user }}"
-    group: "{{ ansible_user }}"
+    owner: "{{ instance_default_user }}"
+    group: "{{ instance_default_user }}"
     mode: "0755"
 
 - name: copy registries.conf
@@ -57,8 +57,8 @@
   ansible.builtin.file:
     path: "{{ work_dir }}/{{ item }}"
     state: directory
-    owner: "{{ ansible_user }}"
-    group: "{{ ansible_user }}"
+    owner: "{{ instance_default_user }}"
+    group: "{{ instance_default_user }}"
     mode: "0755"
   with_items:
     - "containers/user"
@@ -68,10 +68,10 @@
   delegate_to: "{{ instance_public_ip }}"
   become: true
   ansible.builtin.file:
-    path: "/home/{{ ansible_user }}/.config/containers"
+    path: "/home/{{ instance_default_user }}/.config/containers"
     state: directory
-    owner: "{{ ansible_user }}"
-    group: "{{ ansible_user }}"
+    owner: "{{ instance_default_user }}"
+    group: "{{ instance_default_user }}"
     mode: "0755"
 
 - name: copy user storage.conf
@@ -79,7 +79,7 @@
   become: true
   ansible.builtin.copy:
     src: "../files/storage-user.conf"
-    dest: "/home/{{ ansible_user }}/.config/containers/storage.conf"
+    dest: "/home/{{ instance_default_user }}/.config/containers/storage.conf"
     mode: "0644"
 
 # fix selinux issues, see https://access.redhat.com/solutions/7021610

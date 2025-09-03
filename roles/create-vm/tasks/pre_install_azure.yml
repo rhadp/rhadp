@@ -4,6 +4,7 @@
 - name: find resource group
   azure.azcollection.azure_rm_resourcegroup_info:
     name: "{{ azure_resource_group }}"
+    # azure credentials
     client_id: "{{ azure_client_id }}"
     secret: "{{ azure_password }}"
     tenant: "{{ azure_tenant }}"
@@ -16,6 +17,7 @@
     name: "{{ azure_resource_group }}"
     location: "{{ azure_default_region }}"
     state: present
+    # azure credentials
     client_id: "{{ azure_client_id }}"
     secret: "{{ azure_password }}"
     tenant: "{{ azure_tenant }}"
@@ -29,6 +31,7 @@
     address_prefixes: "{{ azure_vnet_cidr }}"
     location: "{{ azure_default_region }}"
     state: present
+    # azure credentials
     client_id: "{{ azure_client_id }}"
     secret: "{{ azure_password }}"
     tenant: "{{ azure_tenant }}"
@@ -42,6 +45,7 @@
     address_prefix: "{{ azure_subnet_cidr }}"
     virtual_network: "{{ vnet_name }}"
     state: present
+    # azure credentials
     client_id: "{{ azure_client_id }}"
     secret: "{{ azure_password }}"
     tenant: "{{ azure_tenant }}"
@@ -76,6 +80,7 @@
         direction: Inbound
         source_address_prefix: "0.0.0.0/0"
     state: present
+    # azure credentials
     client_id: "{{ azure_client_id }}"
     secret: "{{ azure_password }}"
     tenant: "{{ azure_tenant }}"

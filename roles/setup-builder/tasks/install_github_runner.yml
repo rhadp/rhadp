@@ -1,6 +1,28 @@
 # Implement your install deployment tasks here
 # -------------------------------------------------
-    
+
+# FIXME: investigate why the github runner does not work without the following directories ...
+
+- name: create directories
+  delegate_to: "{{ instance_public_ip }}"
+  become: true
+  ansible.builtin.file:
+    path: "{{ work_dir }}/{{ item }}"
+    state: directory
+    owner: "{{ instance_default_user }}"
+    group: "{{ instance_default_user }}"
+    mode: "0755"
+  with_items:
+    - "{{ github_runner_dir }}"
+    - "{{ workspace_dir }}/github/home" # used by the github runner, to create containers ...
+    - "{{ workspace_dir }}/github/workspace"
+
+- name: create a symlink to the workspace directory
+  delegate_to: "{{ instance_public_ip }}"
+  become: true
+  shell: |
+    ln -s {{ work_dir }}/{{ workspace_dir }}/github /github
+
 - name: download the github runner
   delegate_to: "{{ instance_public_ip }}"
   shell: |
@@ -41,3 +63,26 @@
       --labels "{{ github_runner_labels }}" \
       --replace
 
+- name: register the github runner as a service
+  delegate_to: "{{ instance_public_ip }}"
+  become: true
+  shell: |
+    cd {{ work_dir }}/{{ github_runner_dir }}
+
+    # fix selinux issues
+    # see https://github.com/actions/runner/issues/3186
+    chcon system_u:object_r:usr_t:s0 ./svc.sh
+
+    ./svc.sh install
+
+- name: start the github runner
+  delegate_to: "{{ instance_public_ip }}"
+  become: true
+  shell: |
+    cd {{ work_dir }}/{{ github_runner_dir }}
+
+    # fix selinux issues
+    # see https://github.com/actions/runner/issues/3186
+    chcon system_u:object_r:usr_t:s0 ./runsvc.sh
+
+    ./svc.sh start

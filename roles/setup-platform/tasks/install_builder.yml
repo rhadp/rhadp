@@ -22,7 +22,7 @@
   slurp:
     src: "{{ builder_ssh_key_dir }}/{{ cluster_name }}-vm.pub"
   register: vm_ssh_pub_key
-  
+
 - name: create namespace
   k8s:
     kind: Namespace
@@ -55,12 +55,26 @@
   include_role:
     name: roles/create-vm
   vars:
-    instance_name: "{{ cluster_label }}-builder"
+    instance_name: "{{ cluster_label }}-builder-{{ instance_index + 1 }}"
+    instance_base_name: "{{ cluster_label }}-builder"
     instance_type: "{{ builder_instance_type }}"
-    instance_count: "{{ builder_instance_count }}"
     instance_default_user: "{{ builder_instance_default_user }}"
     instance_default_user_password: "{{ builder_instance_default_user_password }}"
     instance_key_name: "{{ cluster_name }}-vm"
+  loop: "{{ range(0, builder_instance_count) }}"
+  loop_control:
+    loop_var: instance_index
+
+- name: create builder runner instances
+  include_role:
+    name: roles/setup-builder
+  vars:
+    instance_name: "{{ cluster_label }}-builder-{{ instance_index + 1 }}"
+    instance_base_name: "{{ cluster_label }}-builder"
+    instance_type: "{{ builder_instance_type }}"
+    instance_default_user: "{{ builder_instance_default_user }}"
+    instance_key_name: "{{ cluster_name }}-vm"
     runner_type: "{{ builder_runner_type }}"
-    runner_count: "{{ builder_runner_count }}"
-    
+  loop: "{{ range(0, builder_instance_count) }}"
+  loop_control:
+    loop_var: instance_index

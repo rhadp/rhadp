@@ -5,30 +5,18 @@
   when: instance_type == "cnv"
   include_tasks:
     file: ./install_cnv.yml
-  vars:
-    vm_name: "{{ instance_name }}-{{ item + 1 }}"
-  loop: "{{ range(0, instance_count) }}"
 
 - name: create aws vm instances
   when: instance_type == "aws"
   include_tasks:
     file: ./install_aws.yml
-  vars:
-    vm_name: "{{ instance_name }}-{{ item + 1 }}"
-  loop: "{{ range(0, instance_count) }}"
 
 - name: create azure vm instances
   when: instance_type == "azure"
   include_tasks:
     file: ./install_azure.yml
-  vars:
-    vm_name: "{{ instance_name }}-{{ item + 1 }}"
-  loop: "{{ range(0, instance_count) }}"
 
 - name: create gcp vm instances
   when: instance_type == "gcp"
   include_tasks:
     file: ./install_gcp.yml
-  vars:
-    vm_name: "{{ instance_name }}-{{ item + 1 }}"
-  loop: "{{ range(0, instance_count) }}"
