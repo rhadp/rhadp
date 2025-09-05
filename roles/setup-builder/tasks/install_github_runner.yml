@@ -63,7 +63,16 @@
       --labels "{{ github_runner_labels }}" \
       --replace
 
+- name: check if the github runner service exists
+  delegate_to: "{{ instance_public_ip }}"
+  become: true
+  stat:
+    path: "/etc/systemd/system/actions.runner.{{ github_org }}.{{ instance_name }}.service"
+    # /etc/systemd/system/actions.runner.rhadp-examples.rhadp-xwktd-builder-1.service
+  register: github_runner_service_stat
+
 - name: register the github runner as a service
+  when: github_runner_service_stat.stat.exists == false
   delegate_to: "{{ instance_public_ip }}"
   become: true
   shell: |

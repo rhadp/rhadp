@@ -62,15 +62,14 @@ spec:
     imagePullPolicy: Always
     deploymentStrategy: Recreate
     
-    #defaultComponents:
-    #  - container:
-    #      sourceMapping: /projects
-    #      image: {{ devspaces_instance_default_container_image }}
-    #      cpuRequest: "{{ devspaces_instance_cpu_requested }}"
-    #      memoryRequest: "{{ devspaces_instance_memory_requested }}"
-    #      cpuLimit: "{{ devspaces_instance_cpu_limit }}"
-    #      memoryLimit: "{{ devspaces_instance_memory_limit }}"
-    #    name: universal-developer-image
+    nodeSelector:
+      rhadp.node-role/builder: "true"
+
+    defaultComponents:
+      - name: runtime
+        container:
+          sourceMapping: /projects
+          image: {{ devspaces_instance_default_container_image }}
     
     defaultNamespace:
       autoProvision: true
