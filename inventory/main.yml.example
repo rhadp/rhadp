@@ -82,5 +82,6 @@ all:
     # keycloak instance variables
     keycloak_db_user: "admin"
     keycloak_db_password: "openshift"
+    keycloak_client_secret: "openshiftkc"
 
     
