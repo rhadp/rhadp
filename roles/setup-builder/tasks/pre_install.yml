@@ -25,7 +25,7 @@
       - qemu-kvm
       - qemu-img
       - libvirt
-      - virt-manager
+      #- virt-manager
       - virt-install
       - virt-viewer
       

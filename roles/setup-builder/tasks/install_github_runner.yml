@@ -44,8 +44,6 @@
 - name: configure the github runner
   delegate_to: "{{ instance_public_ip }}"
   shell: |
-    cd {{ work_dir }}/{{ github_runner_dir }}
-
     RESPONSE=$(curl -s -L \
       -X POST \
       -H "Accept: application/vnd.github+json" \
@@ -55,7 +53,7 @@
 
     TOKEN=$(echo "$RESPONSE" | jq -r '.token')
 
-    ./config.sh --unattended \
+    {{ work_dir }}/{{ github_runner_dir }}/config.sh --unattended \
       --url https://github.com/{{ github_org }} \
       --token $TOKEN \
       --name "{{ instance_name }}" \

@@ -9,6 +9,30 @@
     ansible_ssh_private_key_file: "~/.ssh/{{ public_key_dir }}/{{ instance_key_name }}" # private key used to access the remote server
 
 - name: get instance public ip
+  when: instance_type == "aws"
+  block:
+    - name: get instance information
+      amazon.aws.ec2_instance_info:
+        filters:
+          "tag:Name": "{{ instance_name }}"
+          instance-state-name: ["running"]
+        aws_access_key: "{{ aws_access_key_id }}"
+        aws_secret_key: "{{ aws_secret_access_key }}"
+        region: "{{ aws_default_region }}"
+      register: vm_info
+
+    #- name: check if instance exists
+    #  fail:
+    #    msg: "Instance '{{ instance_name }}' does not exist. Aborting."
+    #  when: vm_info.instances | length == 0
+      
+    - name: set public ip facts
+      set_fact:
+        instance_public_ip: "{{ vm_info.instances[0].public_ip_address }}"
+        instance_public_dns: "{{ vm_info.instances[0].public_dns_name }}"
+      when: vm_info.instances | length > 0
+
+- name: get instance public ip
   when: instance_type == "azure"
   block:
     #- name: get instance
@@ -38,7 +62,8 @@
         subscription_id: "{{ azure_subscription }}"
       register: pip_info
 
-    - name: set public ip fact
+    - name: set public ip facts
       set_fact:
         instance_public_ip: "{{ pip_info.publicipaddresses[0].ip_address }}"
+      when: pip_info.publicipaddresses | length > 0
 

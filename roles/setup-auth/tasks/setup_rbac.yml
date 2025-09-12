@@ -15,16 +15,6 @@
     - "{{ platform_admin_group }}"
     - "{{ platform_user_group }}"
 
-- name: create the jumpstarter groups
-  ignore_errors: true # can fail if group already exists
-  when: rhadp_deploy_jumpstart | bool == true
-  shell: |
-    oc adm groups new {{ item }} \
-      --kubeconfig="$HOME/.kube/{{ cluster_fqn }}"
-  with_items:
-    - "{{ jumpstarter_admin_group }}"
-    - "{{ jumpstarter_user_group }}"
-
 - name: add the cluster-admin ClusterRole to the admin group
   shell: |
     oc adm policy add-cluster-role-to-group cluster-admin {{ cluster_admin_group }} \
@@ -56,18 +46,6 @@
       --kubeconfig="$HOME/.kube/{{ cluster_fqn }}"
 
     oc adm groups add-users {{ platform_user_group }} {{ platform_admin_group }} \
-      --kubeconfig="$HOME/.kube/{{ cluster_fqn }}"
-
-- name: add the admin groups to the jumpstarter groups
-  when: rhadp_deploy_jumpstart | bool == true
-  shell: |
-    oc adm groups add-users {{ jumpstarter_admin_group }} {{ cluster_admin_group }} \
-      --kubeconfig="$HOME/.kube/{{ cluster_fqn }}"
-
-    oc adm groups add-users {{ jumpstarter_admin_group }} {{ platform_admin_group }} \
-      --kubeconfig="$HOME/.kube/{{ cluster_fqn }}"
-
-    oc adm groups add-users {{ jumpstarter_user_group }} {{ jumpstarter_admin_group }} \
       --kubeconfig="$HOME/.kube/{{ cluster_fqn }}"
   
 # RBAC for the default groups

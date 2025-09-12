@@ -11,6 +11,8 @@ volume_mount_point: "/mnt/data"
 
 # VM configuration
 aws_instance_type: "m6g.xlarge" # ARM-based AWS Graviton2, 4 vCPU, 16 GiB RAM
+#aws_image_id: "ami-07b21932ee4cac8c0"  # RHEL10, ARM, us-east-2, see https://access.redhat.com/solutions/15356 how to get the image id
+aws_image_id: "ami-0624b52bb7600a790"  # RHEL10, ARM, eu-central-1
 aws_boot_disk_size: 20
 aws_data_disk_size: 100
 

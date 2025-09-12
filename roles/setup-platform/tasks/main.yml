@@ -33,4 +33,4 @@
     file: ./uninstall.yml
     apply:
       become: "{{ become_override | bool }}"
-  when: ACTION == "UNINSTALL"
+  when: ACTION == "UNINSTALL" and cluster_label is defined
