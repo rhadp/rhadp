@@ -43,7 +43,7 @@
     location: "{{ azure_default_region }}"
     resource_group: "{{ azure_resource_group }}"
     image: "{{ azure_vm_image }}"
-    vm_size: "{{ azure_instance_type }}"
+    vm_size: "{{ azure_vm_instance_type }}"
     admin_username: "{{ ansible_user }}"
     ssh_password_enabled: false
     ssh_public_keys:
@@ -53,13 +53,13 @@
       - "{{ instance_name }}-nic"
     managed_disk_type: "Premium_LRS"
     os_disk_name: "{{ instance_name }}-os"
-    os_disk_size_gb: "{{ azure_boot_disk_size }}"
+    os_disk_size_gb: "{{ azure_vm_boot_disk_size }}"
     os_disk_caching: "ReadOnly"
     data_disks:
       - lun: 0
         name: "{{ instance_name }}-data"
         managed_disk_type: "Premium_LRS"
-        disk_size_gb: "{{ azure_data_disk_size }}"
+        disk_size_gb: "{{ azure_vm_data_disk_size }}"
         caching: "ReadWrite"
     state: present
     # azure credentials

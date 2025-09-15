@@ -3,8 +3,8 @@
 
 - name: create ec2 instance
   amazon.aws.ec2_instance:
-    instance_type: "{{ aws_instance_type }}"
-    image_id: "{{ aws_image_id }}"
+    instance_type: "{{ aws_vm_instance_type }}"
+    image_id: "{{ aws_vm_image_id }}"
     vpc_subnet_id: "{{ subnet.subnet.id }}"
     security_group: "{{ security_group.group_id }}"
     key_name: "{{ ssh_public_key_name }}"
@@ -13,11 +13,11 @@
     volumes:
       - device_name: /dev/sda1
         ebs:
-          volume_size: "{{ aws_boot_disk_size }}"
+          volume_size: "{{ aws_vm_boot_disk_size }}"
           delete_on_termination: true
       - device_name: /dev/sdb
         ebs:
-          volume_size: "{{ aws_data_disk_size }}"
+          volume_size: "{{ aws_vm_data_disk_size }}"
           volume_type: gp3
           delete_on_termination: true
     tags:
