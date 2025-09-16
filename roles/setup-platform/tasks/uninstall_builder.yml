@@ -1,9 +1,9 @@
 # Implement your uninstall deployment tasks here
 # -------------------------------------------------
 
-- name: uninstall builder runner instances
+- name: uninstall runner instances
   include_role:
-    name: roles/setup-builder
+    name: roles/setup-runner
   vars:
     instance_name: "{{ cluster_label }}-builder-{{ instance_index + 1 }}"
     instance_base_name: "{{ cluster_label }}-builder"
@@ -15,7 +15,7 @@
   loop_control:
     loop_var: instance_index
 
-- name: uninstall builder vm instances
+- name: uninstall runner vm instances
   include_role:
     name: roles/create-vm
   vars:

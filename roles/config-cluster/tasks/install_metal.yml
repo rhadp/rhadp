@@ -69,7 +69,7 @@
     kubeconfig: "{{ local_kubeconfig_file }}"
   register: found_metal_nodes
   
-- name: label metal nodes (infra)
+- name: label metal nodes (builder)
   shell: |
     oc label node {{ item }} rhadp.node-role/builder='true' \
     --overwrite=true \

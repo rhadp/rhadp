@@ -51,7 +51,7 @@
   loop:
     - devspaces-secret-private-key.yml.j2
 
-- name: create builder vm instances
+- name: create runner vm instances
   include_role:
     name: roles/create-vm
   vars:
@@ -65,9 +65,9 @@
   loop_control:
     loop_var: instance_index
 
-- name: create builder runner instances
+- name: create runner instances
   include_role:
-    name: roles/setup-builder
+    name: roles/setup-runner
   vars:
     instance_name: "{{ cluster_label }}-builder-{{ instance_index + 1 }}"
     instance_base_name: "{{ cluster_label }}-builder"
