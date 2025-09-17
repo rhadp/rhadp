@@ -1,10 +1,14 @@
 ---
 # defaults
 
+# default platform groups
+cluster_admin_group: "cluster-admins"
+platform_admin_group: "platform-admins"
+platform_user_group: "platform-users"
+
+# keycloak
 keycloak_namespace: "keycloak"
 
+# keycloak subscription
 keycloak_subscription_channel: "stable-v26.2"
 keycloak_subscription_starting_csv: "rhbk-operator.v26.2.4-opr.2"
-
-default_nobody_user: "nobody"
-default_nobody_password: "nobody"

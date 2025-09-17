@@ -1,4 +1,4 @@
-- name: bootstrap the openshift cluster and developer platform
+- name: bootstrap the openshift cluster
   hosts: localhost
   vars:
     # set the following to control the install/uninstall process
@@ -30,14 +30,6 @@
     - name: configure openshift cluster authentication
       include_role:
         name: roles/setup-auth
-
-    - name: install essential devops operators e.g. gitops, pipelines, etc.
-      include_role:
-        name: roles/setup-devops
-
-    - name: bootstrap the developer platform
-      include_role:
-        name: roles/setup-platform
 
     - name: show web console url
       debug:

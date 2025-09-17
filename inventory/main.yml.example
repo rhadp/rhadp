@@ -31,13 +31,6 @@ all:
     # cluster overrides
     # see 'roles/create-cluster/defaults/main.yml' and 'roles/config-cluster/defaults/main.yml' for available variables
 
-    # platform overrides
-    # see 'roles/setup-platform/defaults/main.yml' for available variables
-    #rhadp_deploy_devspaces: True # deploy the devspaces operator
-    #rhadp_deploy_developer_hub: False # deploy the developer hub
-    #rhadp_deploy_jumpstart: False # deploy the jumpstart operator
-    #rhadp_deploy_builder: False # deploy the builder VMs
-
     # aws specific variables
     #aws_access_key_id: "abc123"
     #aws_secret_access_key: "abc123"
@@ -59,14 +52,10 @@ all:
     #gcp_organization_id: "abc123"
     #gcp_default_region: "us-central1"
     
-    # github secrets
+    # github secrets for GitHub oauth provider setup
     #github_endpoint: "https://github.com"
     #github_oauth_client_id: "abc123"
     #github_oauth_client_secret: "abc123"
-    #github_git_client_id: "abc123"
-    #github_git_client_secret: "abc123"
-    #github_api_pat: ""abc123"
-    #github_org: "example.org-examples"
 
     # letsencrypt account email
     letsencrypt_email: "hello@example.com"
@@ -78,6 +67,14 @@ all:
     default_admin_user: admin
     default_admin_password: openshift
     default_admin_email: "admin@example.com"
+
+    # default users
+    default_nobody_user: "nobody"
+    default_nobody_password: "nobody"
+
+    # remove the kubeadmin user and the self-provisioning role
+    remove_kubeadmin: True
+    remove_selfprovisioning: True
     
     # keycloak instance variables
     keycloak_db_user: "admin"

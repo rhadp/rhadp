@@ -604,7 +604,8 @@ spec:
       description: "${role_default-roles}"
       composite: true
       clientRole: false
-    
+
+    {% if github_oauth_client_id is defined %}
     identityProviders:
       - alias: github
         displayName: 'GitHub Login'
@@ -626,5 +627,5 @@ spec:
           syncMode: LEGACY
           clientSecret: "{{ github_oauth_client_secret }}"
           caseSensitiveOriginalUsername: 'false'
-
+    {% endif %}
 

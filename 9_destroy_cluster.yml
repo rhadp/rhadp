@@ -11,10 +11,6 @@
       include_role:
         name: roles/gather-cluster-facts
 
-    - name: uninstall the developer platform
-      include_role:
-        name: roles/setup-platform
-
     - name: destroy the openshift cluster
       include_role:
         name: roles/create-cluster
