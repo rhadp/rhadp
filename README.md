@@ -1,6 +1,6 @@
 # Red Hat Automotive Development Platform
 
-This repository contains "Infrastructure as Code (IaC)" for deploying Red Hat OpenShift with a pecific cluster topology to support the 
+This repository contains "Infrastructure as Code (IaC)" for deploying Red Hat OpenShift with a cluster topology, needed to support the 
 the [Red Hat Automotive Development Platform](https://github.com/rhadp/rhadp-platform) (RHADP) — a cloud-native development environment 
 purpose-built for automotive software development.  
 
@@ -10,9 +10,7 @@ and installs a curated set of tools to accelerate the development of automotive 
 ## Platform overview
 
 Upon deployment, the following core components are available out of the box:  
-- OpenShift Dev Spaces – cloud-based developer workspaces  
-- OpenShift GitOps – declarative management of infrastructure and applications  
-- OpenShift Pipelines – CI/CD pipelines for building and testing automotive software  
+- OpenShift Container Platform - in various deplyoment configurations to support different use-cases
 - OpenShift Virtualization - run and manage virtual machines alongside container workloads (optional)
 - cert-manager Operator for OpenShift – for certificate management (via Let’s Encrypt)  
 - Red Hat build of Keycloak – for identity and access management  
