@@ -13,7 +13,7 @@ spec:
     helm:
       valuesObject:
         global:
-          baseDomain: "{{ cluster_base_domain }}"
+          baseDomain: "{{ cluster_name }}.{{ cluster_domain }}"
           metrics:
             enabled: true
         jumpstarter-controller:
@@ -25,7 +25,7 @@ spec:
             authentication:
               jwt:
                 - issuer:
-                    url: "https://keycloak-keycloak.apps.{{ cluster_name }}.{{ cluster_base_domain }}/realms/openshift"
+                    url: "https://keycloak-keycloak.apps.{{ cluster_name }}.{{ cluster_domain }}/realms/openshift"
                     #certificateAuthority: <PEM encoded CA certificates>
                     audiences:
                       - jumpstarter-cli
