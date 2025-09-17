@@ -7,7 +7,7 @@ purpose-built for automotive software development.
 This setup automatically provisions an OpenShift clusters (on AWS, Azure, or GCP) with a hybrid ARM/x86 architecture, 
 and installs a curated set of tools to accelerate the development of automotive applications and the Red Hat In-Vehicle Operating System (RHIVOS).  
 
-## Platform overview
+## Cluster overview
 
 Upon deployment, the following core components are available out of the box:  
 - OpenShift Container Platform - in various deplyoment configurations to support different use-cases
