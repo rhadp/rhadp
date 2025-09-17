@@ -5,9 +5,9 @@ all:
     cloud_provider: "aws" # aws, azure, gcp
 
     # cluster version
-    cluster_version: "4.19.9"
+    cluster_version: "4.19.10"
 
-    # installer architecture, see https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.19.9/
+    # installer architecture, see https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.19.10/
     installer_architecture: "mac-arm64" # mac, mac-arm64, linux, linux-arm64
         
     # cluster topology
@@ -25,8 +25,8 @@ all:
 
     # cluster deployment options
     setup_arm_worker_nodes: False # create a second set of ARM worker nodes if true
-    setup_baremetal_worker_node: False # create a bare-metal ARM worker node (AWS only)
-    setup_virtualization: False # setup cnv operator on bare-metal ARM worker node (AWS only)
+    setup_baremetal_worker_node: False # create a bare-metal ARM worker node (currently AWS only)
+    setup_virtualization: False # setup cnv operator on bare-metal ARM worker node (currently AWS only)
 
     # cluster overrides
     # see 'roles/create-cluster/defaults/main.yml' and 'roles/config-cluster/defaults/main.yml' for available variables
@@ -52,7 +52,7 @@ all:
     #gcp_organization_id: "abc123"
     #gcp_default_region: "us-central1"
     
-    # github secrets for GitHub oauth provider setup
+    # secrets for GitHub oauth provider setup in Keycloak
     #github_endpoint: "https://github.com"
     #github_oauth_client_id: "abc123"
     #github_oauth_client_secret: "abc123"

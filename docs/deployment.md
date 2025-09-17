@@ -32,16 +32,16 @@ pip install -r ~/.ansible/collections/ansible_collections/azure/azcollection/req
 
 ### Inventory setup
 
-Folder `inventory` contains examples of different cluster configurations. Select a configuration example (e.g. inventory/main.yml.example) and modify it to your needs.
+Folder `inventory` contains examples of different cluster configurations. Select a configuration example (e.g. inventory/cluster.yml.example) and modify it to your needs.
 
 Copy the inventory template:
 ```bash
-cp inventory/main.yml.example inventory/main.yml
+cp inventory/cluster.yml.example inventory/cluster.yml
 ```
 
 Edit the inventory file with your specific settings:
 ```bash
-vi inventory/main.yml
+vi inventory/cluster.yml
 ```
 
 ### Cluster bootstrap

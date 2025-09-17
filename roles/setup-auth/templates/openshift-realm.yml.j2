@@ -61,6 +61,36 @@ spec:
         groups:
           - platform-users
 
+      - username: devops
+        email: devops@{{ default_tld }}
+        emailVerified: true
+        enabled: true
+        firstName: "Dev"
+        lastName: "Ops"
+        credentials:
+          - type: password
+            value: "devops"
+            temporary: false
+        realmRoles:
+          - default-roles-openshift
+        groups:
+          - platform-users
+
+      - username: tester
+        email: tester@{{ default_tld }}
+        emailVerified: true
+        enabled: true
+        firstName: "Big"
+        lastName: "Test"
+        credentials:
+          - type: password
+            value: "tester"
+            temporary: false
+        realmRoles:
+          - default-roles-openshift
+        groups:
+          - platform-users
+
     clientScopes:
       - name: acr
         protocol: "openid-connect"
