@@ -39,18 +39,17 @@ Copy the inventory template:
 cp inventory/main.yml.example inventory/main.yml
 ```
 
-Configure the inventory file:
+Edit the inventory file with your specific settings:
 ```bash
-# Edit the inventory file with your specific settings
 vi inventory/main.yml
 ```
 
 ### Cluster bootstrap
 
-To deploy RHADP with all enabled features, run the following playbook:
+To deploy the OpenShift cluster with all enabled features, run the following playbook:
 
 ```bash
-ansible-playbook -i inventory/ 0_bootstrap_all.yml
+ansible-playbook -i inventory/ 0_all.yml
 ```
 **NOTE:** Depending on the cluster topology, this will take up to 90 minutes!
 
@@ -72,5 +71,5 @@ ansible-playbook -i inventory/ stop.yml
 
 In order to destroy the cluster, use the following playbook:
 ```bash
-ansible-playbook -i inventory/ 99_destroy_cluster.yml
+ansible-playbook -i inventory/ 9_destroy_cluster.yml
 ```
