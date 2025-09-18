@@ -30,4 +30,3 @@ This role performs the following tasks:
 
 - [Relevant Documentation](https://docs.example.com)
 - [Additional Resources](https://resources.example.com)
-
