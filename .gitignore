@@ -8,7 +8,7 @@ bin/
 **/.env-*.sh
 **/venv/**
 
-hack/**
+tmp/**
 hack.*
 **hack**.yml
 cheatsheet.md
