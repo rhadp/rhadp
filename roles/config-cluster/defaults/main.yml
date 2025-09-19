@@ -20,10 +20,11 @@ aws_arm_memory: 16384
 
 # bare-metal worker node
 aws_metal_instance_type: "m6g.metal" # 64 vCPU, 256 GiB RAM
+aws_metal_subregion: "b" # a, b, c
+
 aws_metal_ami_id: "ami-02f30107e3441227b" # ARM, us-east-2
 #aws_metal_ami_id: "ami-02f08479c3613ed0e" # ARM, eu-west-1
 #aws_metal_ami_id: "ami-0281dddee0884d9f0" # ARM, eu-central-1
-aws_metal_subregion: "b" # a, b, c
 
 aws_metal_instance_count: 1 # number of replicas per availability zone
 aws_metal_volume_size: 120

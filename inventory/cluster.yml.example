@@ -11,8 +11,8 @@ all:
     installer_architecture: "mac-arm64" # mac, mac-arm64, linux, linux-arm64
         
     # cluster topology
-    cluster_arch: "aarch64" # x86_64, aarch64, multi -> multi is only available on aws & azure !
-    control_plane_arch: "arm64" #  amd64, arm64, -> only relevant when cluster_arch == multi
+    cluster_arch: "x86_64" # x86_64, aarch64, multi -> multi is only available on aws & azure !
+    control_plane_arch: "amd64" #  amd64, arm64, -> only relevant when cluster_arch == multi
     cluster_topology: "default" # default, compact, metal
 
     # cluster configuration
