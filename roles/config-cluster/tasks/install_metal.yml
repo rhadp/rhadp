@@ -58,7 +58,7 @@
   until:
   - r_nodes.resources | length | int == aws_metal_instance_count | int
   delay: 30
-  retries: 100
+  retries: 120
   
 - name: find metal nodes
   k8s_info:

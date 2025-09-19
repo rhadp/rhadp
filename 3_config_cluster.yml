@@ -1,0 +1,20 @@
+- name: re-configure the openshift cluster
+  hosts: localhost
+  vars:
+    # set the following to control the install/uninstall process
+    silent: false
+    become_override: false
+    ACTION: "INSTALL" # INSTALL, UNINSTALL, UPDATE
+
+  tasks:
+    - name: gather cluster facts
+      include_role:
+        name: roles/gather-cluster-facts
+
+    - name: adjust the cluster configuration and topology
+      include_role:
+        name: roles/config-cluster
+        
+    - name: show web console url
+      debug:
+        msg: "Access the OpenShift web-console here: https://console-openshift-console.apps.{{ cluster_name }}.{{ cluster_domain }}"
