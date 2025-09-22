@@ -6,7 +6,7 @@
   when: setup_arm_worker_nodes | bool == true
   import_tasks: install_machineset.yml
 
-# add the bare-metal worker node to the cluster
+# add the bare-metal worker node to the cluster (currently aws only)
 - name: configure the 'metal' cluster topology
   when: setup_baremetal_worker_node | bool == true
   import_tasks: install_metal.yml

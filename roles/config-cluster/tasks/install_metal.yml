@@ -74,5 +74,9 @@
     oc label node {{ item }} rhadp.node-role/builder='true' \
     --overwrite=true \
     --kubeconfig="$HOME/.kube/{{ cluster_fqn }}"
+
+    oc label node {{ item }} rhadp.node-role/metal='true' \
+    --overwrite=true \
+    --kubeconfig="$HOME/.kube/{{ cluster_fqn }}"
   with_items:
     - "{{ found_metal_nodes.resources | map(attribute='metadata.name') | list }}"
