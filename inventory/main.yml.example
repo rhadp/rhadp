@@ -73,8 +73,8 @@ all:
     default_nobody_password: "nobody"
 
     # remove the kubeadmin user and the self-provisioning role
-    remove_kubeadmin: True
-    remove_selfprovisioning: True
+    remove_kubeadmin: true
+    remove_selfprovisioning: true
     
     # keycloak instance variables
     keycloak_db_user: "admin"
