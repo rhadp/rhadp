@@ -1,6 +1,10 @@
 # Implement your post-install deployment tasks here
 # -------------------------------------------------
 
+- name: pause to allow oauth to settle
+  pause:
+    seconds: 300
+
 # remove the kubeadmin user secret and self-provisioner cluster role binding
 
 - name: remove kubeadmin user secret
