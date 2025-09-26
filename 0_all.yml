@@ -31,6 +31,10 @@
       include_role:
         name: roles/setup-auth
 
+    - name: bootstrap the essential devops operators OpenShift GitOps and OpenShift Pipelines
+      include_role:
+        name: roles/setup-devops
+
     - name: show web console url
       debug:
         msg: "Access the OpenShift web-console here: https://console-openshift-console.apps.{{ cluster_name }}.{{ cluster_domain }}"
