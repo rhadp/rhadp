@@ -1,6 +1,6 @@
 # Red Hat Automotive Development Platform
 
-This repository contains "Infrastructure as Code (IaC)" for deploying Red Hat OpenShift with the cluster setup, needed to support the 
+This repository contains "Infrastructure as Code" (IaC) for deploying Red Hat OpenShift with the cluster setup, needed to support the 
 the [Red Hat Automotive Development Platform](https://github.com/rhadp/rhadp-platform) (RHADP) — a cloud-native development environment 
 purpose-built for automotive software development.  
 
