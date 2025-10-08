@@ -8,8 +8,8 @@ It is the TL;DR version. For in-depth documentation, start [here](README.md).
 
 Clone the repository:
 ```bash
-git clone https://github.com/rhadp/rhadp-bootstrap.git
-cd rhadp-bootstrap
+git clone https://github.com/rhadp/rhadp.git
+cd rhadp
 ```
 
 In case you want to make changes to the Ansible playbooks, roles or to any of the configuration templates, `fork` the repository, instead of just cloning it.
