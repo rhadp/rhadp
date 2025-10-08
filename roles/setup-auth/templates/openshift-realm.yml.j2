@@ -47,7 +47,7 @@ spec:
 
     users:
       - username: developer
-        email: developer@{{ default_tld }}
+        email: developer@{{ cluster_toplevel_domain }}
         emailVerified: true
         enabled: true
         firstName: "Dev"
@@ -63,7 +63,7 @@ spec:
           - jumpstarter-users
 
       - username: devops
-        email: devops@{{ default_tld }}
+        email: devops@{{ cluster_toplevel_domain }}
         emailVerified: true
         enabled: true
         firstName: "Dev"
@@ -78,7 +78,7 @@ spec:
           - platform-users
 
       - username: tester
-        email: tester@{{ default_tld }}
+        email: tester@{{ cluster_toplevel_domain }}
         emailVerified: true
         enabled: true
         firstName: "Big"

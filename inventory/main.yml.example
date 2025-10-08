@@ -1,6 +1,10 @@
 all:
   # default values that control the OpenShift cluster deployment
   vars:
+    #
+    # part 1 - cluster configuration
+    #
+
     # cloud provider selection
     cloud_provider: "aws" # aws, azure, gcp
 
@@ -18,6 +22,7 @@ all:
     # cluster configuration
     cluster_name: "rhadp"
     cluster_domain: "rhadp.example.com"
+    cluster_toplevel_domain: "example.com" # top-level domain for e.g. default user emails
     cluster_default_storage_class: "gp3-csi" # "gp3-csi" (aws), "managed-csi" (azure), "standard-csi" (gcp)
     
     # pull secret, see https://console.redhat.com/openshift/create
@@ -30,6 +35,10 @@ all:
 
     # cluster overrides
     # see 'roles/create-cluster/defaults/main.yml' and 'roles/config-cluster/defaults/main.yml' for available variables
+
+    #
+    # part 2 - cloud provider and other credentials
+    #
 
     # aws specific variables
     #aws_access_key_id: "abc123"
@@ -53,15 +62,15 @@ all:
     #gcp_default_region: "us-central1"
     
     # github org to configure
-    github_endpoint: "https://github.com"
-    github_org: "rhadp-examples"
+    #github_endpoint: "https://github.com"
+    #github_org: "rhadp-examples"
     
     # github api token for e.g. setting up a runner
-    github_api_pat: "abc123"
+    #github_api_pat: "abc123"
 
     # github auth secrets
-    github_git_client_id: "abc123"
-    github_git_client_secret: "abc123"
+    #github_git_client_id: "abc123"
+    #github_git_client_secret: "abc123"
     
     # secrets for oauth provider setup in Keycloak
     #github_oauth_client_id: "abc123"
@@ -70,9 +79,31 @@ all:
     # letsencrypt account email
     letsencrypt_email: "hello@example.com"
     
-    # user setup
-    default_tld: "example.com" # top-level domain for default users
+    #
+    # part 3 - platform deployment options
+    #
+  
+    rhadp_deploy_developer_hub: false # deploy the developer hub
+    rhadp_deploy_jumpstart: false # deploy the jumpstart operator
+    rhadp_deploy_builder: false # deploy the builder VMs
 
+    # resource prefix
+    rhadp_prefix: "rhadp" # used in e.g. namespace creation
+
+    # default repo for all the GitOps apps
+    rhadp_gitops_repo_url: "https://github.com/rhadp/rhadp-manifests"
+    rhadp_gitops_repo_revision: "develop"
+
+    # default platform namespaces
+    platform_devspaces_namespace: "{{ rhadp_prefix }}-devspaces"
+    platform_developer_hub_namespace: "{{ rhadp_prefix }}-devhub"
+    platform_builder_namespace: "{{ rhadp_prefix }}-builder"
+    platform_jumpstarter_namespace: "{{ rhadp_prefix }}-jumpstarter"
+
+    #
+    # part 4 - platform internals
+    #
+    
     # default admin user
     default_admin_user: admin
     default_admin_password: openshift
