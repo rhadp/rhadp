@@ -1,23 +1,31 @@
 # Red Hat Automotive Development Platform
 
-This repository contains "Infrastructure as Code" (IaC) for deploying Red Hat OpenShift with the cluster setup, needed to support the 
-the [Red Hat Automotive Development Platform](https://github.com/rhadp/rhadp-platform) (RHADP) — a cloud-native development environment 
-purpose-built for automotive software development.  
+This repository contains "Infrastructure as Code" (IaC) for deploying the complete [Red Hat Automotive Development Platform](https://github.com/rhadp/rhadp) (RHADP) 
+— a cloud-native development environment purpose-built for automotive software development.  
 
-This setup automatically provisions an OpenShift clusters (on AWS, Azure, or GCP) with a hybrid ARM/x86 architecture, 
-and installs a et of tools to accelerate the development of automotive applications and the Red Hat In-Vehicle Operating System (RHIVOS).  
+This setup automatically provisions OpenShift clusters (on AWS, Azure, or GCP) with a hybrid ARM/x86 architecture, 
+and installs a complete set of tools to accelerate the development of automotive applications and the Red Hat In-Vehicle Operating System (RHIVOS).  
 
-## Cluster overview
+## Platform overview
 
-Upon deployment, the following core components are available out of the box:  
-- OpenShift Container Platform - in various deplyoment configurations to support different use-cases
+Upon deployment, the following components are available out of the box:  
+
+### Core Infrastructure
+- OpenShift Container Platform - in various deployment configurations to support different use-cases
 - OpenShift Virtualization - run and manage virtual machines alongside container workloads (optional)
-- cert-manager Operator for OpenShift – for certificate management (via Let’s Encrypt)  
-- Red Hat build of Keycloak – for identity and access management  
+- cert-manager Operator for OpenShift – for certificate management (via Let's Encrypt)  
+- Red Hat build of Keycloak – for identity and access management
+
+### Development Platform
+- OpenShift Dev Spaces – cloud-based developer workspaces  
+- OpenShift GitOps – declarative management of infrastructure and applications  
+- OpenShift Pipelines – CI/CD pipelines for building and testing automotive software  
+- CI/CD pipeline integration - support for OpenShift Pipelines (Tekton), GitHub Actions and GitLab Runners
+- Jumpstarter - for automated testing on real and virtual hardware with cloud-based CI/CD integration. [https://github.com/jumpstarter-dev](https://github.com/jumpstarter-dev)  
 
 ## Getting started
 
-To deploy the cluster, follow the steps described in the [deployment guide](docs/deployment.md).
+To deploy the complete platform, follow the steps described in the [deployment guide](docs/deployment.md).
 
 The complete documentation is [here](docs/README.md).
 
