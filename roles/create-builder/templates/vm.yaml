@@ -1,0 +1,61 @@
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  name: centos-stream10-jade-grasshopper-21
+  namespace: rhadp-builder
+spec:
+  dataVolumeTemplates:
+    - metadata:
+        name: centos-stream10-jade-grasshopper-21-volume
+      spec:
+        sourceRef:
+          kind: DataSource
+          name: centos-stream10
+          namespace: openshift-virtualization-os-images
+        storage:
+          resources:
+            requests:
+              storage: 30Gi
+          storageClassName: gp3-csi
+  instancetype:
+    name: u1.medium
+  preference:
+    name: centos.stream10
+  runStrategy: Always
+  template:
+    metadata:
+      labels:
+        network.kubevirt.io/headlessService: headless
+    spec:
+      accessCredentials:
+        - sshPublicKey:
+            propagationMethod:
+              noCloud: {}
+            source:
+              secret:
+                secretName: builder-secret-public-key
+      architecture: arm64
+      domain:
+        devices:
+          autoattachGraphicsDevice: false
+          autoattachPodInterface: false
+          disks: []
+          interfaces:
+            - masquerade: {}
+              name: default
+      networks:
+        - name: default
+          pod: {}
+      subdomain: headless
+      volumes:
+        - dataVolume:
+            name: centos-stream10-jade-grasshopper-21-volume
+          name: rootdisk
+        - cloudInitNoCloud:
+            userData: |
+              #cloud-config
+              chpasswd:
+                expire: false
+              password: gyjc-m94b-27j9
+              user: centos
+          name: cloudinitdisk

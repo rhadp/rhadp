@@ -1,0 +1,88 @@
+# Implement your pre-install deployment tasks here
+# -------------------------------------------------
+
+- name: find resource group
+  azure.azcollection.azure_rm_resourcegroup_info:
+    name: "{{ azure_resource_group }}"
+    # azure credentials
+    client_id: "{{ azure_client_id }}"
+    secret: "{{ azure_password }}"
+    tenant: "{{ azure_tenant }}"
+    subscription_id: "{{ azure_subscription }}"
+  register: resource_group
+  
+- name: create resource group
+  when: resource_group.resourcegroups | length == 0
+  azure.azcollection.azure_rm_resourcegroup:
+    name: "{{ azure_resource_group }}"
+    location: "{{ azure_default_region }}"
+    state: present
+    # azure credentials
+    client_id: "{{ azure_client_id }}"
+    secret: "{{ azure_password }}"
+    tenant: "{{ azure_tenant }}"
+    subscription_id: "{{ azure_subscription }}"
+  register: resource_group
+
+- name: create virtual network
+  azure.azcollection.azure_rm_virtualnetwork:
+    resource_group: "{{ azure_resource_group }}"
+    name: "{{ vnet_name }}"
+    address_prefixes: "{{ azure_vnet_cidr }}"
+    location: "{{ azure_default_region }}"
+    state: present
+    # azure credentials
+    client_id: "{{ azure_client_id }}"
+    secret: "{{ azure_password }}"
+    tenant: "{{ azure_tenant }}"
+    subscription_id: "{{ azure_subscription }}"
+  register: vnet
+
+- name: create subnet
+  azure.azcollection.azure_rm_subnet:
+    resource_group: "{{ azure_resource_group }}"
+    name: "{{ subnet_name }}"
+    address_prefix: "{{ azure_subnet_cidr }}"
+    virtual_network: "{{ vnet_name }}"
+    state: present
+    # azure credentials
+    client_id: "{{ azure_client_id }}"
+    secret: "{{ azure_password }}"
+    tenant: "{{ azure_tenant }}"
+    subscription_id: "{{ azure_subscription }}"
+  register: subnet
+
+- name: create network security group
+  azure.azcollection.azure_rm_securitygroup:
+    resource_group: "{{ azure_resource_group }}"
+    name: "{{ nsg_name }}"
+    location: "{{ azure_default_region }}"
+    rules:
+      - name: "AllowSSH"
+        protocol: Tcp
+        destination_port_range: "22"
+        access: Allow
+        priority: 100
+        direction: Inbound
+        source_address_prefix: "0.0.0.0/0"
+      - name: "AllowHTTP"
+        protocol: Tcp
+        destination_port_range: "80"
+        access: Allow
+        priority: 110
+        direction: Inbound
+        source_address_prefix: "0.0.0.0/0"
+      - name: "AllowHTTPS"
+        protocol: Tcp
+        destination_port_range: "443"
+        access: Allow
+        priority: 120
+        direction: Inbound
+        source_address_prefix: "0.0.0.0/0"
+    state: present
+    # azure credentials
+    client_id: "{{ azure_client_id }}"
+    secret: "{{ azure_password }}"
+    tenant: "{{ azure_tenant }}"
+    subscription_id: "{{ azure_subscription }}"
+  register: nsg

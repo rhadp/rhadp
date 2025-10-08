@@ -1,0 +1,70 @@
+﻿apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  name: {{ instance_name }}
+  namespace: "{{ platform_builder_namespace }}"
+  finalizers:
+    - kubevirt.io/virtualMachineControllerFinalize
+spec:
+  instancetype:
+    kind: virtualmachineclusterinstancetype
+    name: u1.large
+  preference:
+    kind: virtualmachineclusterpreference
+    name: rhel.10.arm64
+  runStrategy: Always
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        network.kubevirt.io/headlessService: headless
+    spec:
+      accessCredentials:
+        - sshPublicKey:
+            propagationMethod:
+              noCloud: {}
+            source:
+              secret:
+                secretName: builder-secret-public-key
+      architecture: arm64
+      domain:
+        devices:
+          autoattachGraphicsDevice: false
+          autoattachPodInterface: false
+          interfaces:
+            - masquerade: {}
+              name: default
+        machine:
+          type: virt-rhel9.6.0
+        resources: {}
+      networks:
+        - name: default
+          pod: {}
+      subdomain: headless
+      volumes:
+        - dataVolume:
+            name: {{ instance_name }}-volume
+          name: rootdisk
+        - cloudInitNoCloud:
+            userData: |
+              #cloud-config
+              chpasswd:
+                expire: false
+              password: {{ builder_instance_default_user_password }}
+              user: {{ builder_instance_default_user }}
+              runcmd: []
+          name: cloudinitdisk
+  dataVolumeTemplates:
+    - metadata:
+        creationTimestamp: null
+        name: {{ instance_name }}-volume
+      spec:
+        sourceRef:
+          kind: DataSource
+          name: rhel10
+          namespace: openshift-virtualization-os-images
+        storage:
+          resources:
+            requests:
+              storage: 30Gi
+          storageClassName: gp3-csi

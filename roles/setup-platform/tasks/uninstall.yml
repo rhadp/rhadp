@@ -1,0 +1,37 @@
+# Implement your uninstall deployment tasks here
+# -------------------------------------------------
+
+- name: prepare devspaces installation
+  block:
+    - name: uninstall devspaces operator
+      include_role:
+        name: roles/install-operator
+      vars:
+        operator_name: "devspaces"
+        operator_subscription_name: "devspaces"
+        
+    - name: remove devspaces namespace
+      k8s:
+        kind: Namespace
+        name: "{{ platform_devspaces_namespace }}"
+        state: absent
+        apply: yes
+        kubeconfig: "{{ local_kubeconfig_file }}"
+
+- name: prepare developer hub installation
+  when: rhadp_deploy_developer_hub | bool == true
+  block:
+    - name: uninstall developer hub operator
+      include_role:
+        name: roles/install-operator
+      vars:
+        operator_name: "rhdh"
+        operator_subscription_name: "rhdh"
+
+    - name: remove developer hub namespace
+      k8s:
+        kind: Namespace
+        name: "{{ platform_developer_hub_namespace }}"
+        state: absent
+        apply: yes
+        kubeconfig: "{{ local_kubeconfig_file }}"

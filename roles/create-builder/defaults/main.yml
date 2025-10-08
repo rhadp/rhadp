@@ -1,0 +1,9 @@
+---
+# defaults
+builder_runner_type: "github" # github, gitlab or none
+
+builder_instance_type: "cnv" # cnv, aws, azure, gcp
+builder_instance_count: 2
+builder_instance_default_user: "rhel" # cnv -> rhel, aws -> ec2-user, azure -> azureuser
+builder_instance_default_user_password: "rhel"
+builder_ssh_key_dir: "$HOME/.ssh"

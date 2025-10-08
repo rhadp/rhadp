@@ -1,0 +1,8 @@
+---
+# defaults
+
+jumpstarter_helm_repo: "quay.io/jumpstarter-dev/helm"
+jumpstarter_helm_repo_version: "0.7.1"
+
+# qemu exporter count
+jumpstarter_qemu_exporter_count: 2

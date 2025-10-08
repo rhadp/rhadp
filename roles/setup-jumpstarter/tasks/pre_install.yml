@@ -1,0 +1,21 @@
+# Implement your pre-install deployment tasks here
+# -------------------------------------------------
+
+# FIXME: revisit this once we have a better way to get the ingress cert, or jumpstarter supports the default certificate
+
+- name: extract the default ingress cert
+  shell: |
+    oc get secret default-ingress-cert \
+      -n openshift-ingress --kubeconfig="$HOME/.kube/{{ cluster_fqn }}" \
+      -o jsonpath='{.data.tls\.crt}' | base64 -d > /tmp/ingress-cert.crt
+  #register: r_ingress_cert
+
+- name: import the ingress cert
+  slurp:
+    src: /tmp/ingress-cert.crt
+  register: r_ingress_cert
+
+- name: remove the /tmp/ingress-cert.crt file
+  file:
+    path: /tmp/ingress-cert.crt
+    state: absent

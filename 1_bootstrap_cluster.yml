@@ -22,7 +22,19 @@
     - name: adjust the cluster configuration and topology
       include_role:
         name: roles/config-cluster
-        
+
+    - name: configure certificates
+      include_role:
+        name: roles/setup-cert-manager
+
+    - name: configure openshift cluster authentication
+      include_role:
+        name: roles/setup-auth
+
+    - name: bootstrap the essential devops operators OpenShift GitOps and OpenShift Pipelines
+      include_role:
+        name: roles/setup-devops
+
     - name: show web console url
       debug:
         msg: "Access the OpenShift web-console here: https://console-openshift-console.apps.{{ cluster_name }}.{{ cluster_domain }}"

@@ -1,0 +1,6 @@
+# Implement your install deployment tasks here
+# -------------------------------------------------
+
+- name: debug
+  debug:
+    msg: "create aws vm instances {{ instance_name }}"

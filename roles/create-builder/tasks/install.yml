@@ -1,0 +1,49 @@
+# Implement your install deployment tasks here
+# -------------------------------------------------
+
+- name: create default vm secrets
+  k8s:
+    definition: "{{ lookup('template', item ) | from_yaml }}"
+    state: present
+    apply: yes
+    kubeconfig: "{{ local_kubeconfig_file }}"
+  loop:
+    - builder-secret-public-key.yml.j2
+    - builder-secret-private-key.yml.j2
+
+- name: create default vm secrets for devspaces
+  k8s:
+    definition: "{{ lookup('template', item ) | from_yaml }}"
+    state: present
+    apply: yes
+    kubeconfig: "{{ local_kubeconfig_file }}"
+  loop:
+    - devspaces-secret-private-key.yml.j2
+
+- name: create runner vm instances
+  include_role:
+    name: roles/create-vm
+  vars:
+    instance_name: "{{ cluster_label }}-builder-{{ instance_index + 1 }}"
+    instance_base_name: "{{ cluster_label }}-builder"
+    instance_type: "{{ builder_instance_type }}"
+    instance_default_user: "{{ builder_instance_default_user }}"
+    instance_default_user_password: "{{ builder_instance_default_user_password }}"
+    instance_key_name: "{{ cluster_name }}-vm"
+  loop: "{{ range(0, builder_instance_count) | list }}"
+  loop_control:
+    loop_var: instance_index
+
+- name: create runner instances
+  include_role:
+    name: roles/setup-runner
+  vars:
+    instance_name: "{{ cluster_label }}-builder-{{ instance_index + 1 }}"
+    instance_base_name: "{{ cluster_label }}-builder"
+    instance_type: "{{ builder_instance_type }}"
+    instance_default_user: "{{ builder_instance_default_user }}"
+    instance_key_name: "{{ cluster_name }}-vm"
+    runner_type: "{{ builder_runner_type }}"
+  loop: "{{ range(0, builder_instance_count) | list }}"
+  loop_control:
+    loop_var: instance_index

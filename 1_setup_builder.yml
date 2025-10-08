@@ -1,0 +1,20 @@
+- name: create the builder instances
+  hosts: localhost
+  vars:
+    # set the following to control the install/uninstall process
+    silent: false
+    become_override: false
+    ACTION: "INSTALL" # INSTALL, UNINSTALL, UPDATE
+
+  tasks:
+    - name: gather cluster facts
+      include_role:
+        name: roles/gather-cluster-facts
+
+    - name: hacking
+      include_role:
+        name: roles/create-builder
+
+    - name: show web console url
+      debug:
+        msg: "Access the OpenShift web-console here: https://console-openshift-console.apps.{{ cluster_base_domain }}"

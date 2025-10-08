@@ -1,0 +1,23 @@
+kind: Secret
+apiVersion: v1
+metadata:
+  name: github-oauth-config
+  namespace: {{ platform_devspaces_namespace }}
+  labels:
+    app.kubernetes.io/part-of: che.eclipse.org
+    app.kubernetes.io/component: oauth-scm-configuration
+  annotations:
+    che.eclipse.org/oauth-scm-server: github
+{% if github_git_client_id is defined %}
+    che.eclipse.org/scm-server-endpoint: "{{ github_endpoint }}"
+type: Opaque
+stringData:
+  id: "{{ github_git_client_id }}"
+  secret: "{{ github_git_client_secret }}"
+{% else %}
+    che.eclipse.org/scm-server-endpoint: "https://github.com"
+type: Opaque
+stringData:
+  id: "undefined"
+  secret: "undefined"
+{% endif %}

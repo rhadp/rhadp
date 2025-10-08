@@ -1,0 +1,40 @@
+# Do not modify this file.
+# Implement pre-/post-install, install/uninstall tasks in their own files.
+
+- name: running initial tasks
+  include_tasks:
+    file: ./initial.yml
+    apply:
+      become: "{{ become_override | bool }}"
+
+- name: running pre-install tasks
+  include_tasks:
+    file: ./pre_install.yml
+    apply:
+      become: "{{ become_override | bool }}"
+  when: ACTION == "INSTALL"
+
+- name: running install tasks
+  include_tasks:
+    file: ./install.yml
+    apply:
+      become: "{{ become_override | bool }}"
+  when: ACTION == "INSTALL" #or ACTION == "UPDATE"
+
+- name: running post install tasks
+  include_tasks:
+    file: ./post_install.yml
+    apply:
+      become: "{{ become_override | bool }}"
+  when: ACTION == "INSTALL" or ACTION == "UPDATE"
+
+- name: running uninstall tasks
+  include_tasks:
+    file: ./uninstall.yml
+    apply:
+      become: "{{ become_override | bool }}"
+  vars:
+    ansible_user: "{{ instance_default_user }}"
+    ansible_ssh_private_key_file: "{{ public_key_dir }}/{{ instance_key_name }}"
+    ansible_ssh_common_args: "-o StrictHostKeyChecking=no"
+  when: ACTION == "UNINSTALL"

@@ -35,6 +35,15 @@
       include_role:
         name: roles/setup-devops
 
+    - name: bootstrap the core platform components e.g. devspaces, devhub, etc.
+      include_role:
+        name: roles/setup-platform
+
+    - name: deploy the jumpstarter components
+      when: rhadp_deploy_jumpstarter
+      include_role:
+        name: roles/setup-jumpstarter
+        
     - name: show web console url
       debug:
         msg: "Access the OpenShift web-console here: https://console-openshift-console.apps.{{ cluster_name }}.{{ cluster_domain }}"

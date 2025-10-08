@@ -1,0 +1,22 @@
+# Implement your install deployment tasks here
+# -------------------------------------------------
+
+- name: create cnv vm instances
+  when: instance_type == "cnv"
+  include_tasks:
+    file: ./install_cnv.yml
+
+- name: create aws vm instances
+  when: instance_type == "aws"
+  include_tasks:
+    file: ./install_aws.yml
+
+- name: create azure vm instances
+  when: instance_type == "azure"
+  include_tasks:
+    file: ./install_azure.yml
+
+- name: create gcp vm instances
+  when: instance_type == "gcp"
+  include_tasks:
+    file: ./install_gcp.yml

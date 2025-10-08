@@ -1,0 +1,53 @@
+# Implement your pre-install deployment tasks here
+# -------------------------------------------------
+
+- name: update and upgrade all packages
+  when: upgrade_all_packages | bool == true
+  delegate_to: "{{ instance_public_ip }}"
+  become: true
+  dnf:
+    name: "*"
+    state: latest
+    update_cache: yes
+
+- name: install QEMU/KVM packages
+  delegate_to: "{{ instance_public_ip }}"
+  become: true
+  dnf:
+    name: "{{ packages }}"
+    state: present
+  vars:
+    packages:
+      - "@virtualization-hypervisor"
+      - "@virtualization-client"
+      - "@virtualization-platform"
+      - "@virtualization-tools"
+      - qemu-kvm
+      - qemu-img
+      - libvirt
+      #- virt-manager
+      - virt-install
+      - virt-viewer
+      
+- name: install builder packages
+  delegate_to: "{{ instance_public_ip }}"
+  become: true
+  dnf:
+    name: "{{ packages }}"
+    state: present
+  vars:
+    packages:
+      - podman
+      - podman-docker
+      - git
+      - python3.12
+      - python3-pip
+      - buildah
+      - skopeo
+      - jq
+      - curl
+      - dotnet-sdk-9.0
+      - make
+      - cmake
+      - gcc
+      - g++

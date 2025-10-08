@@ -1,0 +1,216 @@
+# Implement your install deployment tasks here
+# -------------------------------------------------
+
+- name: create public ip address
+  azure.azcollection.azure_rm_publicipaddress:
+    resource_group: "{{ azure_resource_group }}"
+    allocation_method: Static
+    name: "{{ instance_name }}-pip"
+    location: "{{ azure_default_region }}"
+    sku: Standard
+    state: present
+    # azure credentials
+    client_id: "{{ azure_client_id }}"
+    secret: "{{ azure_password }}"
+    tenant: "{{ azure_tenant }}"
+    subscription_id: "{{ azure_subscription }}"
+  register: vm_public_ip
+
+- name: create network interface
+  azure.azcollection.azure_rm_networkinterface:
+    resource_group: "{{ azure_resource_group }}"
+    name: "{{ instance_name }}-nic"
+    location: "{{ azure_default_region }}"
+    virtual_network: "{{ vnet_name }}"
+    subnet_name: "{{ subnet_name }}"
+    security_group: "{{ nsg_name }}"
+    ip_configurations:
+      - name: "{{ instance_name }}-ipconfig"
+        public_ip_address_name: "{{ instance_name }}-pip"
+        #primary: true
+    state: present
+    # azure credentials
+    client_id: "{{ azure_client_id }}"
+    secret: "{{ azure_password }}"
+    tenant: "{{ azure_tenant }}"
+    subscription_id: "{{ azure_subscription }}"
+  register: nic
+
+# see https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_virtualmachine_module.html
+- name: create virtual machine
+  azure.azcollection.azure_rm_virtualmachine:
+    name: "{{ instance_name }}"
+    location: "{{ azure_default_region }}"
+    resource_group: "{{ azure_resource_group }}"
+    image: "{{ azure_vm_image }}"
+    vm_size: "{{ azure_vm_instance_type }}"
+    admin_username: "{{ ansible_user }}"
+    ssh_password_enabled: false
+    ssh_public_keys:
+      - path: "/home/{{ instance_default_user }}/.ssh/authorized_keys"
+        key_data: "{{ lookup('file', '{{ public_key_dir }}/{{ instance_key_name }}.pub') }}"
+    network_interface_names:
+      - "{{ instance_name }}-nic"
+    managed_disk_type: "Premium_LRS"
+    os_disk_name: "{{ instance_name }}-os"
+    os_disk_size_gb: "{{ azure_vm_boot_disk_size }}"
+    os_disk_caching: "ReadOnly"
+    data_disks:
+      - lun: 0
+        name: "{{ instance_name }}-data"
+        managed_disk_type: "Premium_LRS"
+        disk_size_gb: "{{ azure_vm_data_disk_size }}"
+        caching: "ReadWrite"
+    state: present
+    # azure credentials
+    client_id: "{{ azure_client_id }}"
+    secret: "{{ azure_password }}"
+    tenant: "{{ azure_tenant }}"
+    subscription_id: "{{ azure_subscription }}"
+  register: vm
+
+- name: get public ip address
+  azure.azcollection.azure_rm_publicipaddress_info:
+    name: "{{ instance_name }}-pip"
+    resource_group: "{{ azure_resource_group }}"
+    # azure credentials
+    client_id: "{{ azure_client_id }}"
+    secret: "{{ azure_password }}"
+    tenant: "{{ azure_tenant }}"
+    subscription_id: "{{ azure_subscription }}"
+  register: pip_info
+
+- name: set public ip fact
+  set_fact:
+    instance_public_ip: "{{ pip_info.publicipaddresses[0].ip_address }}"
+
+#- name: create DNS A record for the instance
+#  azure.azcollection.azure_rm_dnsrecordset:
+#    resource_group: "{{ azure_dns_resource_group | default(azure_resource_group) }}"
+#    relative_name: "{{ instance_dns_name | default(instance_name) }}"
+#    zone_name: "{{ azure_dns_zone_name }}"
+#    record_type: A
+#    records:
+#      - entry: "{{ instance_public_ip }}"
+#    time_to_live: 300
+#    state: present
+#    # azure credentials
+#    client_id: "{{ azure_client_id }}"
+#    secret: "{{ azure_password }}"
+#    tenant: "{{ azure_tenant }}"
+#    subscription_id: "{{ azure_subscription }}"
+#  when: azure_dns_zone_name is defined
+#  register: dns_record
+
+#- name: set DNS FQDN fact
+#  set_fact:
+#    instance_dns_fqdn: "{{ instance_dns_name | default(instance_name) }}.{{ azure_dns_zone_name }}"
+#  when: azure_dns_zone_name is defined
+
+- name: wait for ssh to be available on the new instance
+  wait_for:
+    host: "{{ instance_public_ip }}"
+    port: 22
+    delay: 30
+    timeout: 600
+    state: started
+
+- name: add host key to known_hosts
+  known_hosts:
+    name: "{{ instance_public_ip }}"
+    key: "{{ lookup('pipe', 'ssh-keyscan -H ' + instance_public_ip) }}"
+    state: present
+
+- name: add host key to known_hosts (DNS name)
+  known_hosts:
+    name: "{{ instance_dns_fqdn }}"
+    key: "{{ lookup('pipe', 'ssh-keyscan -H ' + instance_dns_fqdn) }}"
+    state: present
+  when: azure_dns_zone_name is defined
+
+# mount the data volume
+
+- name: mount the data volume
+  delegate_to: "{{ instance_public_ip }}"
+  become: true
+  vars:
+    ansible_user: "{{ instance_default_user }}"
+    ansible_ssh_private_key_file: "{{ public_key_dir }}/{{ instance_key_name }}"
+    ansible_ssh_common_args: "-o StrictHostKeyChecking=no"
+  block:
+    - name: list available block devices
+      delegate_to: "{{ instance_public_ip }}"
+      become: true
+      command: lsblk
+      register: block_devices
+
+    - name: find the additional storage device (data volume)
+      delegate_to: "{{ instance_public_ip }}"
+      become: true
+      shell: |
+        # Find all disk devices
+        ALL_DISKS=$(lsblk -rno NAME,TYPE | grep disk | awk '{print $1}')
+        
+        # For each disk, check if it has any mounted partitions
+        for disk in $ALL_DISKS; do
+          # Check if this disk has any partitions with mountpoints
+          MOUNTED_PARTITIONS=$(lsblk -rno NAME,MOUNTPOINT /dev/$disk | grep -v "^$disk" | awk '$2 != "" {print $1}' | wc -l)
+          
+          # If no mounted partitions, this is likely our data volume
+          if [ "$MOUNTED_PARTITIONS" -eq 0 ]; then
+            echo "$disk"
+            break
+          fi
+        done
+      register: additional_device_result
+
+    - name: set additional device name
+      set_fact:
+        additional_device_name: "{{ additional_device_result.stdout }}"
+      when: additional_device_result.stdout != ""
+
+    - name: create filesystem on additional storage device
+      delegate_to: "{{ instance_public_ip }}"
+      become: true
+      filesystem:
+        fstype: ext4
+        dev: "/dev/{{ additional_device_name }}"
+        force: no
+      when: additional_device_name is defined
+
+    - name: create mount point directory
+      delegate_to: "{{ instance_public_ip }}"
+      become: true
+      file:
+        path: "{{ volume_mount_point }}"
+        state: directory
+        mode: '0755'
+
+    - name: mount additional storage device
+      delegate_to: "{{ instance_public_ip }}"
+      become: true
+      mount:
+        path: "{{ volume_mount_point }}"
+        src: "/dev/{{ additional_device_name }}"
+        fstype: ext4
+        state: mounted
+        opts: defaults
+      when: additional_device_name is defined
+
+    - name: set proper ownership on mount point
+      delegate_to: "{{ instance_public_ip }}"
+      become: true
+      file:
+        path: "{{ volume_mount_point }}"
+        owner: root
+        group: root
+        mode: '0755'
+
+    - name: update fstab for persistent mount
+      delegate_to: "{{ instance_public_ip }}"
+      become: true
+      lineinfile:
+        path: /etc/fstab
+        line: "/dev/{{ additional_device_name }} {{ volume_mount_point }} ext4 defaults 0 2"
+        state: present
+      when: additional_device_name is defined

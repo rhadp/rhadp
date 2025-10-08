@@ -52,8 +52,18 @@ all:
     #gcp_organization_id: "abc123"
     #gcp_default_region: "us-central1"
     
-    # secrets for GitHub oauth provider setup in Keycloak
-    #github_endpoint: "https://github.com"
+    # github org to configure
+    github_endpoint: "https://github.com"
+    github_org: "rhadp-examples"
+    
+    # github api token for e.g. setting up a runner
+    github_api_pat: "abc123"
+
+    # github auth secrets
+    github_git_client_id: "abc123"
+    github_git_client_secret: "abc123"
+    
+    # secrets for oauth provider setup in Keycloak
     #github_oauth_client_id: "abc123"
     #github_oauth_client_secret: "abc123"
 

@@ -1,0 +1,22 @@
+# Implement your uninstall deployment tasks here
+# -------------------------------------------------
+
+- name: uninstall cnv vm instances
+  when: instance_type == "cnv"
+  include_tasks:
+    file: ./uninstall_cnv.yml
+
+- name: uninstall aws vm instances
+  when: instance_type == "aws"
+  include_tasks:
+    file: ./uninstall_aws.yml
+
+- name: uninstall azure vm instances
+  when: instance_type == "azure"
+  include_tasks:
+    file: ./uninstall_azure.yml
+
+- name: uninstall gcp vm instances
+  when: instance_type == "gcp"
+  include_tasks:
+    file: ./uninstall_gcp.yml

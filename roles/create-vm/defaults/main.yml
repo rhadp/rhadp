@@ -1,0 +1,50 @@
+---
+# defaults
+public_key_dir: "{{ lookup('env', 'HOME') }}/.ssh"
+
+# data volume
+volume_mount_point: "/mnt/data"
+
+#------------------------------------------------------------------------------------------------
+# aws defaults
+#------------------------------------------------------------------------------------------------
+
+# VM configuration
+aws_vm_instance_type: "m6g.xlarge" # ARM-based AWS Graviton2, 4 vCPU, 16 GiB RAM
+#aws_vm_image_id: "ami-07b21932ee4cac8c0"  # RHEL10, ARM, us-east-2, see https://access.redhat.com/solutions/15356 how to get the image id
+aws_vm_image_id: "ami-0624b52bb7600a790"  # RHEL10, ARM, eu-central-1
+aws_vm_boot_disk_size: 20
+aws_vm_data_disk_size: 100
+
+# Network configuration
+aws_vnet_cidr: "10.0.0.0/16" # was vpc_cidr
+aws_subnet_cidr: "10.0.1.0/24"
+
+# names for the resources
+security_group_description: "Security group for RHEL ARM instance"
+
+#------------------------------------------------------------------------------------------------
+# azure defaults  
+#------------------------------------------------------------------------------------------------
+
+azure_vm_instance_type: "Standard_D4ps_v5"  # ARM-based Azure VM, 4 vCPU, 16 GiB RAM
+azure_vm_boot_disk_size: 64
+azure_vm_data_disk_size: 100
+
+# Network configuration
+azure_vnet_cidr: "10.0.0.0/16" # was vnet_cidr
+azure_subnet_cidr: "10.0.1.0/24"
+
+# Image configuration for RHEL 10 ARM64
+azure_vm_image:
+  publisher: "RedHat"
+  offer: "rhel-arm64"
+  sku: "10_0-arm64"
+  version: "latest"
+
+# other configuration
+azure_delete_resource_group: false
+
+#------------------------------------------------------------------------------------------------
+# gcp defaults  
+#------------------------------------------------------------------------------------------------
