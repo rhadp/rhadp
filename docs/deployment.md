@@ -36,12 +36,12 @@ Folder `inventory` contains examples of different cluster configurations. Select
 
 Copy the inventory template:
 ```bash
-cp inventory/cluster.yml.example inventory/cluster.yml
+cp inventory/main.yml.example inventory/main.yml
 ```
 
 Edit the inventory file with your specific settings:
 ```bash
-vi inventory/cluster.yml
+vi inventory/main.yml
 ```
 
 ### Cluster bootstrap
