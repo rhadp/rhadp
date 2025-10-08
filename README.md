@@ -1,10 +1,8 @@
 # Red Hat Automotive Development Platform
 
-This repository contains "Infrastructure as Code" (IaC) for deploying the complete [Red Hat Automotive Development Platform](https://github.com/rhadp/rhadp) (RHADP) 
-— a cloud-native development environment purpose-built for automotive software development.  
+This repository provides Infrastructure as Code (IaC) for deploying the complete [Red Hat Automotive Development Platform](https://github.com/rhadp/rhadp) (RHADP) — a comprehensive, cloud-native development environment specifically designed for automotive software development.
 
-This setup provisions OpenShift clusters (on AWS, Azure, or GCP) with a hybrid ARM/x86 architecture, 
-and installs a complete set of tools to accelerate the development of automotive applications and the Red Hat In-Vehicle Operating System (RHIVOS).  
+The platform automatically provisions OpenShift clusters across major cloud providers (AWS, Azure, or GCP) with hybrid ARM/x86 architecture support, and pre-configures an integrated suite of development tools to streamline the creation of automotive applications and the Red Hat In-Vehicle Operating System (RHIVOS).  
 
 ## Platform overview
 
