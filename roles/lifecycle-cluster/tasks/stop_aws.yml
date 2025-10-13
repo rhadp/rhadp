@@ -21,8 +21,8 @@
         wait: true
         instance_ids: "{{ ec2_instances.instances | map(attribute='instance_id') | list }}"
       when: ec2_instances.instances | length > 0
-      async: 600  # Allow up to 10 minutes for each stop operation
-      poll: 0     # Fire and forget - don't wait for completion
+      async: 60  # Allow up to 10 minutes for each stop operation
+      poll: 10     # Fire and forget - don't wait for completion
       register: stop_jobs
 
     - name: wait for all instances to finish stopping

@@ -29,9 +29,9 @@ all:
     pull_secret_file: "inventory/pull-secret.txt" # place the pull secret at this loacation
 
     # cluster deployment options
-    setup_arm_worker_nodes: False # create a second set of ARM worker nodes if true
-    setup_baremetal_worker_node: False # create a bare-metal ARM worker node (currently AWS only)
-    setup_virtualization: False # setup cnv operator on bare-metal ARM worker node (currently AWS only)
+    setup_arm_worker_nodes: false # create a second set of ARM worker nodes if true
+    setup_baremetal_worker_node: false # create a bare-metal ARM worker node (currently AWS only)
+    setup_virtualization: false # setup cnv operator on bare-metal ARM worker node (currently AWS only)
 
     # cluster overrides
     # see 'roles/create-cluster/defaults/main.yml' and 'roles/config-cluster/defaults/main.yml' for available variables
@@ -85,8 +85,7 @@ all:
   
     rhadp_deploy_developer_hub: false # deploy the developer hub
     rhadp_deploy_jumpstart: false # deploy the jumpstart operator
-    rhadp_deploy_builder: false # deploy the builder VMs
-
+    
     # resource prefix
     rhadp_prefix: "rhadp" # used in e.g. namespace creation
 
