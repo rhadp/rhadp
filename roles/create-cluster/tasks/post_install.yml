@@ -3,8 +3,10 @@
 
 # remove cluster specific assets from the local machine
 - name: remove cluster specific assets
+  when: remove_installer | bool == true
   file:
     path: "{{ item }}"
     state: absent
   with_items:
     - "{{ openshift_install_dir }}/.env-{{ cluster_fqn }}.sh"
+    - "{{ openshift_install_dir }}/{{ installer_binary_fqn }}"

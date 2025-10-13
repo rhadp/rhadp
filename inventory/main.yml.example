@@ -121,4 +121,5 @@ all:
     keycloak_db_password: "openshift"
     keycloak_client_secret: "openshiftkc"
 
-    
+    # other settings
+    remove_installer: true

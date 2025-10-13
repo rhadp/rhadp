@@ -15,6 +15,14 @@
       include_role:
         name: roles/config-cluster
         
+    - name: configure certificates
+      include_role:
+        name: roles/setup-cert-manager
+
+    - name: configure cluster authentication
+      include_role:
+        name: roles/setup-auth
+        
     - name: show web console url
       debug:
         msg: "Access the OpenShift web-console here: https://console-openshift-console.apps.{{ cluster_name }}.{{ cluster_domain }}"
