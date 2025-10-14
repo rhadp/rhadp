@@ -4,7 +4,7 @@
 - name: create key pair using key_material obtained using 'file' lookup plugin
   amazon.aws.ec2_key:
     name: "{{ ssh_public_key_name }}"
-    key_material: "{{ lookup('file', '{{ ssh_public_key_path }}') }}"
+    key_material: "{{ lookup('file', ssh_public_key_path) }}"
     aws_access_key: "{{ aws_access_key_id }}"
     aws_secret_key: "{{ aws_secret_access_key }}"
     region: "{{ aws_default_region }}"

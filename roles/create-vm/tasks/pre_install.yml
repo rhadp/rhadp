@@ -15,3 +15,7 @@
   when: instance_type == "gcp"
   include_tasks:
     file: ./pre_install_gcp.yml
+
+- name: pause to give infra some time to settle
+  pause:
+    seconds: 60

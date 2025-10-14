@@ -11,7 +11,7 @@
       include_role:
         name: roles/gather-cluster-facts
 
-    - name: hacking
+    - name: create the builder instances
       include_role:
         name: roles/create-builder
 
