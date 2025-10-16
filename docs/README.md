@@ -770,751 +770,309 @@ This section provides a complete reference for all configuration variables avail
 
 ### 5.1 Cluster Configuration (Part 1)
 
-#### 5.1.1 Cloud Provider Selection
+#### 5.1.1 Cloud Provider and Version
 
-**`cloud_provider`**
-- **Description**: Cloud platform for cluster deployment
-- **Type**: String
-- **Values**: `aws`, `azure`, `gcp`
-- **Default**: `aws`
-- **Required**: Yes
-- **Example**:
-  ```yaml
-  cloud_provider: "aws"
-  ```
+| Parameter | Type | Default | Required | Values/Notes |
+|-----------|------|---------|----------|--------------|
+| `cloud_provider` | String | `aws` | Yes | Cloud platform: `aws`, `azure`, `gcp` |
+| `cluster_version` | String | `4.19.14` | Yes | OpenShift version (must match available version on Red Hat mirror) |
+| `installer_architecture` | String | `mac-arm64` | Yes | Local machine architecture: `mac`, `mac-arm64`, `linux`, `linux-arm64` |
 
-#### 5.1.2 Cluster Version and Architecture
+**Example:**
+```yaml
+cloud_provider: "aws"
+cluster_version: "4.19.14"
+installer_architecture: "linux"  # For x86_64 Linux workstation
+```
 
-**`cluster_version`**
-- **Description**: OpenShift Container Platform version to deploy
-- **Type**: String
-- **Default**: `4.19.14`
-- **Required**: Yes
-- **Notes**: Must match available version on Red Hat mirror
-- **Example**:
-  ```yaml
-  cluster_version: "4.19.14"
-  ```
+#### 5.1.2 Cluster Architecture
 
-**`installer_architecture`**
-- **Description**: Architecture of the local machine running the Ansible playbook
-- **Type**: String
-- **Values**: `mac`, `mac-arm64`, `linux`, `linux-arm64`
-- **Default**: `mac-arm64`
-- **Required**: Yes
-- **Notes**: Determines which openshift-install binary to download
-- **Example**:
-  ```yaml
-  installer_architecture: "linux"  # For x86_64 Linux workstation
-  ```
+| Parameter | Type | Default | Required | Values/Notes |
+|-----------|------|---------|----------|--------------|
+| `cluster_arch` | String | `x86_64` | Yes | Node architecture: `x86_64` (all x86), `aarch64` (all ARM), `multi` (hybrid, AWS/Azure only) |
+| `control_plane_arch` | String | `amd64` | Conditional | Control plane architecture (only when `cluster_arch=multi`): `amd64`, `arm64` |
 
-**`cluster_arch`**
-- **Description**: CPU architecture for cluster nodes
-- **Type**: String
-- **Values**:
-  - `x86_64`: All nodes use x86_64/amd64 architecture
-  - `aarch64`: All nodes use ARM64 architecture
-  - `multi`: Hybrid cluster with both architectures (AWS and Azure only)
-- **Default**: `x86_64`
-- **Required**: Yes
-- **Notes**: Multi-arch support varies by cloud provider
-- **Example**:
-  ```yaml
-  cluster_arch: "multi"  # Hybrid x86 and ARM cluster
-  ```
-
-**`control_plane_arch`**
-- **Description**: Architecture for control plane nodes (only used when `cluster_arch=multi`)
-- **Type**: String
-- **Values**: `amd64`, `arm64`
-- **Default**: `amd64`
-- **Required**: Only when `cluster_arch=multi`
-- **Example**:
-  ```yaml
-  cluster_arch: "multi"
-  control_plane_arch: "amd64"  # Control plane on x86, workers can be ARM
-  ```
+**Example:**
+```yaml
+cluster_arch: "multi"           # Hybrid cluster
+control_plane_arch: "amd64"     # x86 control plane, ARM workers possible
+```
 
 #### 5.1.3 Cluster Topology
 
-**`cluster_topology`**
-- **Description**: Cluster deployment topology pattern
-- **Type**: String
-- **Values**:
-  - `default`: Standard 3 control plane nodes + separate worker nodes
-  - `compact`: Control plane nodes also run workloads (no dedicated workers)
-  - `metal`: Bare-metal node configuration
-- **Default**: `default`
-- **Required**: Yes
-- **Notes**: Compact topology requires control plane nodes to be schedulable
-- **Example**:
-  ```yaml
-  cluster_topology: "default"
-  ```
+| Parameter | Type | Default | Required | Values/Notes |
+|-----------|------|---------|----------|--------------|
+| `cluster_topology` | String | `default` | Yes | Deployment pattern: `default` (3 control + workers), `compact` (control nodes also run workloads), `metal` (bare-metal) |
+
+**Example:**
+```yaml
+cluster_topology: "default"
+```
 
 #### 5.1.4 Cluster Naming and DNS
 
-**`cluster_name`**
-- **Description**: Name identifier for the OpenShift cluster
-- **Type**: String
-- **Default**: `rhadp`
-- **Required**: Yes
-- **Constraints**: Must be DNS-compatible (lowercase alphanumeric and hyphens only, max 253 characters)
-- **Example**:
-  ```yaml
-  cluster_name: "rhadp-prod"
-  ```
+| Parameter | Type | Default | Required | Values/Notes |
+|-----------|------|---------|----------|--------------|
+| `cluster_name` | String | `rhadp` | Yes | Cluster identifier (DNS-compatible: lowercase, alphanumeric, hyphens, max 253 chars) |
+| `cluster_domain` | String | `rhadp.example.com` | Yes | Base FQDN for cluster routes (format: `<route>.apps.<cluster_name>.<cluster_domain>`) |
+| `cluster_toplevel_domain` | String | `example.com` | Yes | Domain for default user emails |
 
-**`cluster_domain`**
-- **Description**: Base domain for cluster DNS names and routes
-- **Type**: String (FQDN)
-- **Default**: `rhadp.example.com`
-- **Required**: Yes
-- **Notes**:
-  - Must be a domain you control or have DNS delegation rights
-  - All cluster routes will use format: `<route>.apps.<cluster_name>.<cluster_domain>`
-- **Example**:
-  ```yaml
-  cluster_domain: "openshift.mycompany.com"
-  # Results in routes like: console-openshift-console.apps.rhadp-prod.openshift.mycompany.com
-  ```
-
-**`cluster_toplevel_domain`**
-- **Description**: Top-level domain for default user email addresses
-- **Type**: String (domain)
-- **Default**: `example.com`
-- **Required**: Yes
-- **Notes**: Used for generating default email addresses in Keycloak and other services
-- **Example**:
-  ```yaml
-  cluster_toplevel_domain: "mycompany.com"
-  # Generates emails like: admin@mycompany.com
-  ```
+**Example:**
+```yaml
+cluster_name: "rhadp-prod"
+cluster_domain: "openshift.mycompany.com"
+cluster_toplevel_domain: "mycompany.com"
+# Results in routes like: console-openshift-console.apps.rhadp-prod.openshift.mycompany.com
+# And emails like: admin@mycompany.com
+```
 
 #### 5.1.5 Storage Configuration
 
-**`cluster_default_storage_class`**
-- **Description**: Default Kubernetes storage class for persistent volume claims
-- **Type**: String
-- **Values**:
-  - AWS: `gp3-csi` (General Purpose SSD v3)
-  - Azure: `managed-csi` (Azure Managed Disks)
-  - GCP: `standard-csi` (Standard Persistent Disk)
-- **Default**: `gp3-csi`
-- **Required**: Yes
-- **Notes**: Must match cloud provider
-- **Example**:
-  ```yaml
-  cloud_provider: "azure"
-  cluster_default_storage_class: "managed-csi"
-  ```
+| Parameter | Type | Default | Required | Values/Notes |
+|-----------|------|---------|----------|--------------|
+| `cluster_default_storage_class` | String | `gp3-csi` | Yes | Default storage class (AWS: `gp3-csi`, Azure: `managed-csi`, GCP: `standard-csi`) |
+
+**Example:**
+```yaml
+cloud_provider: "azure"
+cluster_default_storage_class: "managed-csi"
+```
 
 #### 5.1.6 Pull Secret
 
-**`pull_secret_file`**
-- **Description**: Path to Red Hat pull secret file (JSON format)
-- **Type**: String (file path)
-- **Default**: `inventory/pull-secret.txt`
-- **Required**: Yes
-- **Notes**:
-  - Obtain from https://console.redhat.com/openshift/create
-  - File must contain valid JSON pull secret
-  - Path can be absolute or relative to playbook directory
-- **Example**:
-  ```yaml
-  pull_secret_file: "$HOME/.secrets/openshift-pull-secret.json"
-  ```
+| Parameter | Type | Default | Required | Values/Notes |
+|-----------|------|---------|----------|--------------|
+| `pull_secret_file` | String | `inventory/pull-secret.txt` | Yes | Path to Red Hat pull secret JSON file (obtain from https://console.redhat.com/openshift/create) |
+
+**Example:**
+```yaml
+pull_secret_file: "$HOME/.secrets/openshift-pull-secret.json"
+```
 
 #### 5.1.7 Cluster Deployment Options
 
-**`setup_arm_worker_nodes`**
-- **Description**: Create an additional pool of ARM64 worker nodes
-- **Type**: Boolean
-- **Default**: `false`
-- **Required**: No
-- **Notes**:
-  - Allows hybrid workloads on multi-architecture clusters
-  - Nodes added in addition to primary worker pool
-  - ARM instance types must be available in target cloud region
-- **Example**:
-  ```yaml
-  setup_arm_worker_nodes: true
-  # Results in both x86 and ARM worker nodes available for scheduling
-  ```
+| Parameter | Type | Default | Required | Values/Notes |
+|-----------|------|---------|----------|--------------|
+| `setup_arm_worker_nodes` | Boolean | `false` | No | Create additional ARM64 worker pool (hybrid workloads) |
+| `setup_baremetal_worker_node` | Boolean | `false` | No | Create bare-metal ARM node (AWS m6g.metal only, for virtualization) |
+| `setup_virtualization` | Boolean | `false` | No | Install OpenShift Virtualization (CNV) operator (requires `setup_baremetal_worker_node: true`) |
 
-**`setup_baremetal_worker_node`**
-- **Description**: Create bare-metal ARM worker node for virtualization
-- **Type**: Boolean
-- **Default**: `false`
-- **Required**: No
-- **Notes**:
-  - **Currently AWS only** (uses m6g.metal instances)
-  - Required for OpenShift Virtualization with nested virtualization
-  - Bare-metal instances are significantly more expensive
-- **Example**:
-  ```yaml
-  setup_baremetal_worker_node: true  # For OpenShift Virtualization
-  ```
-
-**`setup_virtualization`**
-- **Description**: Install OpenShift Virtualization (CNV) operator
-- **Type**: Boolean
-- **Default**: `false`
-- **Required**: No
-- **Prerequisites**: Requires `setup_baremetal_worker_node: true`
-- **Notes**:
-  - Enables VM workloads alongside containers
-  - Installs KubeVirt-based virtualization operator
-  - Configures HyperConverged custom resource
-- **Example**:
-  ```yaml
-  setup_baremetal_worker_node: true
-  setup_virtualization: true
-  ```
+**Example:**
+```yaml
+setup_arm_worker_nodes: true
+setup_baremetal_worker_node: true
+setup_virtualization: true
+```
 
 ### 5.2 Cloud Provider Credentials (Part 2)
 
 #### 5.2.1 AWS Variables
 
-**`aws_access_key_id`**
-- **Description**: AWS IAM access key ID for programmatic access
-- **Type**: String
-- **Required**: Yes (when `cloud_provider: aws`)
-- **Security**: Sensitive credential - protect from exposure
-- **Format**: 20-character alphanumeric string starting with `AKIA`
-- **Example**:
-  ```yaml
-  aws_access_key_id: "AKIAIOSFODNN7EXAMPLE"
-  ```
+| Parameter | Type | Default | Required | Values/Notes |
+|-----------|------|---------|----------|--------------|
+| `aws_access_key_id` | String | - | Yes (AWS) | AWS IAM access key (20-char, starts with `AKIA`) - **Sensitive** |
+| `aws_secret_access_key` | String | - | Yes (AWS) | AWS IAM secret key (40-char Base64) - **Sensitive, use Ansible Vault** |
+| `aws_default_region` | String | - | Yes (AWS) | AWS region (e.g., `us-east-2`, `eu-west-1`) - verify instance type availability |
 
-**`aws_secret_access_key`**
-- **Description**: AWS IAM secret access key corresponding to access key ID
-- **Type**: String
-- **Required**: Yes (when `cloud_provider: aws`)
-- **Security**: Sensitive credential - use Ansible Vault or environment variables
-- **Format**: 40-character Base64-encoded string
-- **Example**:
-  ```yaml
-  aws_secret_access_key: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
-  ```
-
-**`aws_default_region`**
-- **Description**: AWS region for cluster deployment
-- **Type**: String
-- **Required**: Yes (when `cloud_provider: aws`)
-- **Notes**:
-  - Must support required instance types (e.g., m8g, m6g for ARM)
-  - Verify quota availability in target region
-- **Common Values**: `us-east-1`, `us-east-2`, `us-west-2`, `eu-west-1`, `eu-central-1`
-- **Example**:
-  ```yaml
-  aws_default_region: "us-east-2"
-  ```
+**Example:**
+```yaml
+aws_access_key_id: "AKIAIOSFODNN7EXAMPLE"
+aws_secret_access_key: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+aws_default_region: "us-east-2"
+```
 
 #### 5.2.2 Azure Variables
 
-**`azure_guid`**
-- **Description**: Azure GUID identifier for deployment
-- **Type**: String (UUID)
-- **Required**: Yes (when `cloud_provider: azure`)
-- **Format**: UUID format (xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx)
-- **Example**:
-  ```yaml
-  azure_guid: "12345678-1234-1234-1234-123456789012"
-  ```
+| Parameter | Type | Default | Required | Values/Notes |
+|-----------|------|---------|----------|--------------|
+| `azure_guid` | String (UUID) | - | Yes (Azure) | Azure GUID identifier |
+| `azure_client_id` | String (UUID) | - | Yes (Azure) | Service principal application/client ID - **Sensitive** |
+| `azure_password` | String | - | Yes (Azure) | Service principal client secret - **Sensitive, use Ansible Vault** |
+| `azure_tenant` | String | - | Yes (Azure) | Azure AD tenant ID (UUID) or domain (e.g., `company.onmicrosoft.com`) |
+| `azure_subscription` | String (UUID) | - | Yes (Azure) | Azure subscription ID |
+| `azure_resource_group` | String | - | Yes (Azure) | Resource group name (created if doesn't exist) |
+| `azure_default_region` | String | - | Yes (Azure) | Azure region (e.g., `eastus`, `westeurope`) - verify ARM VM availability |
 
-**`azure_client_id`**
-- **Description**: Azure service principal application (client) ID
-- **Type**: String (UUID)
-- **Required**: Yes (when `cloud_provider: azure`)
-- **Security**: Sensitive credential
-- **Notes**: Obtain from service principal creation
-- **Example**:
-  ```yaml
-  azure_client_id: "87654321-4321-4321-4321-210987654321"
-  ```
-
-**`azure_password`**
-- **Description**: Azure service principal password (client secret)
-- **Type**: String
-- **Required**: Yes (when `cloud_provider: azure`)
-- **Security**: Sensitive credential - use Ansible Vault
-- **Example**:
-  ```yaml
-  azure_password: "your-service-principal-password"
-  ```
-
-**`azure_tenant`**
-- **Description**: Azure Active Directory tenant ID or domain name
-- **Type**: String (UUID or domain)
-- **Required**: Yes (when `cloud_provider: azure`)
-- **Format**: UUID or domain (e.g., `contoso.onmicrosoft.com`)
-- **Example**:
-  ```yaml
-  azure_tenant: "mycompany.onmicrosoft.com"
-  # OR
-  azure_tenant: "abcdef01-2345-6789-abcd-ef0123456789"
-  ```
-
-**`azure_subscription`**
-- **Description**: Azure subscription ID where resources will be created
-- **Type**: String (UUID)
-- **Required**: Yes (when `cloud_provider: azure`)
-- **Example**:
-  ```yaml
-  azure_subscription: "fedcba98-7654-3210-fedc-ba9876543210"
-  ```
-
-**`azure_resource_group`**
-- **Description**: Azure resource group name for cluster resources
-- **Type**: String
-- **Required**: Yes (when `cloud_provider: azure`)
-- **Notes**: Resource group will be created if it doesn't exist
-- **Example**:
-  ```yaml
-  azure_resource_group: "rhadp-production-rg"
-  ```
-
-**`azure_default_region`**
-- **Description**: Azure region for cluster deployment
-- **Type**: String
-- **Required**: Yes (when `cloud_provider: azure`)
-- **Notes**:
-  - Verify ARM VM availability (Standard_D8ps_v5) in target region
-  - Reference: [Azure Regions List](https://gist.github.com/ausfestivus/04e55c7d80229069bf3bc75870630ec8)
-- **Common Values**: `eastus`, `westus`, `westeurope`, `northeurope`, `southeastasia`
-- **Example**:
-  ```yaml
-  azure_default_region: "eastus"
-  ```
+**Example:**
+```yaml
+azure_guid: "12345678-1234-1234-1234-123456789012"
+azure_client_id: "87654321-4321-4321-4321-210987654321"
+azure_password: "your-service-principal-password"
+azure_tenant: "mycompany.onmicrosoft.com"
+azure_subscription: "fedcba98-7654-3210-fedc-ba9876543210"
+azure_resource_group: "rhadp-production-rg"
+azure_default_region: "eastus"
+```
 
 #### 5.2.3 GCP Variables
 
-**`gcp_service_account_key_file`**
-- **Description**: Path to GCP service account JSON key file
-- **Type**: String (file path)
-- **Required**: Yes (when `cloud_provider: gcp`)
-- **Security**: Sensitive credential file - protect from exposure
-- **Format**: Path to JSON key file
-- **Notes**: Generate from GCP IAM service accounts
-- **Example**:
-  ```yaml
-  gcp_service_account_key_file: "$HOME/.gcp/openshift-sa.json"
-  ```
+| Parameter | Type | Default | Required | Values/Notes |
+|-----------|------|---------|----------|--------------|
+| `gcp_service_account_key_file` | String (path) | - | Yes (GCP) | Path to service account JSON key file - **Sensitive** |
+| `gcp_service_account_email` | String (email) | - | Yes (GCP) | Service account email (format: `name@project.iam.gserviceaccount.com`) |
+| `gcp_project_id` | String | - | Yes (GCP) | GCP project ID (must have billing and APIs enabled) |
+| `gcp_organization_id` | String | - | No | Numeric organization ID (for organization-level resources) |
+| `gcp_default_region` | String | - | Yes (GCP) | GCP region (e.g., `us-central1`, `europe-west1`) - verify T2A availability |
 
-**`gcp_service_account_email`**
-- **Description**: GCP service account email address
-- **Type**: String (email)
-- **Required**: Yes (when `cloud_provider: gcp`)
-- **Format**: `<service-account-name>@<project-id>.iam.gserviceaccount.com`
-- **Example**:
-  ```yaml
-  gcp_service_account_email: "openshift-sa@my-project-123.iam.gserviceaccount.com"
-  ```
-
-**`gcp_project_id`**
-- **Description**: GCP project ID for cluster deployment
-- **Type**: String
-- **Required**: Yes (when `cloud_provider: gcp`)
-- **Notes**: Must have billing enabled and required APIs enabled
-- **Example**:
-  ```yaml
-  gcp_project_id: "my-openshift-project"
-  ```
-
-**`gcp_organization_id`**
-- **Description**: GCP organization ID (if using organization-level resources)
-- **Type**: String
-- **Required**: No
-- **Format**: Numeric organization ID
-- **Example**:
-  ```yaml
-  gcp_organization_id: "123456789012"
-  ```
-
-**`gcp_default_region`**
-- **Description**: GCP region for cluster deployment
-- **Type**: String
-- **Required**: Yes (when `cloud_provider: gcp`)
-- **Notes**:
-  - Verify T2A (ARM) instance availability in target region
-  - Check quota availability
-- **Common Values**: `us-central1`, `us-east1`, `europe-west1`, `asia-southeast1`
-- **Example**:
-  ```yaml
-  gcp_default_region: "us-central1"
-  ```
+**Example:**
+```yaml
+gcp_service_account_key_file: "$HOME/.gcp/openshift-sa.json"
+gcp_service_account_email: "openshift-sa@my-project-123.iam.gserviceaccount.com"
+gcp_project_id: "my-openshift-project"
+gcp_organization_id: "123456789012"
+gcp_default_region: "us-central1"
+```
 
 #### 5.2.4 GitHub Integration
 
-**`github_endpoint`**
-- **Description**: GitHub API endpoint URL
-- **Type**: String (URL)
-- **Default**: `https://github.com`
-- **Required**: No (required for GitHub integration)
-- **Notes**: Use custom URL for GitHub Enterprise Server
-- **Example**:
-  ```yaml
-  github_endpoint: "https://github.example.com"  # For GitHub Enterprise
-  ```
+| Parameter | Type | Default | Required | Values/Notes |
+|-----------|------|---------|----------|--------------|
+| `github_endpoint` | String (URL) | `https://github.com` | No | GitHub API endpoint (use custom URL for GitHub Enterprise) |
+| `github_org` | String | - | No | GitHub organization name for integration |
+| `github_api_pat` | String | - | No | Personal Access Token - **Sensitive, use Ansible Vault** (scopes: `repo`, `admin:org`, `workflow`) |
+| `github_git_client_id` | String | - | No | OAuth app client ID for Git operations - **Sensitive** |
+| `github_git_client_secret` | String | - | No | OAuth app client secret for Git - **Sensitive, use Ansible Vault** |
+| `github_oauth_client_id` | String | - | No | OAuth app client ID for Keycloak SSO - **Sensitive** (separate app from git client) |
+| `github_oauth_client_secret` | String | - | No | OAuth app client secret for Keycloak - **Sensitive, use Ansible Vault** |
 
-**`github_org`**
-- **Description**: GitHub organization name for integration
-- **Type**: String
-- **Required**: No (required for organization-level integration)
-- **Example**:
-  ```yaml
-  github_org: "my-automotive-company"
-  ```
-
-**`github_api_pat`**
-- **Description**: GitHub Personal Access Token for API operations
-- **Type**: String
-- **Required**: No (required for runner setup and API operations)
-- **Security**: Sensitive credential - use Ansible Vault
-- **Scopes Required**:
-  - `repo`: Full control of repositories
-  - `admin:org`: Organization administration
-  - `workflow`: GitHub Actions workflow management
-- **Example**:
-  ```yaml
-  github_api_pat: "ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-  ```
-
-**`github_git_client_id`**
-- **Description**: GitHub OAuth app client ID for Git operations
-- **Type**: String
-- **Required**: No (required for Git OAuth integration)
-- **Security**: Sensitive credential
-- **Notes**: Create OAuth app in GitHub settings
-- **Example**:
-  ```yaml
-  github_git_client_id: "Iv1.xxxxxxxxxxxxxxxx"
-  ```
-
-**`github_git_client_secret`**
-- **Description**: GitHub OAuth app client secret for Git operations
-- **Type**: String
-- **Required**: No (required for Git OAuth integration)
-- **Security**: Sensitive credential - use Ansible Vault
-- **Example**:
-  ```yaml
-  github_git_client_secret: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-  ```
-
-**`github_oauth_client_id`**
-- **Description**: GitHub OAuth app client ID for Keycloak integration
-- **Type**: String
-- **Required**: No (required for Keycloak GitHub authentication)
-- **Security**: Sensitive credential
-- **Notes**: Separate OAuth app from git client for Keycloak SSO
-- **Example**:
-  ```yaml
-  github_oauth_client_id: "Iv1.yyyyyyyyyyyyyyyy"
-  ```
-
-**`github_oauth_client_secret`**
-- **Description**: GitHub OAuth app client secret for Keycloak integration
-- **Type**: String
-- **Required**: No (required for Keycloak GitHub authentication)
-- **Security**: Sensitive credential - use Ansible Vault
-- **Example**:
-  ```yaml
-  github_oauth_client_secret: "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy"
-  ```
+**Example:**
+```yaml
+github_endpoint: "https://github.com"
+github_org: "my-automotive-company"
+github_api_pat: "ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+github_git_client_id: "Iv1.xxxxxxxxxxxxxxxx"
+github_git_client_secret: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+github_oauth_client_id: "Iv1.yyyyyyyyyyyyyyyy"
+github_oauth_client_secret: "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy"
+```
 
 #### 5.2.5 Certificate Management
 
-**`letsencrypt_email`**
-- **Description**: Email address for Let's Encrypt certificate notifications
-- **Type**: String (email)
-- **Default**: `hello@example.com`
-- **Required**: Yes
-- **Notes**:
-  - Used for certificate expiration notices and important updates
-  - Must be a valid, monitored email address
-  - Recommended: Use team/group email, not personal
-- **Example**:
-  ```yaml
-  letsencrypt_email: "devops-team@mycompany.com"
-  ```
+| Parameter | Type | Default | Required | Values/Notes |
+|-----------|------|---------|----------|--------------|
+| `letsencrypt_email` | String (email) | `hello@example.com` | Yes | Email for Let's Encrypt cert notifications (use team/group email) |
+
+**Example:**
+```yaml
+letsencrypt_email: "devops-team@mycompany.com"
+```
 
 ### 5.3 Platform Deployment Options (Part 3)
 
 #### 5.3.1 Feature Flags
 
-**`rhadp_deploy_developer_hub`**
-- **Description**: Deploy Red Hat Developer Hub (portal and service catalog)
-- **Type**: Boolean
-- **Default**: `false`
-- **Required**: No
-- **Notes**:
-  - Provides unified developer portal
-  - Includes API documentation and service catalog
-  - Based on Backstage technology
-- **Example**:
-  ```yaml
-  rhadp_deploy_developer_hub: true
-  ```
+| Parameter | Type | Default | Required | Values/Notes |
+|-----------|------|---------|----------|--------------|
+| `rhadp_deploy_developer_hub` | Boolean | `false` | No | Deploy Red Hat Developer Hub (Backstage-based portal and service catalog) |
+| `rhadp_deploy_jumpstart` | Boolean | `false` | No | Deploy Jumpstarter operator (hardware testing automation with QEMU support) |
 
-**`rhadp_deploy_jumpstart`**
-- **Description**: Deploy Jumpstarter operator for hardware testing automation
-- **Type**: Boolean
-- **Default**: `false`
-- **Required**: No
-- **Notes**:
-  - Enables automated testing on real and virtual hardware
-  - Includes QEMU exporters for virtual device testing
-  - Ideal for automotive ECU and embedded system testing
-- **Example**:
-  ```yaml
-  rhadp_deploy_jumpstart: true
-  ```
+**Example:**
+```yaml
+rhadp_deploy_developer_hub: true
+rhadp_deploy_jumpstart: true
+```
 
 #### 5.3.2 Platform Configuration
 
-**`rhadp_prefix`**
-- **Description**: Prefix for platform namespaces and resource names
-- **Type**: String
-- **Default**: `rhadp`
-- **Required**: Yes
-- **Notes**:
-  - Used to generate namespace names (e.g., `rhadp-devspaces`)
-  - Helps organize and identify platform resources
-  - Should be DNS-compatible (lowercase, alphanumeric, hyphens)
-- **Example**:
-  ```yaml
-  rhadp_prefix: "automotive"
-  # Results in namespaces: automotive-devspaces, automotive-devhub, etc.
-  ```
+| Parameter | Type | Default | Required | Values/Notes |
+|-----------|------|---------|----------|--------------|
+| `rhadp_prefix` | String | `rhadp` | Yes | Prefix for platform namespaces (DNS-compatible: lowercase, alphanumeric, hyphens) |
+| `rhadp_gitops_repo_url` | String (URL) | `https://github.com/rhadp/rhadp-manifests` | Yes | Git repository URL for ArgoCD application manifests |
+| `rhadp_gitops_repo_revision` | String | `develop` | Yes | Git branch, tag, or commit SHA for ArgoCD sync |
 
-**`rhadp_gitops_repo_url`**
-- **Description**: Git repository URL for GitOps application manifests
-- **Type**: String (URL)
-- **Default**: `https://github.com/rhadp/rhadp-manifests`
-- **Required**: Yes
-- **Notes**:
-  - ArgoCD applications will sync from this repository
-  - Repository should contain Kubernetes manifests for platform applications
-  - Can be GitHub, GitLab, Bitbucket, or any Git server
-- **Example**:
-  ```yaml
-  rhadp_gitops_repo_url: "https://github.com/mycompany/automotive-platform-manifests"
-  ```
-
-**`rhadp_gitops_repo_revision`**
-- **Description**: Git branch, tag, or commit for GitOps repository
-- **Type**: String
-- **Default**: `develop`
-- **Required**: Yes
-- **Notes**:
-  - Can be branch name, tag, or commit SHA
-  - ArgoCD will track this revision for application sync
-  - Use `main` or `master` for production, `develop` for development
-- **Example**:
-  ```yaml
-  rhadp_gitops_repo_revision: "main"
-  # OR
-  rhadp_gitops_repo_revision: "v1.0.0"  # Tag
-  # OR
-  rhadp_gitops_repo_revision: "abc123def456"  # Commit SHA
-  ```
+**Example:**
+```yaml
+rhadp_prefix: "automotive"
+rhadp_gitops_repo_url: "https://github.com/mycompany/automotive-platform-manifests"
+rhadp_gitops_repo_revision: "main"  # or "v1.0.0" (tag) or "abc123def456" (commit)
+```
 
 #### 5.3.3 Platform Namespaces
 
-**`platform_devspaces_namespace`**
-- **Description**: Kubernetes namespace for OpenShift Dev Spaces deployment
-- **Type**: String
-- **Default**: `{{ rhadp_prefix }}-devspaces` (e.g., `rhadp-devspaces`)
-- **Required**: Yes
-- **Notes**: Uses Jinja2 templating to incorporate `rhadp_prefix`
-- **Example**:
-  ```yaml
-  platform_devspaces_namespace: "{{ rhadp_prefix }}-devspaces"
-  # With rhadp_prefix="automotive", results in: automotive-devspaces
-  ```
+| Parameter | Type | Default | Required | Values/Notes |
+|-----------|------|---------|----------|--------------|
+| `platform_devspaces_namespace` | String | `{{ rhadp_prefix }}-devspaces` | Yes | Namespace for OpenShift Dev Spaces |
+| `platform_developer_hub_namespace` | String | `{{ rhadp_prefix }}-devhub` | Yes | Namespace for Developer Hub |
+| `platform_builder_namespace` | String | `{{ rhadp_prefix }}-builder` | Yes | Namespace for CI/CD builder infrastructure |
+| `platform_jumpstarter_namespace` | String | `{{ rhadp_prefix }}-jumpstarter` | Yes | Namespace for Jumpstarter operator |
 
-**`platform_developer_hub_namespace`**
-- **Description**: Kubernetes namespace for Developer Hub deployment
-- **Type**: String
-- **Default**: `{{ rhadp_prefix }}-devhub` (e.g., `rhadp-devhub`)
-- **Required**: Yes
-- **Example**:
-  ```yaml
-  platform_developer_hub_namespace: "{{ rhadp_prefix }}-devhub"
-  ```
-
-**`platform_builder_namespace`**
-- **Description**: Kubernetes namespace for builder infrastructure
-- **Type**: String
-- **Default**: `{{ rhadp_prefix }}-builder` (e.g., `rhadp-builder`)
-- **Required**: Yes
-- **Notes**: Used for CI/CD builder instances and runners
-- **Example**:
-  ```yaml
-  platform_builder_namespace: "{{ rhadp_prefix }}-builder"
-  ```
-
-**`platform_jumpstarter_namespace`**
-- **Description**: Kubernetes namespace for Jumpstarter operator
-- **Type**: String
-- **Default**: `{{ rhadp_prefix }}-jumpstarter` (e.g., `rhadp-jumpstarter`)
-- **Required**: Yes
-- **Example**:
-  ```yaml
-  platform_jumpstarter_namespace: "{{ rhadp_prefix }}-jumpstarter"
-  ```
+**Example:**
+```yaml
+# With rhadp_prefix="automotive", these templates result in:
+platform_devspaces_namespace: "{{ rhadp_prefix }}-devspaces"      # automotive-devspaces
+platform_developer_hub_namespace: "{{ rhadp_prefix }}-devhub"    # automotive-devhub
+platform_builder_namespace: "{{ rhadp_prefix }}-builder"         # automotive-builder
+platform_jumpstarter_namespace: "{{ rhadp_prefix }}-jumpstarter" # automotive-jumpstarter
+```
 
 ### 5.4 Platform Internals (Part 4)
 
-#### 5.4.1 Default Admin User
+#### 5.4.1 Admin User Configuration
 
-**`default_admin_user`**
-- **Description**: Default administrator username for htpasswd OAuth provider
-- **Type**: String
-- **Default**: `admin`
-- **Required**: Yes
-- **Security**: Change for production deployments
-- **Example**:
-  ```yaml
-  default_admin_user: "platform-admin"
-  ```
+| Parameter | Type | Default | Required | Values/Notes |
+|-----------|------|---------|----------|--------------|
+| `default_admin_user` | String | `admin` | Yes | Administrator username for htpasswd OAuth - **Change for production** |
+| `default_admin_password` | String | `openshift` | Yes | Administrator password - **MUST CHANGE for production** (12+ chars, mixed case, numbers, symbols) |
+| `default_admin_email` | String (email) | `admin@example.com` | Yes | Administrator email (used in Keycloak and notifications) |
 
-**`default_admin_password`**
-- **Description**: Default administrator password for htpasswd OAuth provider
-- **Type**: String
-- **Default**: `openshift`
-- **Required**: Yes
-- **Security**: **MUST CHANGE for production deployments**
-- **Notes**:
-  - Used for initial cluster access
-  - Change immediately after deployment
-  - Use strong password (12+ characters, mixed case, numbers, symbols)
-- **Example**:
-  ```yaml
-  default_admin_password: "SecureP@ssw0rd123!"
-  ```
+**Example:**
+```yaml
+default_admin_user: "platform-admin"
+default_admin_password: "SecureP@ssw0rd123!"
+default_admin_email: "openshift-admin@mycompany.com"
+```
 
-**`default_admin_email`**
-- **Description**: Default administrator email address
-- **Type**: String (email)
-- **Default**: `admin@example.com`
-- **Required**: Yes
-- **Notes**: Used in Keycloak and notification systems
-- **Example**:
-  ```yaml
-  default_admin_email: "openshift-admin@mycompany.com"
-  ```
+#### 5.4.2 Test User Configuration
 
-#### 5.4.2 Default Users
+| Parameter | Type | Default | Required | Values/Notes |
+|-----------|------|---------|----------|--------------|
+| `default_nobody_user` | String | `nobody` | No | Unprivileged test user account name |
+| `default_nobody_password` | String | `nobody` | No | Unprivileged test user password |
 
-**`default_nobody_user`**
-- **Description**: Unprivileged user account name for testing
-- **Type**: String
-- **Default**: `nobody`
-- **Required**: No
-- **Notes**: Used for testing unprivileged access scenarios
-- **Example**:
-  ```yaml
-  default_nobody_user: "developer"
-  ```
-
-**`default_nobody_password`**
-- **Description**: Unprivileged user password
-- **Type**: String
-- **Default**: `nobody`
-- **Required**: No
-- **Example**:
-  ```yaml
-  default_nobody_password: "DevPassword123"
-  ```
+**Example:**
+```yaml
+default_nobody_user: "developer"
+default_nobody_password: "DevPassword123"
+```
 
 #### 5.4.3 Security Settings
 
-**`remove_kubeadmin`**
-- **Description**: Remove the default kubeadmin user after deployment
-- **Type**: Boolean
-- **Default**: `true`
-- **Required**: No
-- **Security Recommendation**: Set to `true` for production
-- **Notes**:
-  - kubeadmin has cluster-admin privileges
-  - Remove after verifying admin user works
-  - Prevents unauthorized access via default credentials
-- **Example**:
-  ```yaml
-  remove_kubeadmin: true
-  ```
+| Parameter | Type | Default | Required | Values/Notes |
+|-----------|------|---------|----------|--------------|
+| `remove_kubeadmin` | Boolean | `true` | No | Remove default kubeadmin user after deployment - **Recommended for production** |
+| `remove_selfprovisioning` | Boolean | `true` | No | Remove self-provisioning role binding (prevents users creating own namespaces) |
 
-**`remove_selfprovisioning`**
-- **Description**: Remove self-provisioning cluster role binding
-- **Type**: Boolean
-- **Default**: `true`
-- **Required**: No
-- **Security Recommendation**: Set to `true` for controlled environments
-- **Notes**:
-  - Prevents users from creating their own projects/namespaces
-  - Requires admin to create projects for users
-  - Provides better resource governance
-- **Example**:
-  ```yaml
-  remove_selfprovisioning: true
-  ```
+**Example:**
+```yaml
+remove_kubeadmin: true
+remove_selfprovisioning: true
+```
 
 #### 5.4.4 Keycloak Configuration
 
-**`keycloak_db_user`**
-- **Description**: PostgreSQL database username for Keycloak backend
-- **Type**: String
-- **Default**: `admin`
-- **Required**: Yes
-- **Security**: Change for production deployments
-- **Example**:
-  ```yaml
-  keycloak_db_user: "keycloak_admin"
-  ```
+| Parameter | Type | Default | Required | Values/Notes |
+|-----------|------|---------|----------|--------------|
+| `keycloak_db_user` | String | `admin` | Yes | PostgreSQL username for Keycloak - **Change for production** |
+| `keycloak_db_password` | String | `openshift` | Yes | PostgreSQL password for Keycloak - **MUST CHANGE for production, use Ansible Vault** |
+| `keycloak_client_secret` | String | `openshiftkc` | Yes | OAuth client secret for OpenShift-Keycloak integration - **MUST CHANGE** (32+ random chars) |
 
-**`keycloak_db_password`**
-- **Description**: PostgreSQL database password for Keycloak backend
-- **Type**: String
-- **Default**: `openshift`
-- **Required**: Yes
-- **Security**: **MUST CHANGE for production deployments**
-- **Notes**: Use strong password, store in Ansible Vault
-- **Example**:
-  ```yaml
-  keycloak_db_password: "Keycl0akDB_P@ssw0rd!"
-  ```
-
-**`keycloak_client_secret`**
-- **Description**: OAuth client secret for Keycloak OpenShift integration
-- **Type**: String
-- **Default**: `openshiftkc`
-- **Required**: Yes
-- **Security**: **MUST CHANGE for production deployments**
-- **Notes**:
-  - Used for OAuth integration between OpenShift and Keycloak
-  - Should be random string of 32+ characters
-- **Example**:
-  ```yaml
-  keycloak_client_secret: "randomly-generated-secret-string-here"
-  ```
+**Example:**
+```yaml
+keycloak_db_user: "keycloak_admin"
+keycloak_db_password: "Keycl0akDB_P@ssw0rd!"
+keycloak_client_secret: "randomly-generated-secret-string-here"
+```
 
 #### 5.4.5 Other Settings
 
-**`remove_installer`**
-- **Description**: Remove OpenShift installer files after successful deployment
-- **Type**: Boolean
-- **Default**: `true`
-- **Required**: No
-- **Notes**:
-  - Saves disk space by removing installer binaries and metadata
-  - Set to `false` for troubleshooting or re-running specific tasks
-  - Installer files stored in `$HOME/.openshift/` and `bin/` directories
-- **Example**:
-  ```yaml
-  remove_installer: false  # Keep for debugging
-  ```
+| Parameter | Type | Default | Required | Values/Notes |
+|-----------|------|---------|----------|--------------|
+| `remove_installer` | Boolean | `true` | No | Remove installer files after deployment (saves disk space, set `false` for debugging) |
+
+**Example:**
+```yaml
+remove_installer: false  # Keep for debugging
+```
 
 ---
 
@@ -1524,244 +1082,133 @@ RHADP provides a unified deployment experience across AWS, Azure, and GCP. This 
 
 ### 6.1 AWS Deployment
 
-#### 6.1.1 Deployment Characteristics
+#### 6.1.1 Infrastructure Overview
 
-**Infrastructure Pattern:**
-- Installer-provisioned infrastructure (IPI) mode
-- Creates dedicated VPC with public and private subnets across 3 availability zones
-- Network Load Balancers for API and ingress traffic
-- Route 53 DNS entries (if using AWS DNS)
-- S3 bucket for image registry backend storage
+| Component | Configuration |
+|-----------|--------------|
+| **Deployment Mode** | Installer-provisioned infrastructure (IPI) |
+| **Network** | Dedicated VPC with public/private subnets across 3 Availability Zones |
+| **Load Balancers** | Network Load Balancers (NLB) for API (port 6443) and ingress (ports 80, 443) |
+| **DNS** | Route 53 entries (if using AWS DNS) |
+| **Image Registry** | S3 bucket backend storage |
+| **Storage Class** | `gp3-csi` (General Purpose SSD v3) - EBS CSI driver |
 
-**Networking:**
-- VPC CIDR: Automatically assigned (customizable in role defaults)
-- 3 Availability Zones for high availability
-- Public subnets for load balancers and NAT gateways
-- Private subnets for control plane and worker nodes
-- Security groups for fine-grained access control
+#### 6.1.2 Instance Types
 
-**Storage:**
-- Default storage class: `gp3-csi` (General Purpose SSD v3)
-- EBS CSI driver for persistent volumes
-- S3 for image registry
-- Support for io1, io2, st1, sc1 storage classes
+| Node Type | Instance Type | vCPU | Memory | Architecture | Count | Use Case |
+|-----------|---------------|------|--------|--------------|-------|----------|
+| **Control Plane** | `m8g.2xlarge` | 8 | 32 GiB | ARM64 (Graviton4) | 3 | Default control plane |
+| **Worker Nodes** | `m8g.xlarge` | 4 | 16 GiB | ARM64 (Graviton4) | 3 | Default workers |
+| **ARM Workers** (optional) | `m8g.xlarge` | 4 | 16 GiB | ARM64 (Graviton4) | Configurable | When `setup_arm_worker_nodes: true` |
+| **Bare-Metal** (optional) | `m6g.metal` | 64 | 256 GiB | ARM64 (Graviton2) | 1 | Virtualization with nested virt |
 
-#### 6.1.2 Instance Types Used
-
-**Control Plane Nodes (Default):**
-- Instance Type: `m8g.2xlarge` (ARM Graviton4)
-- vCPU: 8
-- Memory: 32 GiB
-- Architecture: ARM64
-- Count: 3 (one per availability zone)
-
-**Worker Nodes (Default):**
-- Instance Type: `m8g.xlarge` (ARM Graviton4)
-- vCPU: 4
-- Memory: 16 GiB
-- Architecture: ARM64
-- Count: 3 (one per availability zone)
-
-**ARM Worker Nodes (Optional, when `setup_arm_worker_nodes: true`):**
-- Instance Type: `m8g.xlarge`
-- vCPU: 4
-- Memory: 16 GiB
-- Architecture: ARM64
-- Count: Configurable (1 per AZ by default)
-
-**Bare-Metal Worker Nodes (Optional, when `setup_baremetal_worker_node: true`):**
-- Instance Type: `m6g.metal`
-- vCPU: 64
-- Memory: 256 GiB
-- Architecture: ARM64
-- Count: 1
-- Use Case: OpenShift Virtualization with nested virtualization
-
-**Override Variables** (in `inventory/main.yml` or role defaults):
+**Override to x86:**
 ```yaml
-# Override in inventory/main.yml to use x86 instances
 aws_control_plane_instance_type: "m6a.2xlarge"  # x86_64
 aws_control_plane_architecture: "amd64"
-aws_worker_instance_type: "m6a.xlarge"  # x86_64
+aws_worker_instance_type: "m6a.xlarge"          # x86_64
 aws_worker_architecture: "amd64"
 ```
 
-#### 6.1.3 Networking Considerations
+#### 6.1.3 Networking
 
-**VPC and Subnets:**
-- Installer creates new VPC by default
-- Can deploy into existing VPC (requires manual configuration)
-- Each subnet spans a single availability zone
-- Private subnets use NAT gateways for outbound internet access
-
-**Load Balancers:**
-- Network Load Balancer (NLB) for Kubernetes API (port 6443)
-- Network Load Balancer (NLB) for ingress/router (ports 80, 443)
-- Cross-zone load balancing enabled
-
-**Security Groups:**
-- Control plane security group: API access, etcd, internal communication
-- Worker node security group: Ingress traffic, internal communication
-- Automatic rules for required OpenShift traffic
+| Component | Details |
+|-----------|---------|
+| **VPC** | Automatically created (customizable CIDR in role defaults) |
+| **Availability Zones** | 3 zones for high availability |
+| **Public Subnets** | Load balancers and NAT gateways |
+| **Private Subnets** | Control plane and worker nodes |
+| **Security Groups** | Automatic rules for OpenShift traffic (API, etcd, ingress, internal) |
+| **Outbound Access** | NAT gateways for private subnets |
+| **Load Balancing** | Cross-zone load balancing enabled |
 
 #### 6.1.4 Storage Options
 
-**Supported EBS Volume Types:**
-- `gp3`: General Purpose SSD (default) - cost-effective, good performance
-- `gp2`: General Purpose SSD (legacy) - older generation
-- `io1`, `io2`: Provisioned IOPS SSD - high performance workloads
-- `st1`: Throughput Optimized HDD - big data, data warehouses
-- `sc1`: Cold HDD - infrequently accessed data
+| EBS Volume Type | Description | Use Case |
+|----------------|-------------|----------|
+| **gp3** (default) | General Purpose SSD v3 | Cost-effective, good performance |
+| **gp2** | General Purpose SSD (legacy) | Older generation |
+| **io1, io2** | Provisioned IOPS SSD | High performance workloads |
+| **st1** | Throughput Optimized HDD | Big data, data warehouses |
+| **sc1** | Cold HDD | Infrequently accessed data |
 
-**Configuration in Role Defaults:**
-See `roles/config-cluster/defaults/main.yml` for ARM worker and bare-metal node volume settings.
+**Configuration:** See `roles/config-cluster/defaults/main.yml` for volume type settings.
 
 #### 6.1.5 AWS-Specific Features
 
-**Graviton ARM Instances:**
-- Cost savings up to 20% vs x86 instances
-- Better performance-per-watt for many workloads
-- Supported instance families: m6g, m7g, m8g, c6g, c7g, r6g, r7g
-
-**Bare-Metal for Virtualization:**
-- m6g.metal instances provide nested virtualization
-- Required for OpenShift Virtualization (CNV)
-- Access to physical CPU features
-
-**Regional Availability:**
-- Verify Graviton instance availability in target region
-- Not all instance types available in all regions
-- Check AWS documentation for regional availability
+| Feature | Benefits | Notes |
+|---------|----------|-------|
+| **Graviton ARM** | 20% cost savings, better performance-per-watt | Instance families: m6g, m7g, m8g, c6g, c7g, r6g, r7g |
+| **Bare-Metal (m6g.metal)** | Nested virtualization, physical CPU features | Required for OpenShift Virtualization (CNV) |
+| **Regional Availability** | Multiple regions worldwide | Verify Graviton availability in target region |
 
 #### 6.1.6 Reference Documentation
 
-**Official Red Hat Documentation:**
 - [Installing on AWS - OpenShift 4.19](https://docs.redhat.com/en/documentation/openshift_container_platform/4.19/html/installing_on_aws/index)
-- [Preparing to install on AWS](https://docs.redhat.com/en/documentation/openshift_container_platform/4.19/html/installing_on_aws/preparing-to-install-on-aws)
-- [Installing a cluster on AWS with customizations](https://docs.redhat.com/en/documentation/openshift_container_platform/4.19/html/installing_on_aws/installing-aws-customizations)
-
-**AWS Documentation:**
 - [AWS Regions and Availability Zones](https://aws.amazon.com/about-aws/global-infrastructure/regions_az/)
 - [Amazon EC2 Instance Types](https://aws.amazon.com/ec2/instance-types/)
 - [AWS Graviton Processors](https://aws.amazon.com/ec2/graviton/)
 
 ### 6.2 Azure Deployment
 
-#### 6.2.1 Deployment Characteristics
+#### 6.2.1 Infrastructure Overview
 
-**Infrastructure Pattern:**
-- Installer-provisioned infrastructure (IPI) mode
-- Creates resource group with all cluster resources
-- Virtual Network (VNet) with subnets across 3 availability zones
-- Azure Load Balancers for API and ingress traffic
-- Azure DNS zones (if using Azure DNS)
-- Azure Storage Account for image registry backend
+| Component | Configuration |
+|-----------|--------------|
+| **Deployment Mode** | Installer-provisioned infrastructure (IPI) |
+| **Network** | Virtual Network (VNet) with subnets across 3 Availability Zones |
+| **Load Balancers** | Azure Load Balancers (Standard SKU) for API and ingress traffic |
+| **DNS** | Azure DNS zones (if using Azure DNS) |
+| **Image Registry** | Azure Blob Storage backend |
+| **Storage Class** | `managed-csi` (Azure Managed Disks) - Azure Disk CSI driver |
 
-**Networking:**
-- VNet created in specified region
-- 3 Availability Zones (where supported)
-- Public and private subnets
-- Network Security Groups (NSGs) for access control
-- Azure Load Balancer for ingress and API traffic
+#### 6.2.2 Instance Types
 
-**Storage:**
-- Default storage class: `managed-csi` (Azure Managed Disks)
-- Azure Disk CSI driver for persistent volumes
-- Azure Blob Storage for image registry
-- Support for Premium_LRS, StandardSSD_LRS, Standard_LRS disk types
+| Node Type | Instance Type | vCPU | Memory | Architecture | Count | Use Case |
+|-----------|---------------|------|--------|--------------|-------|----------|
+| **Control Plane** | `Standard_D8s_v5` | 8 | 32 GiB | x86_64 (AMD) | 3 | Default control plane |
+| **Worker Nodes** | `Standard_D8s_v5` | 8 | 32 GiB | x86_64 (AMD) | 3 | Default workers |
+| **ARM Workers** (optional) | `Standard_D8ps_v5` | 8 | 32 GiB | ARM64 (Ampere Altra) | Configurable | When `setup_arm_worker_nodes: true` |
 
-#### 6.2.2 Instance Types Used
-
-**Control Plane Nodes (Default):**
-- Instance Type: `Standard_D8s_v5`
-- vCPU: 8
-- Memory: 32 GiB
-- Architecture: x86_64 (AMD)
-- Storage: Premium SSD
-- Count: 3 (one per availability zone)
-
-**Worker Nodes (Default):**
-- Instance Type: `Standard_D8s_v5`
-- vCPU: 8
-- Memory: 32 GiB
-- Architecture: x86_64 (AMD)
-- Storage: Premium SSD
-- Count: 3 (one per availability zone)
-
-**ARM Worker Nodes (Optional, when `setup_arm_worker_nodes: true`):**
-- Instance Type: `Standard_D8ps_v5` (Ampere Altra ARM)
-- vCPU: 8
-- Memory: 32 GiB
-- Architecture: ARM64
-- Storage: Premium SSD
-- Count: Configurable (1 per AZ by default)
-
-**Override Variables:**
+**Override for larger instances:**
 ```yaml
-# Override in inventory/main.yml
 azure_control_plane_instance_type: "Standard_D16s_v5"  # Larger control plane
-azure_worker_instance_type: "Standard_D16s_v5"  # Larger workers
-azure_arm_instance_type: "Standard_D16ps_v5"  # Larger ARM workers
+azure_worker_instance_type: "Standard_D16s_v5"         # Larger workers
+azure_arm_instance_type: "Standard_D16ps_v5"           # Larger ARM workers
 ```
 
-#### 6.2.3 Networking Considerations
+#### 6.2.3 Networking
 
-**Virtual Network:**
-- Installer creates new VNet by default
-- Can deploy into existing VNet (requires manual configuration)
-- VNet address space: Automatically assigned
-- Subnets for control plane and worker nodes
-
-**Load Balancers:**
-- Azure Load Balancer (Standard SKU) for Kubernetes API
-- Azure Load Balancer (Standard SKU) for ingress/router
-- Public IP addresses for external access
-
-**Network Security Groups:**
-- Control plane NSG: API access, internal communication
-- Worker node NSG: Ingress traffic, internal communication
-- Default rules for OpenShift traffic
-
-**Outbound Connectivity:**
-- Azure retiring default outbound access (Sept 2025)
-- OpenShift configures explicit outbound connectivity
-- No configuration changes required for RHADP
+| Component | Details |
+|-----------|---------|
+| **VNet** | Automatically created (customizable address space in role defaults) |
+| **Availability Zones** | 3 zones (where supported by region) |
+| **Subnets** | Separate subnets for control plane and worker nodes |
+| **Network Security Groups** | Automatic rules for OpenShift traffic (API, ingress, internal) |
+| **Load Balancers** | Standard SKU for API and ingress with public IPs |
+| **Outbound Connectivity** | Explicit outbound connectivity (Azure retiring default Sept 2025) |
 
 #### 6.2.4 Storage Options
 
-**Supported Managed Disk Types:**
-- `Premium_LRS`: Premium SSD (default) - high performance, low latency
-- `StandardSSD_LRS`: Standard SSD - cost-effective, moderate performance
-- `Standard_LRS`: Standard HDD - lowest cost, infrequent access
+| Managed Disk Type | Description | Use Case |
+|------------------|-------------|----------|
+| **Premium_LRS** (default) | Premium SSD | High performance, low latency |
+| **StandardSSD_LRS** | Standard SSD | Cost-effective, moderate performance |
+| **Standard_LRS** | Standard HDD | Lowest cost, infrequent access |
 
-**Configuration in Role Defaults:**
-See `roles/create-cluster/defaults/main.yml` and `roles/config-cluster/defaults/main.yml` for volume type settings.
+**Configuration:** See `roles/create-cluster/defaults/main.yml` and `roles/config-cluster/defaults/main.yml`.
 
 #### 6.2.5 Azure-Specific Features
 
-**Ampere Altra ARM Instances:**
-- Dpsv5 and Dplsv5 series VMs
-- ARM64 architecture for cost and performance benefits
-- Available in select Azure regions
-
-**Azure File Cross-Subscription Support (OCP 4.19):**
-- Mount Azure file shares from different subscription
-- Subscriptions must be in same tenant
-- Uses Azure File CSI driver
-
-**Instance Type Series:**
-- **Dv5 Series**: General purpose, x86_64 (Intel/AMD)
-- **Dpsv5 Series**: General purpose, ARM64 (Ampere Altra)
-- **Dasv5 Series**: AMD-optimized, x86_64
-- **Ev5 Series**: Memory-optimized, x86_64
+| Feature | Benefits | Notes |
+|---------|----------|-------|
+| **Ampere Altra ARM (Dpsv5)** | Cost and performance benefits | Available in select regions |
+| **Azure File Cross-Subscription** | Mount file shares from different subscription | Subscriptions must be in same tenant (OCP 4.19+) |
+| **Instance Series** | Multiple optimized options | Dv5 (general x86), Dpsv5 (ARM), Dasv5 (AMD), Ev5 (memory) |
 
 #### 6.2.6 Reference Documentation
 
-**Official Red Hat Documentation:**
 - [Installing on Azure - OpenShift 4.19](https://docs.redhat.com/en/documentation/openshift_container_platform/4.19/html-single/installing_on_azure/index)
-- [Preparing to install on Azure](https://docs.redhat.com/en/documentation/openshift_container_platform/4.19/html-single/installing_on_azure/index#preparing-to-install-on-azure)
-
-**Azure Documentation:**
 - [Azure Virtual Machine Sizes](https://learn.microsoft.com/en-us/azure/virtual-machines/sizes)
 - [Dv5 and Dsv5 Series](https://learn.microsoft.com/en-us/azure/virtual-machines/sizes/general-purpose/dv5-series)
 - [Dpsv5 and Dplsv5 Series (ARM)](https://learn.microsoft.com/en-us/azure/virtual-machines/sizes/general-purpose/dpsv5-series)
@@ -1769,122 +1216,66 @@ See `roles/create-cluster/defaults/main.yml` and `roles/config-cluster/defaults/
 
 ### 6.3 GCP Deployment
 
-#### 6.3.1 Deployment Characteristics
+#### 6.3.1 Infrastructure Overview
 
-**Infrastructure Pattern:**
-- Installer-provisioned infrastructure (IPI) mode
-- Creates resources in specified GCP project
-- VPC network with subnets across 3 zones
-- Cloud Load Balancing for API and ingress traffic
-- Cloud DNS managed zones (if using Cloud DNS)
-- Cloud Storage bucket for image registry backend
+| Component | Configuration |
+|-----------|--------------|
+| **Deployment Mode** | Installer-provisioned infrastructure (IPI) |
+| **Network** | Custom VPC network with regional subnets across 3 Zones |
+| **Load Balancers** | TCP LB for API (port 6443), HTTP(S) LB for ingress (ports 80, 443) |
+| **DNS** | Cloud DNS managed zones (if using Cloud DNS) |
+| **Image Registry** | Cloud Storage bucket backend |
+| **Storage Class** | `standard-csi` (Standard Persistent Disk) - GCE Persistent Disk CSI driver |
 
-**Networking:**
-- Custom VPC network created by installer
-- 3 Zones (within selected region) for high availability
-- Subnets for control plane and worker nodes
-- Cloud NAT for outbound internet access from private instances
-- Firewall rules for access control
+#### 6.3.2 Instance Types
 
-**Storage:**
-- Default storage class: `standard-csi` (Standard Persistent Disk)
-- Google Compute Engine Persistent Disk CSI driver
-- Cloud Storage for image registry
-- Support for pd-standard, pd-balanced, pd-ssd, pd-extreme
+| Node Type | Instance Type | vCPU | Memory | Architecture | Count | Use Case |
+|-----------|---------------|------|--------|--------------|-------|----------|
+| **Control Plane** | `t2a-standard-8` | 8 | 32 GiB | ARM64 (Ampere Altra) | 3 | Default control plane |
+| **Worker Nodes** | `t2a-standard-8` | 8 | 32 GiB | ARM64 (Ampere Altra) | 3 | Default workers |
+| **ARM Workers** (optional) | `t2a-standard-8` | 8 | 32 GiB | ARM64 (Ampere Altra) | Configurable | When `setup_arm_worker_nodes: true` |
 
-#### 6.3.2 Instance Types Used
-
-**Control Plane Nodes (Default):**
-- Instance Type: `t2a-standard-8` (ARM Ampere Altra)
-- vCPU: 8
-- Memory: 32 GiB
-- Architecture: ARM64
-- Count: 3 (one per zone)
-
-**Worker Nodes (Default):**
-- Instance Type: `t2a-standard-8` (ARM Ampere Altra)
-- vCPU: 8
-- Memory: 32 GiB
-- Architecture: ARM64
-- Count: 3 (one per zone)
-
-**ARM Worker Nodes (Optional, when `setup_arm_worker_nodes: true`):**
-- Instance Type: `t2a-standard-8`
-- vCPU: 8
-- Memory: 32 GiB
-- Architecture: ARM64
-- Count: Configurable (2 per zone by default)
-
-**Override Variables:**
+**Override to x86:**
 ```yaml
-# Override in inventory/main.yml to use x86 instances
 gcp_control_plane_instance_type: "n2-standard-8"  # x86_64
 gcp_control_plane_architecture: "amd64"
-gcp_worker_instance_type: "n2-standard-8"  # x86_64
+gcp_worker_instance_type: "n2-standard-8"         # x86_64
 gcp_worker_architecture: "amd64"
 ```
 
-#### 6.3.3 Networking Considerations
+#### 6.3.3 Networking
 
-**VPC Network:**
-- Custom mode VPC created by installer
-- Regional subnets (span all zones in region)
-- Automatic firewall rules for OpenShift traffic
-
-**Load Balancers:**
-- TCP Load Balancer for Kubernetes API (port 6443)
-- HTTP(S) Load Balancer for ingress/router (ports 80, 443)
-- Global load balancing capabilities
-
-**Firewall Rules:**
-- Control plane firewall: API access, internal communication
-- Worker node firewall: Ingress traffic, internal communication
-- Health check firewall rules
-
-**Cloud NAT:**
-- Provides outbound internet access for private instances
-- No public IPs required for worker nodes
-- NAT gateway per region
+| Component | Details |
+|-----------|---------|
+| **VPC** | Custom mode VPC created by installer |
+| **Zones** | 3 zones within selected region for high availability |
+| **Subnets** | Regional subnets (span all zones in region) |
+| **Firewall Rules** | Automatic rules for OpenShift traffic (API, ingress, internal, health checks) |
+| **Load Balancers** | TCP LB for API, HTTP(S) LB for ingress with global capabilities |
+| **Cloud NAT** | Outbound internet access for private instances (no public IPs needed) |
 
 #### 6.3.4 Storage Options
 
-**Supported Persistent Disk Types:**
-- `pd-standard`: Standard persistent disks (HDD) - cost-effective
-- `pd-balanced`: Balanced persistent disks (SSD) - good balance of performance and cost
-- `pd-ssd`: SSD persistent disks (default for many workloads) - high performance
-- `pd-extreme`: Extreme persistent disks - highest performance, customizable IOPS
+| Persistent Disk Type | Description | Use Case |
+|---------------------|-------------|----------|
+| **pd-standard** | Standard persistent disks (HDD) | Cost-effective |
+| **pd-balanced** | Balanced persistent disks (SSD) | Good balance of performance and cost |
+| **pd-ssd** | SSD persistent disks | High performance |
+| **pd-extreme** | Extreme persistent disks | Highest performance, customizable IOPS |
 
-**Configuration in Role Defaults:**
-See `roles/config-cluster/defaults/main.yml` for ARM worker volume settings (`gcp_arm_volume_type`).
+**Configuration:** See `roles/config-cluster/defaults/main.yml` for volume type settings.
 
 #### 6.3.5 GCP-Specific Features
 
-**T2A Ampere Altra ARM Instances:**
-- Cost-effective ARM64 compute
-- T2A instance family (t2a-standard-1 through t2a-standard-48)
-- Available in select GCP regions
-- Up to 30% price-performance improvement vs x86
-
-**Confidential Computing (OCP 4.19):**
-- AMD SEV (Secure Encrypted Virtualization) support
-- Intel TDX (Trust Domain Extensions) support
-- Confidential VMs with encrypted memory
-- N2D and C2D instance families for AMD SEV
-
-**Machine Type Families:**
-- **T2A Series**: ARM64 (Ampere Altra) - cost-effective general purpose
-- **N2 Series**: x86_64 (Intel Cascade Lake/Ice Lake) - balanced performance
-- **N2D Series**: x86_64 (AMD EPYC) - high performance
-- **C2 Series**: x86_64 (Intel Cascade Lake) - compute-optimized
-- **E2 Series**: x86_64 (Intel/AMD) - cost-optimized
+| Feature | Benefits | Notes |
+|---------|----------|-------|
+| **T2A Ampere Altra ARM** | 30% price-performance improvement vs x86 | T2A instance family (t2a-standard-1 to t2a-standard-48) |
+| **Confidential Computing** | AMD SEV, Intel TDX support | Encrypted memory VMs (N2D, C2D instances, OCP 4.19+) |
+| **Machine Type Families** | Multiple optimized options | T2A (ARM), N2 (Intel), N2D (AMD), C2 (compute), E2 (cost) |
 
 #### 6.3.6 Reference Documentation
 
-**Official Red Hat Documentation:**
 - [Installing on GCP - OpenShift 4.19](https://docs.redhat.com/en/documentation/openshift_container_platform/4.19/html-single/installing_on_gcp/index)
-- [Preparing to install on GCP](https://docs.redhat.com/en/documentation/openshift_container_platform/4.19/html-single/installing_on_gcp/index#preparing-to-install-on-gcp)
-
-**GCP Documentation:**
 - [Google Compute Engine Machine Types](https://cloud.google.com/compute/docs/machine-types)
 - [Tau T2A Machine Series (ARM)](https://cloud.google.com/compute/docs/general-purpose-machines#t2a_machines)
 - [GCP Regions and Zones](https://cloud.google.com/compute/docs/regions-zones)
