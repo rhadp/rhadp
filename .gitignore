@@ -12,3 +12,7 @@ tmp/**
 hack.*
 **hack**.yml
 cheatsheet.md
+
+# AI foo
+.claude/**
+.cursor/**
