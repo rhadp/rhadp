@@ -1,0 +1,27 @@
+- name: build_sdwire
+  become: true
+  delegate_to: "{{ exporter_host }}"
+  block:
+    - name: remove the install dir
+      become: true
+      ansible.builtin.file:
+        path: "{{ work_dir }}/sdwirec"
+        state: absent
+
+    - name: clone repo
+      become: true
+      ansible.builtin.git:
+        repo: "{{ sdwire_repo }}"
+        version: "{{ sdwire_branch }}"
+        dest: "{{ work_dir }}/sdwirec"
+        single_branch: yes
+
+    - name: build 'badgerd-sdwirec'
+      become: true
+      shell: |
+        mkdir build && cd build
+        cmake ..
+        make
+        sudo make install
+      args:
+        chdir: "{{ work_dir }}/sdwirec/sdwirec-sw"

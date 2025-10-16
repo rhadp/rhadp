@@ -1,0 +1,28 @@
+---
+# defaults
+
+# what drivers/extensions to install
+install_sdwire: false
+install_ykush: false
+
+# DuT infrastructure
+dut_usb_port: 1
+dut_serial_device: bdgrd_sdwirec_437
+dut_sdcard_mount: "/dev/sda"
+
+# where to store stuff needed for the builds
+work_dir: "/home/workspace"
+exporter_dir: "exporter"
+
+# jumpstarter container
+container_image: "quay.io/jumpstarter-dev/jumpstarter:latest"
+
+# driver repos
+ykush_repo: "https://github.com/Yepkit/ykush"
+ykush_branch: "release"
+
+sdwire_repo: "https://github.com/Badger-Embedded/badgerd-sdwirec.git"
+sdwire_branch: "main"
+
+# oc client
+oc_client_url: "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/{{ cluster_version }}/openshift-client-linux-arm64.tar.gz"

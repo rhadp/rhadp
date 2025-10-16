@@ -1,0 +1,28 @@
+# Implement your uninstall deployment tasks here
+# -------------------------------------------------
+
+- name: update
+  become: true
+  delegate_to: "{{ exporter_host }}"
+  block:
+    - name: stop the systemd services, kill the pods
+      become: true
+      shell: |
+        systemctl stop outpost-{{ item }}-exporter.service
+      with_items:
+        - "default"
+        #- "rpi4"
+        #- "ti"
+
+    - name: pull the latest jumpstarter container
+      become: true
+      shell: podman pull {{ container_image }}
+
+    - name: start the systemd services
+      become: true
+      shell: |
+        systemctl start outpost-{{ item }}-exporter.service
+      with_items:
+        - "default"
+        #- "rpi4"
+        #- "ti"

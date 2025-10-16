@@ -1,0 +1,14 @@
+apiVersion: jumpstarter.dev/v1alpha1
+kind: ClientConfig
+metadata:
+  namespace: outpost
+  name: {{ platform_jumpstarter_namespace }}
+endpoint: grpc.{{ cluster_base_domain }}:443
+tls:
+  ca: ''
+  insecure: true
+token: {{ exporter_config.token }}
+grpcOptions: {}
+drivers:
+  allow: []
+  unsafe: true

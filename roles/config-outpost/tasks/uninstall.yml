@@ -1,0 +1,33 @@
+# Implement your uninstall deployment tasks here
+# -------------------------------------------------
+
+- name: uninstall
+  become: true
+  delegate_to: "{{ exporter_host }}"
+  block:
+    - name: disable the systemd services
+      become: true
+      shell: |
+        systemctl stop outpost-{{ item }}-exporter.service
+        systemctl disable outpost-{{ item }}-exporter.service
+      with_items:
+        - "default"
+
+    - name: refresh the systemd daemon
+      become: true
+      shell: systemctl daemon-reload
+
+    - name: delete the default exporters
+      become: true
+      shell: |
+        podman run --rm -ti --net=host --privileged \
+          -v /run/udev:/run/udev -v /dev:/dev \
+          -v /root/.kube/config:/opt/app-root/src/.kube/config \
+          {{ container_image }} \
+          /bin/bash -c "jmp admin delete exporter outpost-{{ item }} -n {{ platform_jumpstarter_namespace }}"
+
+        rm {{ work_dir }}/{{ exporter_dir }}/outpost-{{ item }}-exporter.yaml
+      args:
+        chdir: "{{ work_dir }}"
+      with_items:
+        - "default"

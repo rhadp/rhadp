@@ -1,0 +1,26 @@
+- name: build_ykush
+  become: true
+  delegate_to: "{{ exporter_host }}"
+  block:
+    - name: remove the install dir
+      become: true
+      ansible.builtin.file:
+        path: "{{ work_dir }}/ykush"
+        state: absent
+
+    - name: clone repo
+      become: true
+      ansible.builtin.git:
+        repo: "{{ ykush_repo }}"
+        version: "{{ ykush_branch }}"
+        dest: "{{ work_dir }}/ykush"
+        single_branch: yes
+
+    - name: build 'ykush'
+      become: true
+      shell: |
+        ./build.sh
+
+        sudo ./install.sh
+      args:
+        chdir: "{{ work_dir }}/ykush"
