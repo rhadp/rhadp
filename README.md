@@ -58,3 +58,7 @@ Also check the [Issues](https://github.com/rhadp/rhadp/issues) section of the th
 ## Disclaimer
 
 This is not an officially supported Red Hat product.
+
+## License
+
+See [LICENSE](LICENCE.md) file for details.

@@ -4,7 +4,7 @@ This document provides a complete reference for all configuration variables avai
 
 ## Cluster Configuration
 
-### Cloud Provider and Version
+#### Cloud Provider and Version
 
 | Parameter | Type | Default | Required | Values/Notes |
 |-----------|------|---------|----------|--------------|
@@ -19,7 +19,7 @@ cluster_version: "4.19.14"
 installer_architecture: "linux"
 ```
 
-### Cluster Architecture
+#### Cluster Architecture
 
 | Parameter | Type | Default | Required | Values/Notes |
 |-----------|------|---------|----------|--------------|
@@ -32,13 +32,13 @@ cluster_arch: "multi"
 control_plane_arch: "amd64"
 ```
 
-### Cluster Topology
+#### Cluster Topology
 
 | Parameter | Type | Default | Required | Values/Notes |
 |-----------|------|---------|----------|--------------|
 | `cluster_topology` | String | `default` | Yes | Deployment pattern: `default` (3 control + workers), `compact` (control nodes also run workloads), `metal` (bare-metal) |
 
-### Cluster Naming and DNS
+#### Cluster Naming and DNS
 
 | Parameter | Type | Default | Required | Values/Notes |
 |-----------|------|---------|----------|--------------|
@@ -46,19 +46,19 @@ control_plane_arch: "amd64"
 | `cluster_domain` | String | `rhadp.example.com` | Yes | Base FQDN for cluster routes |
 | `cluster_toplevel_domain` | String | `example.com` | Yes | Domain for default user emails |
 
-### Storage Configuration
+#### Storage Configuration
 
 | Parameter | Type | Default | Required | Values/Notes |
 |-----------|------|---------|----------|--------------|
 | `cluster_default_storage_class` | String | `gp3-csi` | Yes | Default storage class (AWS: `gp3-csi`, Azure: `managed-csi`, GCP: `standard-csi`) |
 
-### Pull Secret
+#### Pull Secret
 
 | Parameter | Type | Default | Required | Values/Notes |
 |-----------|------|---------|----------|--------------|
 | `pull_secret_file` | String | `inventory/pull-secret.txt` | Yes | Path to Red Hat pull secret JSON file |
 
-### Cluster Deployment Options
+#### Cluster Deployment Options
 
 | Parameter | Type | Default | Required | Values/Notes |
 |-----------|------|---------|----------|--------------|
@@ -68,7 +68,7 @@ control_plane_arch: "amd64"
 
 ## Cloud Provider Credentials
 
-### AWS Variables
+#### AWS Variables
 
 | Parameter | Type | Required | Values/Notes |
 |-----------|------|----------|--------------|
@@ -76,7 +76,7 @@ control_plane_arch: "amd64"
 | `aws_secret_access_key` | String | Yes (AWS) | AWS IAM secret key - **Sensitive, use Ansible Vault** |
 | `aws_default_region` | String | Yes (AWS) | AWS region (e.g., `us-east-2`) |
 
-### Azure Variables
+#### Azure Variables
 
 | Parameter | Type | Required | Values/Notes |
 |-----------|------|----------|--------------|
@@ -88,7 +88,7 @@ control_plane_arch: "amd64"
 | `azure_resource_group` | String | Yes (Azure) | Resource group name |
 | `azure_default_region` | String | Yes (Azure) | Azure region (e.g., `eastus`) |
 
-### GCP Variables
+#### GCP Variables
 
 | Parameter | Type | Required | Values/Notes |
 |-----------|------|----------|--------------|
@@ -98,7 +98,7 @@ control_plane_arch: "amd64"
 | `gcp_organization_id` | String | No | Numeric organization ID |
 | `gcp_default_region` | String | Yes (GCP) | GCP region (e.g., `us-central1`) |
 
-### GitHub Integration
+#### GitHub Integration
 
 | Parameter | Type | Required | Values/Notes |
 |-----------|------|----------|--------------|
@@ -110,7 +110,7 @@ control_plane_arch: "amd64"
 | `github_oauth_client_id` | String | No | OAuth app client ID for Keycloak - **Sensitive** |
 | `github_oauth_client_secret` | String | No | OAuth app client secret for Keycloak - **Sensitive** |
 
-### Certificate Management
+#### Certificate Management
 
 | Parameter | Type | Required | Values/Notes |
 |-----------|------|----------|--------------|
@@ -118,14 +118,14 @@ control_plane_arch: "amd64"
 
 ## Platform Deployment Options
 
-### Feature Flags
+#### Feature Flags
 
 | Parameter | Type | Default | Values/Notes |
 |-----------|------|---------|--------------|
 | `rhadp_deploy_developer_hub` | Boolean | `false` | Deploy Red Hat Developer Hub |
 | `rhadp_deploy_jumpstart` | Boolean | `false` | Deploy Jumpstarter operator |
 
-### Platform Configuration
+#### Platform Configuration
 
 | Parameter | Type | Default | Values/Notes |
 |-----------|------|---------|--------------|
@@ -133,7 +133,7 @@ control_plane_arch: "amd64"
 | `rhadp_gitops_repo_url` | String (URL) | `https://github.com/rhadp/rhadp-manifests` | Git repository for ArgoCD manifests |
 | `rhadp_gitops_repo_revision` | String | `develop` | Git branch, tag, or commit SHA |
 
-### Platform Namespaces
+#### Platform Namespaces
 
 | Parameter | Type | Default |
 |-----------|------|---------|
@@ -144,7 +144,7 @@ control_plane_arch: "amd64"
 
 ## Platform Internals
 
-### Admin User Configuration
+#### Admin User Configuration
 
 | Parameter | Type | Default | Values/Notes |
 |-----------|------|---------|--------------|
@@ -152,21 +152,21 @@ control_plane_arch: "amd64"
 | `default_admin_password` | String | `openshift` | Administrator password - **MUST CHANGE for production** |
 | `default_admin_email` | String (email) | `admin@example.com` | Administrator email |
 
-### Test User Configuration
+#### Test User Configuration
 
 | Parameter | Type | Default | Values/Notes |
 |-----------|------|---------|--------------|
 | `default_nobody_user` | String | `nobody` | Unprivileged test user name |
 | `default_nobody_password` | String | `nobody` | Unprivileged test user password |
 
-### Security Settings
+#### Security Settings
 
 | Parameter | Type | Default | Values/Notes |
 |-----------|------|---------|--------------|
 | `remove_kubeadmin` | Boolean | `true` | Remove default kubeadmin user - **Recommended for production** |
 | `remove_selfprovisioning` | Boolean | `true` | Prevent users from creating own namespaces |
 
-### Keycloak Configuration
+#### Keycloak Configuration
 
 | Parameter | Type | Default | Values/Notes |
 |-----------|------|---------|--------------|
@@ -174,7 +174,7 @@ control_plane_arch: "amd64"
 | `keycloak_db_password` | String | `openshift` | PostgreSQL password - **MUST CHANGE, use Ansible Vault** |
 | `keycloak_client_secret` | String | `openshiftkc` | OAuth client secret - **MUST CHANGE** |
 
-### Other Settings
+#### Other Settings
 
 | Parameter | Type | Default | Values/Notes |
 |-----------|------|---------|--------------|

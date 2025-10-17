@@ -2,7 +2,7 @@
 
 ## Environment Setup
 
-### Clone the Repository
+#### Clone the Repository
 
 ```bash
 git clone https://github.com/rhadp/rhadp.git
@@ -11,7 +11,7 @@ cd rhadp
 
 Fork the repository if you plan to customize playbooks, roles, or configuration templates.
 
-### Setup Python Virtual Environment
+#### Setup Python Virtual Environment
 
 ```bash
 # Create and activate virtual environment
@@ -26,7 +26,7 @@ ansible-galaxy collection install azure.azcollection --force
 pip install -r ~/.ansible/collections/ansible_collections/azure/azcollection/requirements.txt
 ```
 
-### Verify Ansible Installation
+#### Verify Ansible Installation
 
 ```bash
 ansible --version  # Should be 2.16 or later
@@ -35,13 +35,13 @@ ansible-galaxy collection list
 
 ## Configuration
 
-### Copy Example Configuration
+#### Copy Example Configuration
 
 ```bash
 cp inventory/main.yml.example inventory/main.yml
 ```
 
-### Obtain Red Hat Pull Secret
+#### Obtain Red Hat Pull Secret
 
 1. Visit [Red Hat Hybride Cloud Console](https://console.redhat.com/openshift/overview)
 2. Log in with your Red Hat account
@@ -49,9 +49,9 @@ cp inventory/main.yml.example inventory/main.yml
 4. Download the pull secret (JSON file)
 5. Save to `inventory/pull-secret.txt`
 
-### Additional Requirements (Optional)
+#### Additional Requirements (Optional)
 
-#### GitHub Integration (Optional)
+##### GitHub Integration (Optional)
 - GitHub account (personal or organization)
 - GitHub Personal Access Token (PAT) with scopes:
   - `repo` (full control of private repositories)
@@ -61,20 +61,20 @@ cp inventory/main.yml.example inventory/main.yml
   - Client ID and Client Secret
   - Authorization callback URL: `https://keycloak-<namespace>.apps.<cluster_domain>/auth/realms/master/broker/github/endpoint`
 
-#### GitLab Integration (Optional)
+##### GitLab Integration (Optional)
 - GitLab account (gitlab.com or self-hosted)
 - GitLab Personal Access Token with scopes:
   - `api` (access to GitLab API)
   - `read_repository` and `write_repository`
 - GitLab OAuth Application (for Keycloak integration)
 
-#### Let's Encrypt
+##### Let's Encrypt
 - Valid email address for certificate expiration notifications
 - Email must be accessible for emergency certificate issues
 - Recommended: Use a team or group email, not personal
 
 
-### Configure Cloud Provider Credentials
+#### Configure Cloud Provider Credentials
 
 Edit `inventory/main.yml` and configure your cloud provider:
 
@@ -106,7 +106,7 @@ gcp_project_id: "your-project-id"
 gcp_default_region: "us-central1"
 ```
 
-### Configure Cluster Settings
+#### Configure Cluster Settings
 
 ```yaml
 cluster_name: "rhadp"
@@ -117,7 +117,7 @@ cluster_topology: "default"  # Options: default, compact, metal
 installer_architecture: "mac-arm64"  # Options: mac, mac-arm64, linux, linux-arm64
 ```
 
-### Configure Optional Features
+#### Configure Optional Features
 
 **Multi-Architecture:**
 ```yaml
@@ -132,6 +132,7 @@ rhadp_deploy_developer_hub: true
 rhadp_deploy_jumpstart: true
 rhadp_gitops_repo_url: "https://github.com/rhadp/rhadp-manifests"
 ```
+**Note:** [Red Hat OpenShift Dev Spaces](https://developers.redhat.com/products/openshift-dev-spaces/overview) is always enabled by default.
 
 **Security:**
 ```yaml
@@ -143,7 +144,7 @@ remove_selfprovisioning: true
 
 ## Deploy the Platform
 
-### Run Full Deployment
+#### Run Full Deployment
 
 ```bash
 source venv/bin/activate
@@ -165,7 +166,7 @@ This playbook executes:
 10. Development platform services deployment
 11. RBAC configuration
 
-### Monitor Deployment Progress
+#### Monitor Deployment Progress
 
 **Watch OpenShift Installer Logs:**
 ```bash
@@ -177,7 +178,7 @@ tail -f $HOME/.openshift/<cluster-name>-<cloud-provider>/.openshift_install.log
 - `Waiting for cluster operators`: Operators deploying
 - `Cluster is initialized`: Bootstrap complete
 
-### Deployment Troubleshooting
+#### Deployment Troubleshooting
 
 If deployment fails:
 
@@ -197,7 +198,7 @@ ansible-playbook -i inventory/ 0_all.yml
 
 ## Access the Platform
 
-### Cluster Access URLs
+#### Cluster Access URLs
 
 **OpenShift Console:**
 ```
@@ -214,7 +215,7 @@ https://api.<cluster_name>.<cluster_domain>:6443
 $HOME/.openshift/<cluster-name>-<cloud-provider>/auth/kubeconfig
 ```
 
-### Default Credentials
+#### Default Credentials
 
 **Admin User:**
 - Username: `admin` (or value of `default_admin_user`)
@@ -222,7 +223,7 @@ $HOME/.openshift/<cluster-name>-<cloud-provider>/auth/kubeconfig
 
 **Change default password immediately after first login.**
 
-### CLI Access
+#### CLI Access
 
 ```bash
 # Set KUBECONFIG

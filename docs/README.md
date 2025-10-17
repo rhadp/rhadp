@@ -63,9 +63,6 @@ RHADP deploys a layered architecture:
 - **Red Hat Customer Portal**: [https://access.redhat.com](https://access.redhat.com)
 - For Red Hat subscription customers
 
-#### Disclaimer
+## Disclaimer
 This is not an officially supported Red Hat product. For production use, consult Red Hat support and follow enterprise deployment best practices.
 
-## License
-
-See LICENSE file for details.
