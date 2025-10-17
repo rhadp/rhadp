@@ -61,4 +61,4 @@ This is not an officially supported Red Hat product.
 
 ## License
 
-See [LICENSE](LICENCE.md) file for details.
+See [LICENSE](LICENSE) file for details.
