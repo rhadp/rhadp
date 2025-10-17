@@ -31,17 +31,3 @@
 - [Red Hat Container Catalog](https://catalog.redhat.com/software/containers/explore) - Certified images
 - [Red Hat Developer](https://developers.redhat.com/) - Developer resources
 
-
-## Community and Support
-
-**Project Resources:**
-- **GitHub Issues**: [https://github.com/rhadp/rhadp/issues](https://github.com/rhadp/rhadp/issues)
-- **Project Board**: [https://github.com/orgs/rhadp/projects/1](https://github.com/orgs/rhadp/projects/1)
-- **Contributing**: See CONTRIBUTING.md
-
-**Red Hat Support:**
-- **Red Hat Customer Portal**: [https://access.redhat.com](https://access.redhat.com)
-- For Red Hat subscription customers
-
-**Disclaimer:**
-This is not an officially supported Red Hat product. For production use, consult Red Hat support and follow enterprise deployment best practices.
