@@ -49,6 +49,31 @@ cp inventory/main.yml.example inventory/main.yml
 4. Download the pull secret (JSON file)
 5. Save to `inventory/pull-secret.txt`
 
+### Additional Requirements (Optional)
+
+#### GitHub Integration (Optional)
+- GitHub account (personal or organization)
+- GitHub Personal Access Token (PAT) with scopes:
+  - `repo` (full control of private repositories)
+  - `admin:org` (for organization integration)
+  - `workflow` (for GitHub Actions integration)
+- GitHub OAuth App (for Keycloak integration):
+  - Client ID and Client Secret
+  - Authorization callback URL: `https://keycloak-<namespace>.apps.<cluster_domain>/auth/realms/master/broker/github/endpoint`
+
+#### GitLab Integration (Optional)
+- GitLab account (gitlab.com or self-hosted)
+- GitLab Personal Access Token with scopes:
+  - `api` (access to GitLab API)
+  - `read_repository` and `write_repository`
+- GitLab OAuth Application (for Keycloak integration)
+
+#### Let's Encrypt
+- Valid email address for certificate expiration notifications
+- Email must be accessible for emergency certificate issues
+- Recommended: Use a team or group email, not personal
+
+
 ### Configure Cloud Provider Credentials
 
 Edit `inventory/main.yml` and configure your cloud provider:

@@ -5,7 +5,6 @@ The Red Hat Automotive Development Platform (RHADP) is an Infrastructure as Code
 ## Documentation
 
 ### Getting Started
-- **[Prerequisites](prerequisites.md)** - Cloud provider requirements, Red Hat account, credentials
 - **[Deployment Guide](deployment.md)** - Step-by-step deployment instructions
 
 ### Configuration
