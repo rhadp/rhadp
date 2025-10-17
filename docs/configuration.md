@@ -178,4 +178,4 @@ control_plane_arch: "amd64"
 
 | Parameter | Type | Default | Values/Notes |
 |-----------|------|---------|--------------|
-| `remove_installer` | Boolean | `true` | Remove installer files after deployment |
+| `remove_installer_binary` | Boolean | `true` | Remove installer files after deployment |

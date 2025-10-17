@@ -55,6 +55,9 @@ gcp_worker_instance_type: "t2a-standard-8" # 8 vCPU, 32 GiB RAM
 # default name of the openshift-install binary
 installer_binary: "openshift-install"
 
+# remove the openshift-install binary after deployment
+remove_installer_binary: true
+
 # directory where the openshift-install binary will be stored
 openshift_install_dir: "bin" 
 

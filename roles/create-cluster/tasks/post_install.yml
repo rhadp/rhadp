@@ -3,7 +3,7 @@
 
 # remove cluster specific assets from the local machine
 - name: remove cluster specific assets
-  when: remove_installer | bool == true
+  when: remove_installer_binary | bool == true
   file:
     path: "{{ item }}"
     state: absent

@@ -21,7 +21,7 @@
     - "{{ openshift_install_dir }}/.env-{{ cluster_fqn }}.sh"
 
 - name: remove the installer binary
-  when: remove_installer | bool == true
+  when: remove_installer_binary | bool == true
   file:
     path: "{{ item }}"
     state: absent

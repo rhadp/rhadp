@@ -120,6 +120,3 @@ all:
     keycloak_db_user: "admin"
     keycloak_db_password: "openshift"
     keycloak_client_secret: "openshiftkc"
-
-    # other settings
-    remove_installer: true
