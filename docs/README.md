@@ -7,15 +7,12 @@ The Red Hat Automotive Development Platform (RHADP) is an Infrastructure as Code
 ### Getting Started
 - **[Prerequisites](prerequisites.md)** - Cloud provider requirements, Red Hat account, credentials
 - **[Deployment Guide](deployment.md)** - Step-by-step deployment instructions
+
+### Configuration
 - **[Configuration Reference](configuration.md)** - Complete inventory variable reference
 
-### Platform Capabilities
-- **[Technologies and Components](technologies.md)** - Platform components overview
-- **[Multi-Cloud Deployment](multi-cloud.md)** - AWS, Azure, and GCP deployment details
-- **[Multi-Architecture Support](multi-architecture.md)** - x86_64, ARM64, and hybrid clusters
-- **[Platform Services](platform-services.md)** - Dev Spaces, GitOps, Pipelines, Jumpstarter
-
 ### Additional Resources
+- **[Multi-Cloud Deployment](multi-cloud.md)** - AWS, Azure, and GCP deployment details
 - **[Reference](reference.md)** - Official documentation, community resources
 - **[Appendices](appendices.md)** - Example configurations, role overrides, glossary
 

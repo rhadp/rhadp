@@ -45,7 +45,7 @@ cp inventory/main.yml.example inventory/main.yml
 
 1. Visit [Red Hat OpenShift Cluster Manager](https://console.redhat.com/openshift/create)
 2. Log in with your Red Hat account
-3. Click "Datacenter" tab
+3. Select the OpenShift [cluster type](https://console.redhat.com/openshift/create)
 4. Download the pull secret (JSON file)
 5. Save to `inventory/pull-secret.txt`
 
