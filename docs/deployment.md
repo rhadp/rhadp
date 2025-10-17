@@ -43,7 +43,7 @@ cp inventory/main.yml.example inventory/main.yml
 
 ### Obtain Red Hat Pull Secret
 
-1. Visit [Red Hat OpenShift Cluster Manager](https://console.redhat.com/openshift/create)
+1. Visit [Red Hat Hybride Cloud Console](https://console.redhat.com/openshift/overview)
 2. Log in with your Red Hat account
 3. Select the OpenShift [cluster type](https://console.redhat.com/openshift/create)
 4. Download the pull secret (JSON file)

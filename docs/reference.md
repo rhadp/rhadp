@@ -3,17 +3,17 @@
 ## Official OpenShift Documentation
 
 **OpenShift Container Platform 4.19:**
-- [OCP 4.19 Documentation Portal](https://docs.redhat.com/en/documentation/openshift_container_platform/4.19)
+- [OpenShift Documentation Portal](https://docs.redhat.com/en/documentation/openshift_container_platform/)
 - [Installing on AWS](https://docs.redhat.com/en/documentation/openshift_container_platform/4.19/html/installing_on_aws/index)
 - [Installing on Azure](https://docs.redhat.com/en/documentation/openshift_container_platform/4.19/html-single/installing_on_azure/index)
 - [Installing on GCP](https://docs.redhat.com/en/documentation/openshift_container_platform/4.19/html-single/installing_on_gcp/index)
 - [Release Notes](https://docs.redhat.com/en/documentation/openshift_container_platform/4.19/html/release_notes/index)
 
 **Platform Services:**
-- [OpenShift GitOps Documentation](https://docs.openshift.com/gitops/latest/)
-- [OpenShift Pipelines Documentation](https://docs.openshift.com/pipelines/latest/)
-- [OpenShift Dev Spaces Documentation](https://docs.redhat.com/en/documentation/red_hat_openshift_dev_spaces/)
-- [OpenShift Virtualization Documentation](https://docs.openshift.com/container-platform/4.19/virt/about_virt/about-virt.html)
+- [OpenShift GitOps Documentation](https://docs.redhat.com/en/documentation/red_hat_openshift_gitops)
+- [OpenShift Pipelines Documentation](https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines/)
+- [OpenShift Dev Spaces Documentation](https://docs.redhat.com/en/documentation/red_hat_openshift_dev_spaces)
+- [OpenShift Virtualization Documentation](https://docs.redhat.com/en/documentation/openshift_container_platform/4.19#Virtualization)
 
 ## Related Projects
 
@@ -31,27 +31,6 @@
 - [Red Hat Container Catalog](https://catalog.redhat.com/software/containers/explore) - Certified images
 - [Red Hat Developer](https://developers.redhat.com/) - Developer resources
 
-## Ansible Roles Documentation
-
-**Core Roles:**
-- `create-cluster`: Cluster bootstrapping
-- `config-cluster`: Topology configuration
-- `gather-cluster-facts`: Cluster discovery
-- `install-operator`: Operator installation
-
-**Platform Roles:**
-- `setup-auth`: Authentication and Keycloak
-- `setup-cert-manager`: Certificate management
-- `setup-devops`: GitOps and Pipelines
-- `setup-platform`: Dev Spaces and Developer Hub
-- `setup-jumpstarter`: Jumpstarter operator
-
-**Lifecycle Roles:**
-- `lifecycle-cluster`: Start/stop operations
-
-**Builder Roles:**
-- `create-builder`: Builder VM creation
-- `setup-runner`: GitHub/GitLab runner
 
 ## Community and Support
 
