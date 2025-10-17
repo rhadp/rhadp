@@ -4,13 +4,13 @@ The Red Hat Automotive Development Platform (RHADP) is an Infrastructure as Code
 
 ## Documentation
 
-### Getting Started
+#### Getting Started
 - **[Deployment Guide](deployment.md)** - Step-by-step deployment instructions
 
-### Configuration
+#### Configuration
 - **[Configuration Reference](configuration.md)** - Complete inventory variable reference
 
-### Additional Resources
+#### Additional Resources
 - **[Reference](reference.md)** - Official documentation, community resources
 - **[Appendices](appendices.md)** - Example configurations, role overrides, glossary
 
@@ -18,19 +18,19 @@ The Red Hat Automotive Development Platform (RHADP) is an Infrastructure as Code
 
 RHADP deploys a layered architecture:
 
-**Infrastructure Layer**
+#### Infrastructure Layer
 - OpenShift Container Platform 4.19
 - Cloud provider infrastructure (AWS, Azure, or GCP)
 - Multi-architecture compute nodes (x86_64, ARM64, or hybrid)
 - OpenShift Virtualization (optional)
 
-**Platform Services Layer**
+#### Platform Services Layer
 - Identity and Access Management (Keycloak + OAuth)
 - Certificate Management (cert-manager with Let's Encrypt)
 - GitOps (OpenShift GitOps/ArgoCD)
 - CI/CD (OpenShift Pipelines/Tekton)
 
-**Development Tools Layer**
+#### Development Tools Layer
 - OpenShift Dev Spaces (browser-based IDE)
 - Developer Hub (optional, service catalog)
 - Jumpstarter (optional, hardware testing)
@@ -54,16 +54,16 @@ RHADP deploys a layered architecture:
 
 ## Support
 
-**Project Resources:**
+#### Project Resources
 - **GitHub Issues**: [https://github.com/rhadp/rhadp/issues](https://github.com/rhadp/rhadp/issues)
 - **Project Board**: [https://github.com/orgs/rhadp/projects/1](https://github.com/orgs/rhadp/projects/1)
 - **Contributing**: See CONTRIBUTING.md
 
-**Red Hat Support:**
+#### Red Hat Support
 - **Red Hat Customer Portal**: [https://access.redhat.com](https://access.redhat.com)
 - For Red Hat subscription customers
 
-**Disclaimer:**
+#### Disclaimer
 This is not an officially supported Red Hat product. For production use, consult Red Hat support and follow enterprise deployment best practices.
 
 ## License
