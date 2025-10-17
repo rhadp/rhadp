@@ -21,11 +21,29 @@ Upon deployment, the following components are available out of the box:
 - CI/CD pipeline integration - support for OpenShift Pipelines (Tekton), GitHub Actions and GitLab Runners.
 - [Jumpstarter](https://github.com/jumpstarter-dev) - for automated testing on real and virtual hardware with CI/CD integration.  
 
-## Getting started
+## Getting started - TL;DR
+
+```bash
+# Clone repository
+git clone https://github.com/rhadp/rhadp.git
+cd rhadp
+
+# Setup environment
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+
+# Configure deployment
+cp inventory/main.yml.example inventory/main.yml
+# Edit inventory/main.yml with your cloud credentials and settings
+
+# Deploy cluster
+ansible-playbook -i inventory/ 0_all.yml
+```
 
 To deploy the complete platform, follow the steps described in the [deployment guide](docs/deployment.md).
 
-The complete documentation is [here](docs/README.md).
+The complete documentation of the platform is [here](docs/README.md).
 
 ## Contributing
 
