@@ -6,7 +6,7 @@ all:
     #
 
     # cloud provider selection
-    cloud_provider: "aws" # aws, azure, gcp
+    cloud_provider: "gcp" # aws, azure, gcp
 
     # cluster version
     cluster_version: "4.19.14"
@@ -15,18 +15,18 @@ all:
     installer_architecture: "mac-arm64" # mac, mac-arm64, linux, linux-arm64
         
     # cluster topology
-    cluster_arch: "x86_64" # x86_64, aarch64, multi -> multi is only available on aws & azure !
-    control_plane_arch: "amd64" #  amd64, arm64, -> only relevant when cluster_arch == multi
-    cluster_topology: "default" # default, compact, metal
+    cluster_arch: "aarch64" # x86_64, aarch64, multi -> multi is only available on aws & azure !
+    control_plane_arch: "arm64" #  amd64, arm64, -> only relevant when cluster_arch == multi
+    cluster_topology: "compact" # default, compact, metal
 
     # cluster configuration
-    cluster_name: "rhadp"
+    cluster_name: "gcp"
     cluster_domain: "rhadp.example.com"
     cluster_toplevel_domain: "example.com" # top-level domain for e.g. default user emails
-    cluster_default_storage_class: "gp3-csi" # "gp3-csi" (aws), "managed-csi" (azure), "standard-csi" (gcp)
+    cluster_default_storage_class: "standard-csi" # "gp3-csi" (aws), "managed-csi" (azure), "standard-csi" (gcp)
     
     # pull secret, see https://console.redhat.com/openshift/create
-    pull_secret_file: "inventory/pull-secret.txt" # place the pull secret at this loacation
+    pull_secret_file: "inventory/pull-secret-gcp.txt" # place the pull secret at this loacation
 
     # cluster deployment options
     setup_arm_worker_nodes: false # create a second set of ARM worker nodes if true
@@ -40,26 +40,12 @@ all:
     # part 2 - cloud provider and other credentials
     #
 
-    # aws specific variables
-    #aws_access_key_id: "abc123"
-    #aws_secret_access_key: "abc123"
-    #aws_default_region: "us-east-2"
-
-    # azure specific variables
-    #azure_guid: "guid123"
-    #azure_client_id: "abc123"
-    #azure_password: "abc123"
-    #azure_tenant: "redhatOn.example.com"
-    #azure_subscription: "abc123"
-    #azure_resource_group: "abc123"
-    #azure_default_region: "westus" # https://gist.github.com/ausfestivus/04e55c7d80229069bf3bc75870630ec8
-
     # gcp specific variables
-    #gcp_service_account_key_file: "$HOME/.gcp/osServiceAccount.json" # place the service account key at this location
-    #gcp_service_account_email: "abc@123.iam.gserviceaccount.com"
-    #gcp_project_id: "project-123"
-    #gcp_organization_id: "abc123"
-    #gcp_default_region: "us-central1"
+    gcp_service_account_key_file: "$HOME/.gcp/osServiceAccount.json" # place the service account key at this location
+    gcp_service_account_email: "abc@123.iam.gserviceaccount.com"
+    gcp_project_id: "project-123"
+    gcp_organization_id: "abc123"
+    gcp_default_region: "us-central1"
     
     # github org to configure
     #github_endpoint: "https://github.com"
@@ -82,7 +68,7 @@ all:
     #
     # part 3 - platform deployment options
     #
-  
+
     rhadp_deploy_devspaces: false # deploy dev spaces
     rhadp_deploy_developer_hub: false # deploy the developer hub
     rhadp_deploy_jumpstart: false # deploy the jumpstart operator

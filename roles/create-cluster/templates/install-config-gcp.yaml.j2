@@ -2,7 +2,7 @@ additionalTrustBundlePolicy: Proxyonly
 apiVersion: v1
 baseDomain: {{ cluster_domain }}
 metadata:
-  name: rhadp
+  name: {{ cluster_name }}
 compute:
 {% if cluster_topology == "compact" %}
 - name: worker

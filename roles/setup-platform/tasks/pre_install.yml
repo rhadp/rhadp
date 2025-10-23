@@ -2,6 +2,7 @@
 # -------------------------------------------------
 
 - name: prepare devspaces installation
+  when: rhadp_deploy_devspaces | bool == true
   block:
     - name: install devspaces operator
       include_role:

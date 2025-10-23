@@ -18,8 +18,8 @@
     apply: yes
     kubeconfig: "{{ local_kubeconfig_file }}"
   with_items: # FIXME: check which namespaces are really needed
+    - "{{ cert_manager_namespace }}"
     - "{{ cert_manager_operator_namespace }}"
-    - "cert-manager"
     - "openshift-ingress"
     - "openshift-ingress-operator"
 
@@ -40,8 +40,8 @@
     apply: yes
     kubeconfig: "{{ local_kubeconfig_file }}"
   with_items: # FIXME: check which namespaces are really needed
+    - "{{ cert_manager_namespace }}"
     - "{{ cert_manager_operator_namespace }}"
-    - "cert-manager"
     - "openshift-ingress"
     - "openshift-ingress-operator"
 
@@ -68,10 +68,10 @@
         apply: yes
         kubeconfig: "{{ local_kubeconfig_file }}"
       with_items: # FIXME: check which namespaces are really needed
-        - "cert-manager"
-        #- "{{ cert_manager_operator_namespace }}"
-        #- "openshift-ingress"
-        #- "openshift-ingress-operator"
+        - "{{ cert_manager_namespace }}"
+        - "{{ cert_manager_operator_namespace }}"
+        - "openshift-ingress"
+        - "openshift-ingress-operator"
 
 - name: create cert-manager instance
   k8s:
