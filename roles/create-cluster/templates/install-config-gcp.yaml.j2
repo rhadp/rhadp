@@ -14,8 +14,7 @@ compute:
   hyperthreading: Enabled
   platform:
     gcp:
-      defaultMachinePlatform:
-        type: {{ gcp_worker_instance_type }}
+      type: {{ gcp_worker_instance_type }}
   replicas: {{ gcp_worker_instance_count }}
 {% endif %}
 controlPlane:
@@ -24,8 +23,7 @@ controlPlane:
   name: master
   platform:
     gcp:
-      defaultMachinePlatform:
-        type: {{ gcp_control_plane_instance_type }}
+      type: {{ gcp_control_plane_instance_type }}
   replicas: {{ gcp_control_plane_instance_count }}
 networking:
   clusterNetwork:
