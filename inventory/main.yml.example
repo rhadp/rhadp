@@ -9,14 +9,14 @@ all:
     cloud_provider: "aws" # aws, azure, gcp
 
     # cluster version
-    cluster_version: "4.19.14"
+    cluster_version: "4.19.17"
 
     # installer architecture, see https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.19.10/
     installer_architecture: "mac-arm64" # mac, mac-arm64, linux, linux-arm64
         
     # cluster topology
-    cluster_arch: "x86_64" # x86_64, aarch64, multi -> multi is only available on aws & azure !
-    control_plane_arch: "amd64" #  amd64, arm64, -> only relevant when cluster_arch == multi
+    cluster_arch: "aarch64" # x86_64, aarch64, multi -> multi is only available on aws & azure !
+    control_plane_arch: "arm4" #  amd64, arm64, -> only relevant when cluster_arch == multi
     cluster_topology: "default" # default, compact, metal
 
     # cluster configuration
@@ -41,8 +41,8 @@ all:
     #
 
     # aws specific variables
-    #aws_access_key_id: "abc123"
-    #aws_secret_access_key: "abc123"
+    #aws_access_key_id: "{{ lookup('env', 'AWS_ACCESS_KEY_ID') }}"
+    #aws_secret_access_key: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') }}"
     #aws_default_region: "us-east-2"
 
     # azure specific variables
