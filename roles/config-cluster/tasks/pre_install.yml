@@ -12,13 +12,31 @@
     kubeconfig: "{{ local_kubeconfig_file }}"
   register: found_worker_nodes
 
-- name: label worker nodes
+- name: label worker nodes (infra)
   shell: |
     oc label node {{ item }} rhadp.node-role/infra='true' \
     --overwrite=true \
     --kubeconfig="$HOME/.kube/{{ cluster_fqn }}"
   with_items:
     - "{{ found_worker_nodes.resources | map(attribute='metadata.name') | list }}"
+
+- name: find ARM worker nodes
+  k8s_info:
+    api_version: v1
+    kind: Node
+    label_selectors:
+      - node-role.kubernetes.io/worker
+      - kubernetes.io/arch=arm64
+    kubeconfig: "{{ local_kubeconfig_file }}"
+  register: found_arm_worker_nodes
+
+- name: label ARM worker nodes (builder)
+  shell: |
+    oc label node {{ item }} rhadp.node-role/builder='true' \
+    --overwrite=true \
+    --kubeconfig="$HOME/.kube/{{ cluster_fqn }}"
+  with_items:
+    - "{{ found_arm_worker_nodes.resources | map(attribute='metadata.name') | list }}"
 
 - name: label control plane nodes
   when: cluster_topology == 'compact' or cluster_topology == 'metal'

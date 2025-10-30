@@ -8,7 +8,7 @@
 # secondary set of compute nodes (arm64)
 aws_arm_instance_type: "m8g.xlarge" # 4 vCPU, 16 GiB RAM
 aws_arm_ami_id: "ami-02f30107e3441227b" # ARM, us-east-2
-#aws_arm_ami_id: "ami-02f08479c3613ed0e" # ARM, eu-west-1
+#aws_arm_ami_id: "ami-0ba6941055f037421" # ARM, eu-west-1
 #aws_arm_ami_id: "ami-00bd76511738f7c79" # ARM, eu-central-1
 
 aws_arm_instance_count: 1 # number of replicas per availability zone
@@ -23,7 +23,7 @@ aws_metal_instance_type: "m6g.metal" # 64 vCPU, 256 GiB RAM
 aws_metal_availability_zone: "a" # a, b, c
 
 aws_metal_ami_id: "ami-02f30107e3441227b" # ARM, us-east-2
-#aws_metal_ami_id: "ami-02f08479c3613ed0e" # ARM, eu-west-1
+#aws_metal_ami_id: "ami-0ba6941055f037421" # ARM, eu-west-1
 #aws_metal_ami_id: "ami-00bd76511738f7c79" # ARM, eu-central-1
 
 aws_metal_instance_count: 1 # number of replicas per availability zone
