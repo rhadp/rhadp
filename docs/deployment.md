@@ -130,7 +130,7 @@ setup_virtualization: true
 ```yaml
 rhadp_deploy_developer_hub: true
 rhadp_deploy_jumpstart: true
-rhadp_gitops_repo_url: "https://github.com/rhadp/rhadp-manifests"
+rhadp_gitops_repo_url: "https://github.com/rhadp/manifests"
 ```
 **Note:** [Red Hat OpenShift Dev Spaces](https://developers.redhat.com/products/openshift-dev-spaces/overview) is always enabled by default.
 

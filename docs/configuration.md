@@ -130,7 +130,7 @@ control_plane_arch: "amd64"
 | Parameter | Type | Default | Values/Notes |
 |-----------|------|---------|--------------|
 | `rhadp_prefix` | String | `rhadp` | Prefix for platform namespaces |
-| `rhadp_gitops_repo_url` | String (URL) | `https://github.com/rhadp/rhadp-manifests` | Git repository for ArgoCD manifests |
+| `rhadp_gitops_repo_url` | String (URL) | `https://github.com/rhadp/manifests` | Git repository for ArgoCD manifests |
 | `rhadp_gitops_repo_revision` | String | `develop` | Git branch, tag, or commit SHA |
 
 #### Platform Namespaces

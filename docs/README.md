@@ -1,6 +1,6 @@
-# Red Hat Automotive Development Platform
+# Red Hat Automotive Suite
 
-The Red Hat Automotive Development Platform (RHADP) is an Infrastructure as Code solution that automates deployment of a complete cloud-native development environment for automotive software development and RHIVOS.
+The Red Hat Automotive Suite (RHAS) is an Infrastructure as Code solution that automates deployment of a complete cloud-native development environment for automotive software development and RHIVOS.
 
 ## Documentation
 
@@ -16,7 +16,7 @@ The Red Hat Automotive Development Platform (RHADP) is an Infrastructure as Code
 
 ## Architecture Overview
 
-RHADP deploys a layered architecture:
+RHAS deploys a layered architecture:
 
 #### Infrastructure Layer
 - OpenShift Container Platform 4.19

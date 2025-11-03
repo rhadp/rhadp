@@ -16,8 +16,8 @@
 - [OpenShift Virtualization Documentation](https://docs.redhat.com/en/documentation/openshift_container_platform/4.19#Virtualization)
 
 ## Related Projects
-- [RHADP Repository](https://github.com/rhadp/rhadp) - Infrastructure as Code
-- [RHADP Manifests Repository](https://github.com/rhadp/rhadp-manifests) - GitOps manifests
+- [RHAS Repository](https://github.com/rhadp/rhadp) - Infrastructure as Code
+- [RHAS Manifests Repository](https://github.com/rhadp/manifests) - GitOps manifests
 - [Jumpstarter Project](https://github.com/jumpstarter-dev) - Hardware testing automation
 
 ## Related Technologies

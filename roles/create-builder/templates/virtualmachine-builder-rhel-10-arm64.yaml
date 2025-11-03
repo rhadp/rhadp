@@ -60,8 +60,8 @@ spec:
                 org: 100000
               runcmd:
                 - systemctl enable --now dnf-automatic-install.timer
-                - curl -sSL https://raw.githubusercontent.com/rhadp/rhadp-manifests/refs/heads/develop/scripts/setup-vm.sh | bash
-                - curl -sSL https://raw.githubusercontent.com/rhadp/rhadp-manifests/refs/heads/develop/scripts/setup-builder.sh | bash
+                - curl -sSL https://raw.githubusercontent.com/rhadp/manifests/refs/heads/develop/scripts/setup-vm.sh | bash
+                - curl -sSL https://raw.githubusercontent.com/rhadp/manifests/refs/heads/develop/scripts/setup-builder.sh | bash
           name: cloudinitdisk
 
   # volume template for the builder vm

@@ -1,15 +1,15 @@
-# Product Requirements Document: Red Hat Automotive Development Platform (RHADP)
+# Product Requirements Document: Red Hat Automotive Suite (RHAS)
 
 **Version:** 1.0
 **Last Updated:** October 2025
-**Product Owner:** RHADP Team
+**Product Owner:** RHAS Team
 **Status:** Active Development
 
 ---
 
 ## Executive Summary
 
-The Red Hat Automotive Development Platform (RHADP) is an Infrastructure as Code (IaC) solution designed to eliminate the complexity of deploying and managing cloud-native development environments for automotive software development. RHADP automates the provisioning of a complete, production-ready OpenShift-based development platform with integrated toolchains, multi-architecture support, and hardware testing capabilities tailored specifically for automotive use cases and Red Hat In-Vehicle Operating System (RHIVOS) development.
+The Red Hat Automotive Suite (RHAS) is an Infrastructure as Code (IaC) solution designed to eliminate the complexity of deploying and managing cloud-native development environments for automotive software development. RHAS automates the provisioning of a complete, production-ready OpenShift-based development platform with integrated toolchains, multi-architecture support, and hardware testing capabilities tailored specifically for automotive use cases and Red Hat In-Vehicle Operating System (RHIVOS) development.
 
 ### Product Vision
 
@@ -145,7 +145,7 @@ Automotive software development teams face significant infrastructure challenges
 **Goal:** Deploy complete development environment for new automotive project
 
 **Flow:**
-1. DevOps engineer clones RHADP repository
+1. DevOps engineer clones RHAS repository
 2. Configures `inventory/main.yml` with cloud credentials and preferences
 3. Adds Red Hat pull secret
 4. Executes `ansible-playbook -i inventory/ 0_all.yml`
@@ -801,10 +801,10 @@ Automotive software development teams face significant infrastructure challenges
 
 ## Out of Scope
 
-The following are explicitly out of scope for RHADP v1.0:
+The following are explicitly out of scope for RHAS v1.0:
 
-1. **Application Development:** RHADP provides the platform; users bring their own applications
-2. **Custom Operator Development:** Users can deploy custom operators, but RHADP doesn't build them
+1. **Application Development:** RHAS provides the platform; users bring their own applications
+2. **Custom Operator Development:** Users can deploy custom operators, but RHAS doesn't build them
 3. **Multi-Cluster Management:** Single cluster deployment only; fleet management future
 4. **On-Premise Deployment:** Cloud-only; bare-metal support planned for future
 5. **Cluster Upgrades:** Initial deployment only; in-place upgrades not automated
@@ -966,4 +966,4 @@ remove_selfprovisioning: true
 
 | Version | Date | Author | Changes |
 |---------|------|--------|---------|
-| 1.0 | October 2025 | RHADP Team | Initial PRD creation |
+| 1.0 | October 2025 | RHAS Team | Initial PRD creation |

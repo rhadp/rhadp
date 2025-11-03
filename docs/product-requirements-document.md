@@ -1,4 +1,4 @@
-# Red Hat Automotive Development Platform (RHADP)
+# Red Hat Automotive Suite (RHAS)
 ## Product Requirements Document
 
 **Document Version:** 1.0  
@@ -10,9 +10,9 @@
 
 ## Executive Summary
 
-The Red Hat Automotive Development Platform (RHADP) is a comprehensive Infrastructure-as-Code solution that automates the deployment and management of cloud-native development environments specifically designed for automotive software development and Red Hat In-Vehicle Operating System (RHIVOS) development. 
+The Red Hat Automotive Suite (RHAS) is a comprehensive Infrastructure-as-Code solution that automates the deployment and management of cloud-native development environments specifically designed for automotive software development and Red Hat In-Vehicle Operating System (RHIVOS) development. 
 
-RHADP addresses the growing complexity of automotive software development by providing a standardized, scalable, and multi-architecture platform that integrates seamlessly across major cloud providers while supporting both x86_64 and ARM64 architectures essential for modern automotive computing.
+RHAS addresses the growing complexity of automotive software development by providing a standardized, scalable, and multi-architecture platform that integrates seamlessly across major cloud providers while supporting both x86_64 and ARM64 architectures essential for modern automotive computing.
 
 ## Product Vision
 
@@ -38,7 +38,7 @@ RHADP addresses the growing complexity of automotive software development by pro
 - **Traditional Automotive Toolchains:** Vector CANoe, ETAS ASCET (limited cloud integration)
 - **Generic DevOps Platforms:** Jenkins, GitLab (lack automotive-specific features)
 - **Cloud Development Platforms:** AWS CodeStar, Azure DevOps (no automotive optimization)
-- **RHADP Differentiation:** Automotive-focused, multi-architecture, hardware testing integration
+- **RHAS Differentiation:** Automotive-focused, multi-architecture, hardware testing integration
 
 ## User Personas
 
@@ -212,7 +212,7 @@ RHADP addresses the growing complexity of automotive software development by pro
 ## Success Metrics
 
 ### Business Metrics
-- **Adoption Rate:** Number of automotive teams using RHADP
+- **Adoption Rate:** Number of automotive teams using RHAS
 - **Time-to-Market:** Reduction in automotive software development cycles
 - **Cost Savings:** Infrastructure cost optimization through automated lifecycle management
 - **Developer Productivity:** Lines of code deployed per developer per sprint
@@ -271,9 +271,9 @@ RHADP addresses the growing complexity of automotive software development by pro
 
 ## Conclusion
 
-The Red Hat Automotive Development Platform represents a strategic opportunity to capture the growing automotive software development market by providing a comprehensive, cloud-native development platform tailored specifically for automotive requirements. By combining multi-architecture support, hardware testing integration, and automotive-specific workflows, RHADP can significantly accelerate the development and deployment of next-generation automotive software.
+The Red Hat Automotive Suite represents a strategic opportunity to capture the growing automotive software development market by providing a comprehensive, cloud-native development platform tailored specifically for automotive requirements. By combining multi-architecture support, hardware testing integration, and automotive-specific workflows, RHAS can significantly accelerate the development and deployment of next-generation automotive software.
 
-The proposed phased implementation approach balances rapid time-to-market with comprehensive feature development, while the comprehensive risk assessment ensures proactive management of potential challenges. Success will be measured through both technical excellence and business impact, positioning RHADP as the industry standard for automotive software development platforms.
+The proposed phased implementation approach balances rapid time-to-market with comprehensive feature development, while the comprehensive risk assessment ensures proactive management of potential challenges. Success will be measured through both technical excellence and business impact, positioning RHAS as the industry standard for automotive software development platforms.
 
 ---
 

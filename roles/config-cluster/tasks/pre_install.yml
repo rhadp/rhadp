@@ -1,7 +1,7 @@
 # Implement your pre-install deployment tasks here
 # -------------------------------------------------
 
-# add RHADP labels to the default nodes
+# add RHAS labels to the default nodes
 
 - name: find default worker nodes
   k8s_info:
