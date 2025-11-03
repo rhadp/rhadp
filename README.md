@@ -1,6 +1,6 @@
 # Red Hat Automotive Suite
 
-This repository provides Infrastructure as Code (IaC) for deploying the complete [Red Hat Automotive Suite](https://github.com/rhadp/rhadp) (RHAS) — a comprehensive, cloud-native development environment specifically designed for automotive software development.
+This repository provides Infrastructure as Code (IaC) for deploying the complete [Red Hat Automotive Suite](https://github.com/rhadp/deploy) (RHAS) — a comprehensive, cloud-native development environment specifically designed for automotive software development.
 
 The platform automatically provisions OpenShift clusters across major cloud providers (AWS, Azure, or GCP) with hybrid ARM/x86 architecture support, and pre-configures an integrated suite of development tools to streamline the creation of automotive applications and the Red Hat In-Vehicle Operating System (RHIVOS).  
 
@@ -25,7 +25,7 @@ Upon deployment, the following components are available out of the box:
 
 ```bash
 # Clone repository
-git clone https://github.com/rhadp/rhadp.git
+git clone https://github.com/rhadp/deploy.git
 cd rhadp
 
 # Setup environment
@@ -53,7 +53,7 @@ Fork the repository and submit a pull request.
 
 A list of ideas, open issues etc related to the Red Hat Automotive Suite (RHAS) is [here](https://github.com/orgs/rhadp/projects/1).  
 
-Also check the [Issues](https://github.com/rhadp/rhadp/issues) section of the this repository.
+Also check the [Issues](https://github.com/rhadp/deploy/issues) section of the this repository.
 
 ## Disclaimer
 

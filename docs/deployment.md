@@ -5,7 +5,7 @@
 #### Clone the Repository
 
 ```bash
-git clone https://github.com/rhadp/rhadp.git
+git clone https://github.com/rhadp/deploy.git
 cd rhadp
 ```
 

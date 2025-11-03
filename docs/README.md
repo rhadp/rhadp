@@ -55,7 +55,7 @@ RHAS deploys a layered architecture:
 ## Support
 
 #### Project Resources
-- **GitHub Issues**: [https://github.com/rhadp/rhadp/issues](https://github.com/rhadp/rhadp/issues)
+- **GitHub Issues**: [https://github.com/rhadp/deploy/issues](https://github.com/rhadp/deploy/issues)
 - **Project Board**: [https://github.com/orgs/rhadp/projects/1](https://github.com/orgs/rhadp/projects/1)
 - **Contributing**: See CONTRIBUTING.md
 
