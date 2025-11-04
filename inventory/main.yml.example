@@ -15,13 +15,13 @@ all:
     installer_architecture: "mac-arm64" # mac, mac-arm64, linux, linux-arm64
         
     # cluster topology
-    cluster_arch: "aarch64" # x86_64, aarch64, multi -> multi is only available on aws & azure !
-    control_plane_arch: "arm4" #  amd64, arm64, -> only relevant when cluster_arch == multi
+    cluster_arch: "multi" # x86_64, aarch64, multi -> multi is only available on aws & azure !
+    control_plane_arch: "arm64" #  amd64, arm64, -> only relevant when cluster_arch == multi
     cluster_topology: "default" # default, compact, metal
 
     # cluster configuration
-    cluster_name: "rhadp"
-    cluster_domain: "rhadp.example.com"
+    cluster_name: "auto"
+    cluster_domain: "auto.example.com"
     cluster_toplevel_domain: "example.com" # top-level domain for e.g. default user emails
     cluster_default_storage_class: "gp3-csi" # "gp3-csi" (aws), "managed-csi" (azure), "standard-csi" (gcp)
     
@@ -29,7 +29,7 @@ all:
     pull_secret_file: "inventory/pull-secret.txt" # place the pull secret at this loacation
 
     # cluster deployment options
-    setup_arm_worker_nodes: false # create a second set of ARM worker nodes if true
+    setup_arm_worker_nodes: true # create a second set of ARM worker nodes if true
     setup_baremetal_worker_node: false # create a bare-metal ARM worker node (currently AWS only)
     setup_virtualization: false # setup cnv operator on bare-metal ARM worker node (currently AWS only)
 
@@ -41,9 +41,9 @@ all:
     #
 
     # aws specific variables
-    #aws_access_key_id: "{{ lookup('env', 'AWS_ACCESS_KEY_ID') }}"
-    #aws_secret_access_key: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') }}"
-    #aws_default_region: "us-east-2"
+    aws_access_key_id: "{{ lookup('env', 'AWS_ACCESS_KEY_ID') }}"
+    aws_secret_access_key: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') }}"
+    aws_default_region: "{{ lookup('env', 'AWS_REGION') }}"
 
     # azure specific variables
     #azure_guid: "guid123"
@@ -61,17 +61,6 @@ all:
     #gcp_organization_id: "abc123"
     #gcp_default_region: "us-central1"
     
-    # github org to configure
-    #github_endpoint: "https://github.com"
-    #github_org: "rhadp-examples"
-    
-    # github api token for e.g. setting up a runner
-    #github_api_pat: "abc123"
-
-    # github auth secrets
-    #github_git_client_id: "abc123"
-    #github_git_client_secret: "abc123"
-    
     # secrets for oauth provider setup in Keycloak
     #github_oauth_client_id: "abc123"
     #github_oauth_client_secret: "abc123"
@@ -80,33 +69,12 @@ all:
     letsencrypt_email: "hello@example.com"
     
     #
-    # part 3 - platform deployment options
+    # part 3 - platform internals
     #
-  
-    rhadp_deploy_devspaces: false # deploy dev spaces
-    rhadp_deploy_developer_hub: false # deploy the developer hub
-    rhadp_deploy_jumpstart: false # deploy the jumpstart operator
     
     # resource prefix
-    rhadp_prefix: "rhadp" # used in e.g. namespace creation
+    platform_prefix: "auto" # used in e.g. namespace creation
 
-    # default repo for all the GitOps apps
-    rhadp_gitops_repo_url: "https://github.com/rhadp/rhadp-manifests"
-    rhadp_gitops_repo_revision: "develop"
-
-    # default platform namespaces
-    platform_devspaces_namespace: "{{ rhadp_prefix }}-devspaces"
-    platform_developer_hub_namespace: "{{ rhadp_prefix }}-devhub"
-    platform_builder_namespace: "{{ rhadp_prefix }}-builder"
-    platform_jumpstarter_namespace: "{{ rhadp_prefix }}-jumpstarter"
-
-    # platform overrides
-    # see 'roles/setup-platform/defaults/main.yml' for available variables
-    
-    #
-    # part 4 - platform internals
-    #
-    
     # default admin user
     default_admin_user: admin
     default_admin_password: openshift

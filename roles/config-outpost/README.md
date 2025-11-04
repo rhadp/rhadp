@@ -1,2 +1,0 @@
-## ROLE_TEMPLATE
-
