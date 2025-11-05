@@ -23,6 +23,10 @@
       include_role:
         name: roles/setup-auth
         
+    - name: install the essential devops operators, prepare the cluster for the deployment of the platform services
+      include_role:
+        name: roles/setup-basic-capabilities
+        
     - name: show web console url
       debug:
         msg: "Access the OpenShift web-console here: https://console-openshift-console.apps.{{ cluster_name }}.{{ cluster_domain }}"
