@@ -71,11 +71,11 @@
   
 - name: label metal nodes (builder)
   shell: |
-    oc label node {{ item }} rhadp.node-role/builder='true' \
+    oc label node {{ item }} {{ platform_prefix }}.node-role/builder='true' \
     --overwrite=true \
     --kubeconfig="$HOME/.kube/{{ cluster_fqn }}"
 
-    oc label node {{ item }} rhadp.node-role/metal='true' \
+    oc label node {{ item }} {{ platform_prefix }}.node-role/metal='true' \
     --overwrite=true \
     --kubeconfig="$HOME/.kube/{{ cluster_fqn }}"
   with_items:

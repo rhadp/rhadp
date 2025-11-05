@@ -14,7 +14,7 @@
 
 - name: label worker nodes (infra)
   shell: |
-    oc label node {{ item }} rhadp.node-role/infra='true' \
+    oc label node {{ item }} {{ platform_prefix }}.node-role/infra='true' \
     --overwrite=true \
     --kubeconfig="$HOME/.kube/{{ cluster_fqn }}"
   with_items:
@@ -32,7 +32,7 @@
 
 - name: label ARM worker nodes (builder)
   shell: |
-    oc label node {{ item }} rhadp.node-role/builder='true' \
+    oc label node {{ item }} {{ platform_prefix }}.node-role/builder='true' \
     --overwrite=true \
     --kubeconfig="$HOME/.kube/{{ cluster_fqn }}"
   with_items:
@@ -47,21 +47,22 @@
         kind: Node
         label_selectors:
           - node-role.kubernetes.io/master
+          - kubernetes.io/arch=arm64   # NOTE: this entire setup only makes sense if the control plane nodes are ARM ...
         kubeconfig: "{{ local_kubeconfig_file }}"
       register: found_control_plane_nodes
       
     - name: label control plane nodes (infra)
       shell: |
-        oc label node {{ item }} rhadp.node-role/infra='true' \
+        oc label node {{ item }} {{ platform_prefix }}.node-role/infra='true' \
         --overwrite=true \
         --kubeconfig="$HOME/.kube/{{ cluster_fqn }}"
       with_items:
         - "{{ found_control_plane_nodes.resources | map(attribute='metadata.name') | list }}"
 
     - name: label control plane nodes (builder)
-      when: cluster_topology == 'compact'
+      when: cluster_topology == 'compact' # NOTE:
       shell: |
-        oc label node {{ item }} rhadp.node-role/builder='true' \
+        oc label node {{ item }} {{ platform_prefix }}.node-role/builder='true' \
         --overwrite=true \
         --kubeconfig="$HOME/.kube/{{ cluster_fqn }}"
       with_items:

@@ -73,7 +73,7 @@ all:
     #
     
     # resource prefix
-    platform_prefix: "auto" # used in e.g. namespace creation
+    platform_prefix: "auto" # used in e.g. namespace creation, node labeling etc
 
     # default admin user
     default_admin_user: admin

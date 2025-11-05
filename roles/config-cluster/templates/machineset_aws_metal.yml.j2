@@ -13,7 +13,6 @@ metadata:
     machine.openshift.io/cluster-api-machineset: {{ cluster_label }}-metal-{{ aws_default_region }}{{ aws_metal_availability_zone }}
     machine.openshift.io/cluster-api-machine-role: worker
     machine.openshift.io/cluster-api-machine-type: metal
-    rhadp.node-role/builder: 'true'
 spec:
   replicas: {{ aws_metal_instance_count }}
   selector:
@@ -27,10 +26,12 @@ spec:
         machine.openshift.io/cluster-api-machineset: {{ cluster_label }}-metal-{{ aws_default_region }}{{ aws_metal_availability_zone }}
         machine.openshift.io/cluster-api-machine-role: worker
         machine.openshift.io/cluster-api-machine-type: metal
-        rhadp.node-role/builder: 'true'
     spec:
       lifecycleHooks: {}
-      metadata: {}
+      metadata:
+        labels:
+          {{ platform_prefix }}.node-role/builder: 'true'
+          {{ platform_prefix }}.node-role/virt: 'true'
       providerSpec:
         value:
           userDataSecret:

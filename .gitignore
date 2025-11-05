@@ -12,6 +12,7 @@ tmp/**
 hack.*
 **hack**.yml
 cheatsheet.md
+hacking.md
 
 # AI foo
 .claude/**

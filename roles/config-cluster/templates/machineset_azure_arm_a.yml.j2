@@ -13,7 +13,6 @@ metadata:
     machine.openshift.io/cluster-api-machineset: {{ cluster_label }}-arm-worker-1
     machine.openshift.io/cluster-api-machine-role: worker
     machine.openshift.io/cluster-api-machine-type: worker
-    rhadp.node-role/builder: 'true'
 spec:
   replicas: {{ azure_arm_instance_count }}
   selector:
@@ -27,10 +26,11 @@ spec:
         machine.openshift.io/cluster-api-machineset: {{ cluster_label }}-arm-worker-1
         machine.openshift.io/cluster-api-machine-role: worker
         machine.openshift.io/cluster-api-machine-type: worker
-        rhadp.node-role/builder: 'true'
     spec:
       lifecycleHooks: {}
-      metadata: {}
+      metadata:
+        labels:
+          {{ platform_prefix }}.node-role/builder: 'true'
       providerSpec:
         value:
           osDisk:
