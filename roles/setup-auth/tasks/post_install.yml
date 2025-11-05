@@ -1,29 +1,6 @@
 # Implement your post-install deployment tasks here
 # -------------------------------------------------
 
-- name: pause to allow oauth to settle
-  pause:
-    seconds: 300
-
-# remove the kubeadmin user secret and self-provisioner cluster role binding
-
-- name: remove kubeadmin user secret
-  k8s:
-    api_version: v1
-    kind: Secret
-    namespace: kube-system
-    name: kubeadmin
-    state: absent
-    kubeconfig: "{{ local_kubeconfig_file }}"
-  when: remove_kubeadmin | bool == true
-
-- name: remove self-provisioner
-  ignore_errors: true
-  shell: |
-    oc adm policy remove-cluster-role-from-group \
-      self-provisioner system:authenticated:oauth \
-      --kubeconfig="$HOME/.kube/{{ cluster_fqn }}"
-  when: remove_selfprovisioning | bool == true
 
 # cleanup temp files
 

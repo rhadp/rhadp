@@ -1,0 +1,28 @@
+# Implement your install deployment tasks here
+# -------------------------------------------------
+
+# see https://docs.redhat.com/en/documentation/openshift_container_platform/4.19/html/web_console/index
+- name: enable developer perspective
+  shell: |
+    oc patch console.operator.openshift.io/cluster --type='merge' \
+    -p '{"spec":{"customization":{"perspectives":[{"id":"dev","visibility":{"state":"Enabled"}}]}}}' \
+    --kubeconfig="$HOME/.kube/{{ cluster_fqn }}"
+
+# remove the kubeadmin user secret and self-provisioner cluster role binding
+- name: remove kubeadmin user secret
+  when: remove_kubeadmin | bool == true
+  k8s:
+    api_version: v1
+    kind: Secret
+    namespace: kube-system
+    name: kubeadmin
+    state: absent
+    kubeconfig: "{{ local_kubeconfig_file }}"
+
+- name: remove self-provisioner
+  when: remove_selfprovisioning | bool == true
+  ignore_errors: true
+  shell: |
+    oc adm policy remove-cluster-role-from-group \
+      self-provisioner system:authenticated:oauth \
+      --kubeconfig="$HOME/.kube/{{ cluster_fqn }}"

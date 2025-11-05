@@ -31,9 +31,9 @@
       include_role:
         name: roles/setup-auth
 
-    - name: bootstrap the essential devops operators OpenShift GitOps and OpenShift Pipelines
+    - name: install the essential devops operators, prepare the cluster for the deployment of the platform services
       include_role:
-        name: roles/setup-devops
+        name: roles/setup-basic-capabilities
 
     - name: show web console url
       debug:
