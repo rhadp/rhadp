@@ -14,5 +14,5 @@ jumpstarter_user_group: "jumpstarter-users"
 keycloak_namespace: "keycloak"
 
 # keycloak subscription
-keycloak_subscription_channel: "stable-v26.2"
-keycloak_subscription_starting_csv: "rhbk-operator.v26.2.10-opr.1" #"rhbk-operator.v26.2.4-opr.2"
+keycloak_subscription_channel: "stable-v26.4"
+keycloak_subscription_starting_csv: "rhbk-operator.v26.4.2-opr.1" 

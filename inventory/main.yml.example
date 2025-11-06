@@ -86,7 +86,7 @@ all:
 
     # remove the kubeadmin user and the self-provisioning role
     remove_kubeadmin: true
-    remove_selfprovisioning: true
+    remove_self_provisioning: true
     
     # keycloak instance variables
     keycloak_db_user: "admin"
